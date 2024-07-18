@@ -1,0 +1,26 @@
+{
+  "name": "no-anime-no-life",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon --exec ts-node main.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@nestjs/axios": "^3.0.2",
+    "@nestjs/common": "^10.3.10",
+    "@nestjs/core": "^10.3.10",
+    "@nestjs/platform-express": "^10.3.10",
+    "axios": "^1.7.2",
+    "class-transformer": "^0.5.1",
+    "fastify": "^4.28.1",
+    "http-status-codes": "^2.3.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1",
+    "ts-node": "^10.9.2"
+  }
+}
