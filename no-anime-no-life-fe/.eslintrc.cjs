@@ -14,5 +14,10 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    'quotes': ['error', 'single'],
+    'semi': ['error', 'never'],
+    'react/react-in-jsx-scope': 'off',
+    'indent': ['error', 2],
+    "@typescript-eslint/no-explicit-any": "off"
   },
 }
