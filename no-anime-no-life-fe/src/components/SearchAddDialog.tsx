@@ -1,29 +1,40 @@
 import { forwardRef, useImperativeHandle, useState, FunctionComponent, FC, useEffect} from 'react'
 import { useRequest } from 'ahooks'
 import { searchByKeyword } from '../api'
-import { AnimeInfo, ResponseResult } from '../type'
+import { AnimeDataInfo, AnimeInfo, ResponseResult } from '../type'
 import { AxiosResponse } from 'axios'
+import useAnimeData from '../hooks/useAnimeData'
+import { addAnime } from '../store/anime'
+import { useDispatch } from 'react-redux'
 
 
-interface Props {
+export interface SearchAddDialogProps {
+
+}
+
+interface AddInfo {
+  categoryId: string,
+  animeInfo?: AnimeInfo
 }
  
 export type SearchAddDialogRef = {
-  openModal: () => void;
+  openModal: (addInfo: AddInfo) => void;
 };
+
 
 const getSearchRes = async (key:string)=> {
   return await searchByKeyword(key)
 } 
 
-export const SearchAddDialog = forwardRef<SearchAddDialogRef, Props>((props, ref) => {
+export const SearchAddDialog = forwardRef<SearchAddDialogRef, SearchAddDialogProps>((props, ref) => {
   const [isOpen, setIsOpen] = useState(false)
   const [inputValue, setInputValue] = useState('')
+  const dispatch = useDispatch()
   const { data:searchData, loading, runAsync } = useRequest(getSearchRes, {
     manual: true,
     debounceWait: 500,
   })
-  const [animeList, setAnimeList] = useState<AnimeInfo[]>([])
+  const [searchAnimeList, setAnimeList] = useState<AnimeInfo[]>([])
 
   useEffect(() => {
     const data = searchData?.data
@@ -42,13 +53,14 @@ export const SearchAddDialog = forwardRef<SearchAddDialogRef, Props>((props, ref
       setInputValue(value)
       await runAsync(value)
     } else {
-      setInputValue([])
+      setInputValue('')
 
     }
   }
 
- 
-  const openModal = () => {
+  const [addInfo, setAddInfo]= useState<AddInfo>({categoryId: ''})
+  const openModal = (data:AddInfo) => {
+    setAddInfo(data)
     setAnimeList([])
     setInputValue('')
     setIsOpen(true)
@@ -60,7 +72,11 @@ export const SearchAddDialog = forwardRef<SearchAddDialogRef, Props>((props, ref
     setIsOpen(false)
   }
 
-  const chooseAnime = () => {}
+  const chooseAnime = (data: AnimeInfo) => {
+    dispatch(
+      addAnime({categoryId: addInfo.categoryId, obj: data})
+    )
+  }
  
   return (
     <div>
@@ -70,10 +86,11 @@ export const SearchAddDialog = forwardRef<SearchAddDialogRef, Props>((props, ref
             <input placeholder="输入关键字查询动画" className="text-sm border-solid border-black/60 border rounded-sm py-1 px-2" type="text" value={inputValue} onChange={inputChange}/>
             <div className="flex flex-row flex-wrap overflow-y-auto" style={{minHeight: '50vh',maxHeight: '80vh'}}>
               {
-                animeList.map(item => {
+                searchAnimeList.map(item => {
                   return (
-                    <div 
-                      onTouchStart={chooseAnime}
+                    <div
+                      key={item.aid}
+                      onClick={() => chooseAnime(item)}
                       className="flex flex-col items-center w-12 mr-1">
                       <img src={item.images?.large} alt="" className="w-full h-14"/>
                       <div className="flex flex-row text-xs">{item.name_cn}</div>

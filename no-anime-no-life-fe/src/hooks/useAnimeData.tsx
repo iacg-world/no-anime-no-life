@@ -1,11 +1,17 @@
-import { useState } from 'react'
+import { createContext, useState, FC } from 'react'
 import { mockAnimeList } from '../mock'
 import { nanoid } from 'nanoid'
 import { AnimeDataInfo, AnimeInfo } from '../type'
 import { produce } from 'immer'
+const initData = JSON.parse(localStorage.getItem('animeData') || '[]')
 
 export default function useAnimeData() {
-  const [animeList, setAnimeList] = useState(mockAnimeList)
+  const initData = JSON.parse(localStorage.getItem('animeData') || '[]')
+  const [animeList, setAnimeList] = useState<AnimeDataInfo[]>(initData)
+  const setAnimeListWrap = (data:AnimeDataInfo[]) => {
+    setAnimeList(data)
+    localStorage.setItem('animeData', JSON.stringify(data))
+  }
 
   const addAnimeCategory = (categoryName:string) => {
     const newList = produce(animeList, draft => {
@@ -16,7 +22,7 @@ export default function useAnimeData() {
       })
     })
 
-    setAnimeList(newList)
+    setAnimeListWrap(newList)
 
   
 
@@ -25,25 +31,22 @@ export default function useAnimeData() {
     const newAnimeList = produce(animeList, draft => {
       draft.map(item => {
         if (item.categoryId === categoryId) {
-          const newList= produce(item.list, draft => {
-            draft.push({
+          const newList= produce(item.list, draft2 => {
+            draft2.push({
               ...obj,
               aid: nanoid(),
             })
           })
-          return {
-            ...item,
-            list: newList,
-          }
+          item.list = newList
 
-        } else {
-          return item
+
         }
+        return item
 
       })
 
     })
-    setAnimeList(newAnimeList)
+    setAnimeListWrap(newAnimeList)
 
   }
 
@@ -76,12 +79,29 @@ export default function useAnimeData() {
       })
 
     })
-    setAnimeList(newAnimeList)
+    setAnimeListWrap(newAnimeList)
+  }
+  const modifyCategoryName = (categoryId:string, name:string) => {
+    const newAnimeList = produce(animeList, draft => {
+      draft.map(item => {
+        if (item.categoryId === categoryId) {
+          return {
+            ...item,
+            categoryName: name,
+          }
+        } else {
+          return item
+        }
+      })
+
+    })
+    setAnimeListWrap(newAnimeList)
   }
   return {
+    animeList,
     addAnimeCategory,
     addAnime,
     modifyAnime,
-    animeList,
+    modifyCategoryName,
   }
 }
