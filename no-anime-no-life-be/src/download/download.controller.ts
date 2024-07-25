@@ -19,17 +19,18 @@ export class DownloadController {
       accessKeyId: process.env.OSS_ACCESS_KEY_ID, // 确保已设置环境变量OSS_ACCESS_KEY_ID。
       accessKeySecret: process.env.OSS_ACCESS_KEY_SECRET, // 确保已设置环境变量OSS_ACCESS_KEY_SECRET。
       bucket: 'no-anime-no-life', // 示例：'my-bucket-name'，填写存储空间名称。
+      secure: true,
     });
     this.client = client
   }
 
   @Post()
   async downloadImage(@Body() list: AnimeCategoryInfo[]) {
-    const nameList = await this.downloadService.download(list)
-    const promiseArr: Promise<Function>[] = []
+    const localImgList = await this.downloadService.download(list)
+    const promiseArr: Promise<any>[] = []
     const cachePath = []
 
-    nameList.forEach(async (name) => {
+    localImgList.forEach(async ({name}) => {
       
       const savedOSSPath = join(
         'cover',
@@ -42,10 +43,21 @@ export class DownloadController {
 
     })
     
-    const res = await Promise.all(promiseArr)
+    const res:{url: string}[] = await Promise.all(promiseArr)
+    const ossUrlList = res.map(item => item.url)
     clearImageCache(cachePath)
 
-    const newList = res
+    const newList: AnimeCategoryInfo[] = list.map(item => {
+      return {
+        ...item,
+        list: item.list.map(item => {
+          return {
+            ...item,
+            ossUrl: ossUrlList.find(url => url.includes(item.aid))
+          }
+        })
+      }
+    })
     return newList
     
 

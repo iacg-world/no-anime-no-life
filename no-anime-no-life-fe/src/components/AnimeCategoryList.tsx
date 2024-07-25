@@ -40,11 +40,6 @@ export const AnimeCategoryList = () =>{
 
   const onShare = async () => {
     shareDialogRef.current?.openModal()
-    setTimeout(async () => {
-      // await takeScreenshot(contentRef.current)
-
-    })
-
   }
 
   return (

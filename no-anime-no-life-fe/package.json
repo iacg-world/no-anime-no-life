@@ -12,6 +12,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.6",
     "ahooks": "^3.8.0",
+    "antd-mobile": "^5.37.1",
     "axios": "^1.7.2",
     "html2canvas": "^1.4.1",
     "immer": "^10.1.1",

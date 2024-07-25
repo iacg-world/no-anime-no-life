@@ -20,5 +20,11 @@ export interface AnimeInfo {
     'medium': string,
     'small': string,
     'grid': string
-  }
+  },
+  ossUrl?: string,
+}
+
+export interface LocalImgInfo {
+  aid: string,
+  name: string,
 }

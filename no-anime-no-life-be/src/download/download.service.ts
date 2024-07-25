@@ -2,7 +2,7 @@ import { HttpService } from "@nestjs/axios";
 import { Injectable } from "@nestjs/common";
 import { AxiosError, AxiosResponse } from "axios";
 import { Observable, catchError, firstValueFrom } from "rxjs";
-import { AnimeCategoryInfo } from "src/type";
+import { AnimeCategoryInfo, LocalImgInfo } from "src/type";
 import fs from 'fs'
 import { imagePath } from "../../src/common";
 import { nanoid } from 'nanoid'
@@ -17,23 +17,22 @@ export class DownloadService {
   constructor(private readonly httpService: HttpService) { }
 
 
-  async download(list: AnimeCategoryInfo[]): Promise<string[]> {
+  async download(list: AnimeCategoryInfo[]): Promise<LocalImgInfo[]> {
     let imgList: ImageInfo[] = []
-    
+
     list.forEach(item => {
-      
+
       imgList = imgList.concat(item.list.map(item => {
         return {
-          url: item.images?.large || item.images?.medium,
+          url: item.images?.medium || item.images?.large,
           aid: item.aid,
-          name: (item.aid || 'none') + '-' + nanoid()
+          name: item.aid + '-' + nanoid()
         }
       }))
     })
 
-
     return new Promise((resolve, reject) => {
-      const res = []
+      const res: LocalImgInfo[] = []
       imgList.forEach(async (item) => {
         const response = await this.httpService.axiosRef({
           url: item.url,
@@ -48,8 +47,11 @@ export class DownloadService {
         response.data.pipe(writer);
 
         writer.on('finish', () => {
-          res.push(fileName)
-          if(res.length === imgList.length) {
+          res.push({
+            aid: item.aid,
+            name: fileName
+          })
+          if (res.length === imgList.length) {
             resolve(res)
           }
         });

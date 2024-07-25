@@ -21,6 +21,7 @@ export interface AnimeInfo {
     'small': string,
     'grid': string
   }
+  ossUrl?: string,
 }
 
 export interface ResponseResult<T> {
