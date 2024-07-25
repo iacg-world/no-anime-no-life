@@ -6,15 +6,17 @@ import { SearchController } from './src/search.controller';
 import { SearchService } from './src/search.service';
 import { HttpModule } from '@nestjs/axios';
 import { TransformInterceptor } from './src/response.interceptor';
+import { DownloadController } from './src/download/download.controller';
+import { DownloadService } from './src/download/download.service';
 // 使用 @Module 装饰器定义一个模块
 @Module({
   // 在 controllers 属性中指定当前模块包含的控制器
-  controllers: [AppController, SearchController],
+  controllers: [AppController, SearchController, DownloadController],
   imports: [HttpModule.register({
     timeout: 5000,
     maxRedirects: 5,
   }),],
-  providers: [SearchService, {
+  providers: [SearchService, DownloadService, {
     provide: 'APP_INTERCEPTOR',
     useClass: TransformInterceptor
   }],

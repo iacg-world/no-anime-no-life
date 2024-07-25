@@ -1,14 +1,14 @@
 import { createContext, useState, FC } from 'react'
 import { mockAnimeList } from '../mock'
 import { nanoid } from 'nanoid'
-import { AnimeDataInfo, AnimeInfo } from '../type'
+import { AnimeCategoryInfo, AnimeInfo } from '../type'
 import { produce } from 'immer'
 const initData = JSON.parse(localStorage.getItem('animeData') || '[]')
 
 export default function useAnimeData() {
   const initData = JSON.parse(localStorage.getItem('animeData') || '[]')
-  const [animeList, setAnimeList] = useState<AnimeDataInfo[]>(initData)
-  const setAnimeListWrap = (data:AnimeDataInfo[]) => {
+  const [animeList, setAnimeList] = useState<AnimeCategoryInfo[]>(initData)
+  const setAnimeListWrap = (data:AnimeCategoryInfo[]) => {
     setAnimeList(data)
     localStorage.setItem('animeData', JSON.stringify(data))
   }

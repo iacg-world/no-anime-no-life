@@ -1,7 +1,7 @@
 import { forwardRef, useImperativeHandle, useState, FunctionComponent, FC, useEffect} from 'react'
 import { useRequest } from 'ahooks'
 import { searchByKeyword } from '../api'
-import { AnimeDataInfo, AnimeInfo, ResponseResult } from '../type'
+import { AnimeCategoryInfo, AnimeInfo, ResponseResult } from '../type'
 import { AxiosResponse } from 'axios'
 import useAnimeData from '../hooks/useAnimeData'
 import { addAnime, modifyAnime } from '../store/anime'

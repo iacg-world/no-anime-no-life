@@ -1,18 +1,22 @@
 import { createRef, forwardRef, useEffect, useRef, useState } from 'react'
 import { mockAnimeList } from '../mock'
-import { localImg } from '../utils'
+import { localImg, takeScreenshot } from '../utils'
 import { SearchAddDialog, SearchAddDialogRef } from './SearchAddDialog'
 import useAnimeData from '../hooks/useAnimeData'
-import { AnimeDataInfo, AnimeInfo } from '../type'
+import { AnimeCategoryInfo, AnimeInfo } from '../type'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateType } from '../store'
 import { addAnimeCategory } from '../store/anime'
+import { ShareDialog, ShareDialogRef } from './ShareDialog'
 
 
 
 export const AnimeCategoryList = () =>{
   const dialogRef = createRef<SearchAddDialogRef>()
-  const animeList = useSelector<StateType, AnimeDataInfo[]>(state => state.anime) || []
+  const shareDialogRef = createRef<ShareDialogRef>()
+  const contentRef = createRef<HTMLDivElement>()
+  const animeList = useSelector<StateType, AnimeCategoryInfo[]>(state => state.anime) || []
+  const [sharing, setSharing] = useState(false)
   const dispatch = useDispatch()
   useEffect(() => {
     console.log(animeList)
@@ -34,15 +38,24 @@ export const AnimeCategoryList = () =>{
 
   }
 
+  const onShare = async () => {
+    shareDialogRef.current?.openModal()
+    setTimeout(async () => {
+      // await takeScreenshot(contentRef.current)
+
+    })
+
+  }
+
   return (
     <>
-      <div className="flex flex-row overflow-x-auto max-h-screen w-screen min-h-screen">
+      <div className="flex flex-row overflow-x-auto max-h-screen w-screen min-h-screen" ref={contentRef}>
         {
           animeList.map(categoryItem => {
             return (
               <div className='flex flex-col flex-nowrap min-w-12 max-w-16' key={categoryItem.categoryId}>
                 <div className="text-sm font-sans text-nowrap">{categoryItem.categoryName}</div>
-                <div className="flex flex-col flex-nowrap overflow-y-auto px-1">
+                <div className={`flex flex-col flex-nowrap px-1 ${sharing ? '' : 'overflow-y-auto'}`}>
                   {
                     categoryItem.list.map(animeItem => {
                       return (
@@ -50,7 +63,7 @@ export const AnimeCategoryList = () =>{
                           key={animeItem.aid}
                           onMouseUp={() => openSearchAdd(categoryItem.categoryId, animeItem)}
                           className="flex flex-col items-center">
-                          <img src={animeItem.images?.large} alt="" className="w-full h-auto"/>
+                          <img src={animeItem.images?.large} alt="" className="w-full h-auto" />
                           <div className="flex flex-row text-xs">{animeItem.name_cn}</div>
                         </div>
                       )
@@ -74,6 +87,10 @@ export const AnimeCategoryList = () =>{
         </div>
       </div>
       <SearchAddDialog ref={dialogRef}></SearchAddDialog>
+      <ShareDialog  ref={shareDialogRef} animeList={animeList} />
+      <div onClick={onShare} className="fixed right-1 bottom-1">
+        <img className="size-4" src={localImg('share.png')} alt="" />
+      </div>
     </>
   )
 }

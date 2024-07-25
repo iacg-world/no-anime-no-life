@@ -22,11 +22,3 @@ export interface AnimeInfo {
     'grid': string
   }
 }
-
-export interface ResponseResult<T> {
-  code: number,
-  message: string,
-  timestamp: number,
-  data: T
-}
-

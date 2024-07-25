@@ -1,7 +1,7 @@
 import { createContext, useState, FC } from 'react'
 import { mockAnimeList } from '../mock'
 import { nanoid } from 'nanoid'
-import { AnimeDataInfo, AnimeInfo } from '../type'
+import { AnimeCategoryInfo, AnimeInfo } from '../type'
 import { produce } from 'immer'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 const initData = JSON.parse(localStorage.getItem('animeData') || '[]')
@@ -11,8 +11,8 @@ export const componentsSlice = createSlice({
   initialState: initData,
   reducers: {
     addAnimeCategory: produce(
-      (draft: AnimeDataInfo[], action: PayloadAction<string>) => {
-        const newCategory: AnimeDataInfo = {
+      (draft: AnimeCategoryInfo[], action: PayloadAction<string>) => {
+        const newCategory: AnimeCategoryInfo = {
           categoryId: nanoid(),
           categoryName: action.payload,
           list: []
@@ -21,7 +21,7 @@ export const componentsSlice = createSlice({
       }
     ),
     addAnime: produce(
-      (draft: AnimeDataInfo[], action: PayloadAction<{
+      (draft: AnimeCategoryInfo[], action: PayloadAction<{
         categoryId: string,
         obj: AnimeInfo,
       }>) => {
@@ -38,7 +38,7 @@ export const componentsSlice = createSlice({
     ),
   
     modifyAnime: produce(
-      (draft: AnimeDataInfo[], action: PayloadAction<{
+      (draft: AnimeCategoryInfo[], action: PayloadAction<{
         categoryId: string,
         aid: string,
         obj: AnimeInfo,
@@ -63,7 +63,7 @@ export const componentsSlice = createSlice({
     ),
 
     modifyCategoryName:produce(
-      (draft: AnimeDataInfo[], action: PayloadAction<{
+      (draft: AnimeCategoryInfo[], action: PayloadAction<{
         categoryId: string,
         name: string,
       }>) => {
