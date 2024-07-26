@@ -12,7 +12,6 @@ async function bootstrap() {
   const whiteList = ['http://example.com', 'http://localhost:3000', 'http://localhost:5173'];
   app.enableCors({
     origin: (requestOrigin: string, callback: (err: Error, allow?: boolean) => void) => {
-      console.log(requestOrigin);
       
       if (!requestOrigin || whiteList.find(item => requestOrigin.includes(item))) {
         callback(null, true);

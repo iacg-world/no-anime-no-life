@@ -49,8 +49,6 @@ export const AnimeCategoryList = () =>{
   let lastCategoryId = ''
   useClickAway(
     () => {
-      console.log(lastCategoryId)
-      
       dispatch(
         modifyCategory({categoryId: lastCategoryId, editing: false})
       )
@@ -59,7 +57,6 @@ export const AnimeCategoryList = () =>{
   )
   const onEditCategory = (data: AnimeCategoryInfo) => {
     lastCategoryId = data.categoryId
-    console.log(data.categoryId)
     
     dispatch(
       modifyCategory({categoryId: data.categoryId, editing: true})
@@ -97,7 +94,7 @@ export const AnimeCategoryList = () =>{
                           key={animeItem.aid}
                           onMouseUp={() => openSearchAdd(categoryItem.categoryId, animeItem)}
                           className="flex flex-col items-center">
-                          <img src={animeItem.images?.medium} alt="" className="w-full h-12" />
+                          <img src={animeItem.images?.medium} alt="" className="w-full h-14" />
                           <div className="flex flex-row text-xs">{animeItem.name_cn}</div>
                         </div>
                       )
