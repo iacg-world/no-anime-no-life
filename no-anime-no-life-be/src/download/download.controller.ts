@@ -30,11 +30,11 @@ export class DownloadController {
     const promiseArr: Promise<any>[] = []
     const cachePath = []
 
-    localImgList.forEach(async ({name}) => {
-      
+    localImgList.forEach(async ({ name }) => {
+
       const savedOSSPath = join(
         'cover',
-         `${name}-${new Date().getTime()}`,
+        `${new Date().getTime()}-${name}`,
       )
       const localPath = `${imagePath}/${name}`
       cachePath.push(localPath)
@@ -42,8 +42,8 @@ export class DownloadController {
       promiseArr.push(res)
 
     })
-    
-    const res:{url: string}[] = await Promise.all(promiseArr)
+
+    const res: { url: string }[] = await Promise.all(promiseArr)
     const ossUrlList = res.map(item => item.url)
     clearImageCache(cachePath)
 
@@ -59,7 +59,7 @@ export class DownloadController {
       }
     })
     return newList
-    
+
 
   }
 }
