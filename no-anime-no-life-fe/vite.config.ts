@@ -6,8 +6,6 @@ export default defineConfig({
   plugins: [react()],
   // 别名配置
   resolve: {
-    alias: {
-      '@': './src'
-    }
+
   }
 })

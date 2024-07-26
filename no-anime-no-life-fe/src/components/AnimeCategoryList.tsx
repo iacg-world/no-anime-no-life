@@ -49,7 +49,7 @@ export const AnimeCategoryList = () =>{
           animeList.map(categoryItem => {
             return (
               <div className='flex flex-col flex-nowrap min-w-12 max-w-16' key={categoryItem.categoryId}>
-                <div className="text-sm font-sans text-nowrap">{categoryItem.categoryName}</div>
+                <div className="text-sm font-sans text-nowrap font-bold">{categoryItem.categoryName}</div>
                 <div className={`flex flex-col flex-nowrap px-1 ${sharing ? '' : 'overflow-y-auto'}`}>
                   {
                     categoryItem.list.map(animeItem => {
@@ -58,7 +58,7 @@ export const AnimeCategoryList = () =>{
                           key={animeItem.aid}
                           onMouseUp={() => openSearchAdd(categoryItem.categoryId, animeItem)}
                           className="flex flex-col items-center">
-                          <img src={animeItem.images?.large} alt="" className="w-full h-auto" />
+                          <img src={animeItem.images?.medium} alt="" className="w-full h-12" />
                           <div className="flex flex-row text-xs">{animeItem.name_cn}</div>
                         </div>
                       )
