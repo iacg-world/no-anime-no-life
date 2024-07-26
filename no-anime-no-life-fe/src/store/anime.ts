@@ -1,5 +1,3 @@
-import { createContext, useState, FC } from 'react'
-import { mockAnimeList } from '../mock'
 import { nanoid } from 'nanoid'
 import { AnimeCategoryInfo, AnimeInfo } from '../type'
 import { produce } from 'immer'
@@ -36,17 +34,37 @@ export const componentsSlice = createSlice({
 
       }
     ),
-  
+    rmAnime: produce(
+      (draft: AnimeCategoryInfo[], action: PayloadAction<{
+        categoryId: string,
+      }>) => {
+        let deleteIndex = 0
+        const target = draft.find((item, index) => {
+          deleteIndex = index
+          return item.categoryId === action.payload.categoryId
+        })
+        if (target) {
+          if (target.list.length) {
+
+            target.list.pop()
+          } else {
+            draft.splice(deleteIndex, 1)
+          }
+        }
+
+      }
+    ),
+
     modifyAnime: produce(
       (draft: AnimeCategoryInfo[], action: PayloadAction<{
         categoryId: string,
         aid: string,
         obj: AnimeInfo,
       }>) => {
-        const {categoryId, aid, obj} = action.payload
+        const { categoryId, aid, obj } = action.payload
         const categoryTarget = draft.find(item => item.categoryId === categoryId)
         if (categoryTarget) {
-          const newList= categoryTarget.list.map(item => {
+          const newList = categoryTarget.list.map(item => {
             if (item.aid === aid) {
               return {
                 ...item,
@@ -62,14 +80,11 @@ export const componentsSlice = createSlice({
       }
     ),
 
-    modifyCategoryName:produce(
-      (draft: AnimeCategoryInfo[], action: PayloadAction<{
-        categoryId: string,
-        name: string,
-      }>) => {
+    modifyCategory: produce(
+      (draft: AnimeCategoryInfo[], action: PayloadAction<Partial<AnimeCategoryInfo>>) => {
         const target = draft.find(item => item.categoryId === action.payload.categoryId)
         if (target) {
-          target.categoryName = action.payload.name
+          Object.assign(target , action.payload)
         }
 
       }
@@ -79,6 +94,8 @@ export const componentsSlice = createSlice({
 export const {
   addAnimeCategory,
   addAnime,
+  rmAnime,
   modifyAnime,
+  modifyCategory,
 } = componentsSlice.actions
 export default componentsSlice.reducer

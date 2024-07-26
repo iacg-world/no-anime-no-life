@@ -1,7 +1,8 @@
 export interface AnimeCategoryInfo {
   categoryId: string,
   categoryName: string,
-  list: AnimeInfo[]
+  list: AnimeInfo[],
+  editing?: boolean,
 
 }
 export interface AnimeInfo {

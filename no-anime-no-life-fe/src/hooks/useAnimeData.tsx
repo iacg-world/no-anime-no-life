@@ -81,7 +81,7 @@ export default function useAnimeData() {
     })
     setAnimeListWrap(newAnimeList)
   }
-  const modifyCategoryName = (categoryId:string, name:string) => {
+  const modifyCategory = (categoryId:string, name:string) => {
     const newAnimeList = produce(animeList, draft => {
       draft.map(item => {
         if (item.categoryId === categoryId) {
@@ -102,6 +102,6 @@ export default function useAnimeData() {
     addAnimeCategory,
     addAnime,
     modifyAnime,
-    modifyCategoryName,
+    modifyCategory,
   }
 }

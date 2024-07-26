@@ -1,13 +1,14 @@
-import { createRef, forwardRef, useEffect, useRef, useState } from 'react'
-import { mockAnimeList } from '../mock'
-import { localImg, takeScreenshot } from '../utils'
+import { createRef, useEffect, useState } from 'react'
+import { localImg } from '../utils'
 import { SearchAddDialog, SearchAddDialogRef } from './SearchAddDialog'
-import useAnimeData from '../hooks/useAnimeData'
 import { AnimeCategoryInfo, AnimeInfo } from '../type'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateType } from '../store'
-import { addAnimeCategory } from '../store/anime'
+import { addAnimeCategory, modifyCategory, rmAnime } from '../store/anime'
 import { ShareDialog, ShareDialogRef } from './ShareDialog'
+import { Button } from 'antd-mobile'
+import { AddSquareOutline, DeleteOutline } from 'antd-mobile-icons'
+import { useClickAway } from 'ahooks'
 
 
 
@@ -16,12 +17,8 @@ export const AnimeCategoryList = () =>{
   const shareDialogRef = createRef<ShareDialogRef>()
   const contentRef = createRef<HTMLDivElement>()
   const animeList = useSelector<StateType, AnimeCategoryInfo[]>(state => state.anime) || []
-  const [sharing, setSharing] = useState(false)
   const dispatch = useDispatch()
-  useEffect(() => {
-    console.log(animeList)
-    
-  }, [animeList])
+
   const openSearchAdd = (categoryId: string, data?:AnimeInfo) => {
     dialogRef.current?.openModal({categoryId, animeInfo: data})
   }
@@ -42,15 +39,57 @@ export const AnimeCategoryList = () =>{
     shareDialogRef.current?.openModal()
   }
 
+  const deleteAnime = (categoryId:string) => {
+
+    dispatch(
+      rmAnime({categoryId})
+    )
+  }
+  const editInputRef = createRef<HTMLInputElement>()
+  let lastCategoryId = ''
+  useClickAway(
+    () => {
+      console.log(lastCategoryId)
+      
+      dispatch(
+        modifyCategory({categoryId: lastCategoryId, editing: false})
+      )
+    },
+    () => editInputRef.current
+  )
+  const onEditCategory = (data: AnimeCategoryInfo) => {
+    lastCategoryId = data.categoryId
+    console.log(data.categoryId)
+    
+    dispatch(
+      modifyCategory({categoryId: data.categoryId, editing: true})
+    )
+
+  }
+  const modifyCategoryName = (e: { target: { value: string } }, data: AnimeCategoryInfo) => {
+    dispatch(
+      modifyCategory({...data, categoryName: e.target.value, editing: false})
+    )
+
+  }
+
   return (
     <>
       <div className="flex flex-row overflow-x-auto max-h-screen w-screen min-h-screen" ref={contentRef}>
         {
           animeList.map(categoryItem => {
             return (
-              <div className='flex flex-col flex-nowrap min-w-12 max-w-16' key={categoryItem.categoryId}>
-                <div className="text-sm font-sans text-nowrap font-bold">{categoryItem.categoryName}</div>
-                <div className={`flex flex-col flex-nowrap px-1 ${sharing ? '' : 'overflow-y-auto'}`}>
+              <div className='flex flex-col flex-nowrap min-w-12 max-w-16' key={categoryItem.categoryId} ref={editInputRef}>
+                {
+                  categoryItem.editing 
+                    ?
+                    <input onBlur={(e) => modifyCategoryName(e, categoryItem)} data-id={categoryItem.categoryId} defaultValue={categoryItem.categoryName} type="text" placeholder="编辑类目" maxLength={5} className="h-4 w-full text-sm" />
+                    :
+                    <div className="text-sm font-sans text-nowrap font-bold"
+                      onClick={() => onEditCategory(categoryItem)} >{categoryItem.categoryName}
+                    </div>
+                }
+                <div className={'flex flex-col flex-nowrap px-1'}>
                   {
                     categoryItem.list.map(animeItem => {
                       return (
@@ -65,11 +104,22 @@ export const AnimeCategoryList = () =>{
                     })
                   }
                   <div
-                    onMouseUp={() => openSearchAdd(categoryItem.categoryId)}
-                    onTouchEnd={() => openSearchAdd(categoryItem.categoryId)}
-                    className="flex flex-col items-center justify-center border-dashed border border-gray w-full min-h-9">
-                    <img src={localImg('add.png')} alt="" className="size-5"/>
+                    className="flex flex-nowrap items-center justify-around"
+                  >
+                    <DeleteOutline 
+                      className="text-base"
+                      color='var(--adm-color-danger)'
+                      onClick={(e) => {e.stopPropagation();deleteAnime(categoryItem.categoryId)}}
+                    />
+                    <AddSquareOutline
+                      className="text-base"
+                      color="#76c6b8"
+                      onMouseUp={() => openSearchAdd(categoryItem.categoryId)}
+                      onTouchEnd={() => openSearchAdd(categoryItem.categoryId)}
+                    />
+
                   </div>
+
                 </div>
               </div>
             )
