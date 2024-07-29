@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:be": "cd no-anime-no-life-be && npm install && npm run build",
-    "build:fe": "cd no-anime-no-life-fe && npm install && npm run build",
+    "build:be": "cd no-anime-no-life-be && npm install --registry=https://r.cnpmjs.org && npm run build",
+    "build:fe": "cd no-anime-no-life-fe && npm install --registry=https://r.cnpmjs.org && npm run build",
     "build": "npm run build:be && npm run build:fe",
     "server": "pm2 start no-anime-no-life-be/dist/main.js",
     "release": "release-it"
