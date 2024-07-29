@@ -8,9 +8,13 @@
     "build:be": "cd no-anime-no-life-be && npm install && npm run build",
     "build:fe": "cd no-anime-no-life-fe && npm install && npm run build",
     "build": "npm run build:be && npm run build:fe",
-    "server": "pm2 start no-anime-no-life-be/dist/main.js"
+    "server": "pm2 start no-anime-no-life-be/dist/main.js",
+    "release": "release-it"
   },
   "keywords": [],
   "author": "lc",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "release-it": "^15.11.0"
+  }
 }

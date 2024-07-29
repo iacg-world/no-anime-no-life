@@ -1,0 +1,9 @@
+FROM node:20-alpine
+USER root
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+COPY . /usr/src/app/
+RUN npm build
+COPY . /usr/src/app
+EXPOSE 80 3000
+CMD npm run server

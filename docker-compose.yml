@@ -1,0 +1,11 @@
+version: '3'
+# 启动的服务
+services:
+  no-anime-no-life:
+    image: registry.cn-hangzhou.aliyuncs.com/supercll/no-anime-no-life:{{tag}}
+    container_name: no-anime-no-life
+    ports:
+      - 3002:3000
+      - 82:80
+    env_file:
+      - .env
