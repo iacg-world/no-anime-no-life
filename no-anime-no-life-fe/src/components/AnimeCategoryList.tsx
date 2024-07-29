@@ -1,4 +1,4 @@
-import { createRef, useEffect, useState } from 'react'
+import { createRef } from 'react'
 import { localImg } from '../utils'
 import { SearchAddDialog, SearchAddDialogRef } from './SearchAddDialog'
 import { AnimeCategoryInfo, AnimeInfo } from '../type'
@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { StateType } from '../store'
 import { addAnimeCategory, modifyCategory, rmAnime } from '../store/anime'
 import { ShareDialog, ShareDialogRef } from './ShareDialog'
-import { Button } from 'antd-mobile'
 import { AddSquareOutline, DeleteOutline } from 'antd-mobile-icons'
 import { useClickAway } from 'ahooks'
 

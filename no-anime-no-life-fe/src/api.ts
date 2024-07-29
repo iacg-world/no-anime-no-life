@@ -1,5 +1,4 @@
-import axios, { AxiosResponse } from 'axios'
-import { ResDataType, ResType } from './ajax'
+import axios from 'axios'
 import { AnimeCategoryInfo, AnimeInfo, ResponseResult } from './type'
 
 export const searchByKeyword = (keyword: string) => {

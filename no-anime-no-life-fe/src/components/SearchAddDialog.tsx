@@ -1,9 +1,7 @@
-import { forwardRef, useImperativeHandle, useState, FunctionComponent, FC, useEffect} from 'react'
+import { forwardRef, useImperativeHandle, useState, useEffect} from 'react'
 import { useRequest } from 'ahooks'
 import { searchByKeyword } from '../api'
-import { AnimeCategoryInfo, AnimeInfo, ResponseResult } from '../type'
-import { AxiosResponse } from 'axios'
-import useAnimeData from '../hooks/useAnimeData'
+import { AnimeInfo } from '../type'
 import { addAnime, modifyAnime } from '../store/anime'
 import { useDispatch } from 'react-redux'
 import { Button } from 'antd-mobile'
@@ -27,7 +25,7 @@ const getSearchRes = async (key:string)=> {
   return await searchByKeyword(key)
 } 
 
-export const SearchAddDialog = forwardRef<SearchAddDialogRef, SearchAddDialogProps>((props, ref) => {
+export const SearchAddDialog = forwardRef<SearchAddDialogRef, SearchAddDialogProps>((_props, ref) => {
   const [isOpen, setIsOpen] = useState(false)
   const [inputValue, setInputValue] = useState('')
   const dispatch = useDispatch()

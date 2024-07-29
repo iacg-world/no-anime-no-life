@@ -7,7 +7,7 @@ interface StorageAdapter {
 
 // 创建一个Redux中间件来自动存储状态到localStorage
 const createStorageMiddleware = (adapter: StorageAdapter) => {
-  return ({ dispatch, getState }) => (next: any) => (action: any) => {
+  return ({ getState }: { getState: any }) => (next: any) => (action: any) => {
     // 派发action
     const result = next(action)
 

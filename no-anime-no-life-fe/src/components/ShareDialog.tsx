@@ -1,6 +1,6 @@
-import { forwardRef, useImperativeHandle, useState, FunctionComponent, FC, useEffect, createRef} from 'react'
-import { getShareList, searchByKeyword } from '../api'
-import { AnimeCategoryInfo, AnimeInfo, ResponseResult } from '../type'
+import { forwardRef, useImperativeHandle, useState, createRef} from 'react'
+import { getShareList } from '../api'
+import { AnimeCategoryInfo} from '../type'
 import { takeScreenshot } from '../utils'
 import { useRequest } from 'ahooks'
 import { Button, DotLoading } from 'antd-mobile'
@@ -11,10 +11,6 @@ export interface ShareDialogProps {
 
 }
 
-interface AddInfo {
-  categoryId: string,
-  animeInfo?: AnimeInfo
-}
  
 export type ShareDialogRef = {
   openModal: () => void;

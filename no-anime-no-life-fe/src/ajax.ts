@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { getToken } from '../utils/user-token'
 
 const instance = axios.create({
   timeout: 10 * 1000,

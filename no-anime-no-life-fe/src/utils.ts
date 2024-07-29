@@ -1,14 +1,7 @@
-import { toJpeg } from 'html-to-image';
+import { toJpeg } from 'html-to-image'
 
 export function localImg(file: string) {
   return new URL(`./assets/${file}`, import.meta.url).href
-}
-function getCanvasBlob(canvas: HTMLCanvasElement) {
-  return new Promise<Blob | null>((resolve) => {
-    canvas.toBlob((blob) => {
-      resolve(blob)
-    })
-  })
 }
 
 function download(url: string) {

@@ -1,9 +1,7 @@
-import { createContext, useState, FC } from 'react'
-import { mockAnimeList } from '../mock'
+import { useState } from 'react'
 import { nanoid } from 'nanoid'
 import { AnimeCategoryInfo, AnimeInfo } from '../type'
 import { produce } from 'immer'
-const initData = JSON.parse(localStorage.getItem('animeData') || '[]')
 
 export default function useAnimeData() {
   const initData = JSON.parse(localStorage.getItem('animeData') || '[]')
