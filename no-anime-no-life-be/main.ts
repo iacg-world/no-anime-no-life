@@ -13,7 +13,7 @@ async function bootstrap() {
   // 使用 NestFactory.create 方法创建一个 Nest 应用实例，并传入根模块 AppModule
   const app = await NestFactory.create(AppModule);
   // 配置CORS白名单
-  const whiteList = ['http://example.com', 'http://localhost:3000', 'http://localhost:5173'];
+  const whiteList = [process.env.NANF_HOST, 'http://localhost:3000', 'http://localhost:5173'];
   app.enableCors({
     origin: (requestOrigin: string, callback: (err: Error, allow?: boolean) => void) => {
       

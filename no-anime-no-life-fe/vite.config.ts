@@ -8,6 +8,12 @@ export default defineConfig(({ command, mode }) => {
   
   return {
     envPrefix: 'NANF',
+    build: {
+      outDir: path.join(envPath, 'no-anime-no-life-be/dist'),
+      assetsDir: 'fe-dist',
+    },
+    
+
     envDir: envPath,
     plugins: [react()],
     // 别名配置
