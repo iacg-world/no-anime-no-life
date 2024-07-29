@@ -1,9 +1,10 @@
-import axios from 'axios'
+import axios from './ajax'
 import { AnimeCategoryInfo, AnimeInfo, ResponseResult } from './type'
 
+
 export const searchByKeyword = (keyword: string) => {
-  return axios.get<ResponseResult<AnimeInfo[]>>(`http://localhost:3000/s/${keyword}`)
+  return axios.get<ResponseResult<AnimeInfo[]>>(`s/${keyword}`)
 }
 export const getShareList = (animeList: AnimeCategoryInfo[]) => {
-  return axios.post<ResponseResult<AnimeCategoryInfo[]>>('http://localhost:3000/share', animeList)
+  return axios.post<ResponseResult<AnimeCategoryInfo[]>>('share', animeList)
 }

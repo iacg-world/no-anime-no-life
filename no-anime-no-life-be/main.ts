@@ -3,7 +3,11 @@ import { NestFactory } from '@nestjs/core';
 // 导入应用的根模块 AppModule
 import { AppModule } from './app.module';
 import dotenv from 'dotenv'
-dotenv.config()
+import path from 'path'
+
+dotenv.config({
+  path: path.join(path.dirname(__dirname), '.env')
+})
 // 定义一个异步函数 bootstrap，用于启动应用
 async function bootstrap() {
   // 使用 NestFactory.create 方法创建一个 Nest 应用实例，并传入根模块 AppModule
