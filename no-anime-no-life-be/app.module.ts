@@ -12,10 +12,12 @@ import { DownloadService } from './src/download/download.service';
 @Module({
   // 在 controllers 属性中指定当前模块包含的控制器
   controllers: [AppController, SearchController, DownloadController],
-  imports: [HttpModule.register({
-    timeout: 5000,
-    maxRedirects: 5,
-  }),],
+  imports: [
+    HttpModule.register({
+      timeout: 5000,
+      maxRedirects: 5,
+    }),
+  ],
   providers: [SearchService, DownloadService, {
     provide: 'APP_INTERCEPTOR',
     useClass: TransformInterceptor

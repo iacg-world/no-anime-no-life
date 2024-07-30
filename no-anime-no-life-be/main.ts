@@ -6,7 +6,7 @@ import dotenv from 'dotenv'
 import path from 'path'
 
 dotenv.config({
-  path: path.join(path.dirname(__dirname), '.env')
+  path: path.resolve('../.env')
 })
 // 定义一个异步函数 bootstrap，用于启动应用
 async function bootstrap() {

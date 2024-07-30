@@ -6,8 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --exec ts-node main.ts",
-    "build": "npx nest build",
-    "start": "nodemon dist/main.js"
+    "build": "npx nest build NODE_ENV=production",
+    "start": "nodemon dist/main.js NODE_ENV=production",
+    "server": "pm2 dist/main.js"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +16,7 @@
   "dependencies": {
     "@nestjs/axios": "^3.0.2",
     "@nestjs/common": "^10.3.10",
+    "@nestjs/config": "^3.2.3",
     "@nestjs/core": "^10.3.10",
     "@nestjs/platform-express": "^10.3.10",
     "ali-oss": "^6.20.0",

@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseURL = location.href.includes('localhost') ? 'http://localhost:3000/' : import.meta.env.NANF_API_BASE_URL
+const baseURL = location.href.includes('localhost') ? 'http://localhost:3000/' : `https://${import.meta.env.NANF_API_BASE_URL}`
 
 const instance = axios.create({
   baseURL: baseURL,
