@@ -4,6 +4,11 @@ export interface AnimeCategoryInfo {
   list: Partial<AnimeInfo>[]
 }
 
+export interface OSSImgInfo {
+  name: string,
+  url: string,
+}
+
 
 export interface AnimeInfo {
   'aid': string,
@@ -22,4 +27,6 @@ export interface AnimeInfo {
 export interface LocalImgInfo {
   aid: string,
   name: string,
+  id: number,
+  ossUrl?: string
 }

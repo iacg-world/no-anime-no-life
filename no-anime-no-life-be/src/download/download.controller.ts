@@ -8,6 +8,14 @@ import { extname, normalize, join } from 'path'
 import { imagePath } from "../../src/common";
 import { clearImageCache } from "../../src/utils";
 
+const asyncUrl = (url) => {
+  return new Promise((resolve) => {
+    resolve({
+      url,
+    })
+  })
+}
+
 @Controller('share')
 export class DownloadController {
   private client
@@ -29,16 +37,14 @@ export class DownloadController {
     const localImgList = await this.downloadService.download(list)
     const promiseArr: Promise<any>[] = []
     const cachePath = []
+    
 
-    localImgList.forEach(async ({ name }) => {
+    localImgList.forEach(async ({ name, ossUrl }) => {
 
-      const savedOSSPath = join(
-        'cover',
-        `${new Date().getTime()}-${name}`,
-      )
+      // const savedOSSPath = `${new Date().getTime()}-${name}`
       const localPath = `${imagePath}/${name}`
       cachePath.push(localPath)
-      const res = this.client.put(savedOSSPath, localPath)
+      const res = ossUrl ? asyncUrl(ossUrl) : this.client.put(name, localPath)
       promiseArr.push(res)
 
     })
@@ -55,7 +61,7 @@ export class DownloadController {
             aid: item.aid,
             id: item.id,
             name_cn: item.name_cn,
-            ossUrl: ossUrlList.find(url => url.includes(item.aid))
+            ossUrl: ossUrlList.find(url => url.includes(String(item.id)))
           }
         })
       }
