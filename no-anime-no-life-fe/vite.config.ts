@@ -12,7 +12,7 @@ export default defineConfig(({ command, mode }) => {
       outDir: path.join(envPath, 'no-anime-no-life-be/dist'),
       assetsDir: 'fe-dist',
     },
-    
+
 
     envDir: envPath,
     plugins: [react()],

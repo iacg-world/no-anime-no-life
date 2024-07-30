@@ -14,8 +14,8 @@ import { DownloadService } from './src/download/download.service';
   controllers: [AppController, SearchController, DownloadController],
   imports: [
     HttpModule.register({
-      timeout: 5000,
-      maxRedirects: 5,
+      timeout: 8000,
+      maxRedirects: 10,
     }),
   ],
   providers: [SearchService, DownloadService, {
