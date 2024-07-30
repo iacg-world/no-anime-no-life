@@ -52,7 +52,9 @@ export class DownloadController {
         ...item,
         list: item.list.map(item => {
           return {
-            ...item,
+            aid: item.aid,
+            id: item.id,
+            name_cn: item.name_cn,
             ossUrl: ossUrlList.find(url => url.includes(item.aid))
           }
         })

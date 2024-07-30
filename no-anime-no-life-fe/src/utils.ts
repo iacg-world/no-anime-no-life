@@ -8,7 +8,7 @@ function download(url: string) {
   const link = document.createElement('a')
   link.style.display = 'none'
   link.href = url
-  link.download = decodeURI('anime.jpg')
+  link.download = decodeURI('动画人生')
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)
@@ -16,10 +16,11 @@ function download(url: string) {
 }
 export async function takeScreenshot(ele: HTMLElement) {
   const url = await toJpeg(ele, {
-    quality: 0.80,
+    quality: 1,
     width: ele.scrollWidth,
     height: ele.scrollHeight,
-    backgroundColor: '#FFFAFA'
+    backgroundColor: '#FFFAFA',
+    skipAutoScale: true,
 
   })
   if (url) {

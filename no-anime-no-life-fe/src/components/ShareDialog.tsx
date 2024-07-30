@@ -75,7 +75,7 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
                 loading 
                   ?
                   <div className="flex content-center">
-                    <span>加载中</span><DotLoading />
+                    <span>生成分享中</span><DotLoading />
                   </div>
                   :    
                   <>
@@ -91,7 +91,7 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
                                     return (
                                       <div 
                                         className="flex flex-col items-center">
-                                        <img src={animeItem.ossUrl} alt="" className="w-full h-14" />
+                                        <img src={animeItem.ossUrl} alt="" className="w-full h-16" />
                                         <div className="text-center text-xs whitespace-nowrap w-full overflow-hidden text-ellipsis ">{animeItem.name_cn}</div>
                                       </div>
                                     )
@@ -105,8 +105,8 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
                       }
                     </div>
                     <div className="flex content-center">
-                      <Button onClick={closeModal}>关闭</Button>
-                      <Button onClick={createImg} loading={downloadLoading} color='success' loadingText='正在下载'>下载</Button>
+                      <Button onClick={closeModal} className="mr-1">关闭</Button>
+                      <Button onClick={createImg} loading={downloadLoading} color='success' loadingText='正在下载'>下载分享图</Button>
                     </div>
                   </>
               }

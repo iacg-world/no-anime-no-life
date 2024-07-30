@@ -19,7 +19,9 @@ export class DownloadService {
 
   async download(list: AnimeCategoryInfo[]): Promise<LocalImgInfo[]> {
     let imgList: ImageInfo[] = []
-
+    if(!fs.existsSync(imagePath)) {
+      fs.mkdirSync(imagePath);
+    }
     list.forEach(item => {
 
       imgList = imgList.concat(item.list.map(item => {
@@ -41,6 +43,7 @@ export class DownloadService {
         });
 
         const fileName = item.name + '.jpg'
+
         fs.writeFileSync(`${imagePath}/${fileName}`, 'test');
         const writer = fs.createWriteStream(`${imagePath}/${fileName}`);
 
