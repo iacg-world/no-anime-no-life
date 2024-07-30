@@ -8,7 +8,7 @@
     "build:be": "cd no-anime-no-life-be && npm install --registry=https://registry.npmmirror.com/ && npm run build",
     "build:fe": "cd no-anime-no-life-fe && npm install --registry=https://registry.npmmirror.com/ && npm run build",
     "build": "npm run build:be && npm run build:fe",
-    "server": "node no-anime-no-life-be/dist/main.js",
+    "server": "cd no-anime-no-life-be && npm run server",
     "release": "release-it"
   },
   "keywords": [],
