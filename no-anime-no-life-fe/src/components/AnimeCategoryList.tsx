@@ -71,21 +71,21 @@ export const AnimeCategoryList = () =>{
 
   return (
     <>
-      <div className="flex flex-row overflow-x-auto max-h-screen w-screen min-h-screen" ref={contentRef}>
+      <div className="flex flex-row overflow-x-auto w-screen h-full" ref={contentRef}>
         {
           animeList.map(categoryItem => {
             return (
-              <div className='flex flex-col flex-nowrap min-w-12 max-w-16' key={categoryItem.categoryId} ref={editInputRef}>
+              <div className='flex flex-col flex-nowrap min-w-14 max-w-16 h-full' key={categoryItem.categoryId} ref={editInputRef}>
                 {
                   categoryItem.editing 
                     ?
-                    <input onBlur={(e) => modifyCategoryName(e, categoryItem)} data-id={categoryItem.categoryId} defaultValue={categoryItem.categoryName} type="text" placeholder="编辑类目" maxLength={5} className="h-4 w-full text-sm" />
+                    <input autoFocus onBlur={(e) => modifyCategoryName(e, categoryItem)} data-id={categoryItem.categoryId} defaultValue={categoryItem.categoryName} type="text" placeholder="编辑类目" maxLength={5} className="h-4 w-full text-sm" />
                     :
                     <div className="text-sm font-sans text-nowrap font-bold"
                       onClick={() => onEditCategory(categoryItem)} >{categoryItem.categoryName}
                     </div>
                 }
-                <div className={'flex flex-col flex-nowrap px-1'}>
+                <div className='flex flex-col flex-nowrap px-1 overflow-y-auto h-full flex-1'>
                   {
                     categoryItem.list.map(animeItem => {
                       return (
@@ -93,7 +93,7 @@ export const AnimeCategoryList = () =>{
                           key={animeItem.aid}
                           onMouseUp={() => openSearchAdd(categoryItem.categoryId, animeItem)}
                           className="flex flex-col items-center">
-                          <img src={animeItem.images?.medium} alt="" className="w-full h-14" />
+                          <img src={animeItem.images?.medium} alt="" className="w-full min-h-16 max-h-18" />
                           <div className="flex flex-row text-xs">{animeItem.name_cn}</div>
                         </div>
                       )
@@ -129,8 +129,9 @@ export const AnimeCategoryList = () =>{
       </div>
       <SearchAddDialog ref={dialogRef}></SearchAddDialog>
       <ShareDialog  ref={shareDialogRef} animeList={animeList} />
-      <div onClick={onShare} className="fixed right-1 bottom-1">
-        <img className="size-4" src={localImg('share.png')} alt="" />
+      <div onClick={onShare} className="fixed right-1 bottom-1 p-0.5 bg-white rounded-sm flex flex-col items-center">
+        <img className="size-4 mb-0.5" src={localImg('share.png')} alt="" />
+        分享
       </div>
     </>
   )

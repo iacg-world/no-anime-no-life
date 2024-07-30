@@ -4,7 +4,7 @@ import { searchByKeyword } from '../api'
 import { AnimeInfo } from '../type'
 import { addAnime, modifyAnime } from '../store/anime'
 import { useDispatch } from 'react-redux'
-import { Button } from 'antd-mobile'
+import { Button, Toast } from 'antd-mobile'
 
 
 export interface SearchAddDialogProps {
@@ -71,15 +71,25 @@ export const SearchAddDialog = forwardRef<SearchAddDialogRef, SearchAddDialogPro
     setIsOpen(false)
   }
 
-  const chooseAnime = (data: AnimeInfo) => {
+  const chooseAnime = async (data: AnimeInfo) => {
     if (addInfo.animeInfo) {
-      dispatch(
+      await dispatch(
         modifyAnime({categoryId: addInfo.categoryId, aid: addInfo.animeInfo.aid, obj: data})
       )
+      
+      Toast.show({
+        content: '修改成功',
+        position: 'top',
+      })
     } else {
-      dispatch(
+      await dispatch(
         addAnime({categoryId: addInfo.categoryId, obj: data})
       )
+      Toast.show({
+        content: '添加成功',
+        position: 'top',
+        duration: 800,
+      })
     }
 
   }

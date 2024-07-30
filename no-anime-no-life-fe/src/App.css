@@ -5,8 +5,8 @@
 
 /* 整个滚动条 */
 ::-webkit-scrollbar {
-  width: 0.2rem; /* 水平滚动条的高度、垂直滚动条的宽度 */
-  height: 0.2rem; /* 水平滚动条的高度 */
+  width: 0.1rem; /* 水平滚动条的高度、垂直滚动条的宽度 */
+  height: 0.1rem; /* 水平滚动条的高度 */
   border-radius: 1rem;
 }
  
@@ -18,7 +18,7 @@
  
 /* 滚动条滑块 */
 ::-webkit-scrollbar-thumb {
-  background: #c7c6c6; /* 滑块颜色 */
+  background: #d6d5d5; /* 滑块颜色 */
   border-radius: 1rem;
 }
  
