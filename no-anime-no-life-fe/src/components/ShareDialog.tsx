@@ -47,7 +47,13 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
   const openModal = async (isWx: boolean = false) => {
     setIsOpen(true)
     setIsWx(isWx)
-    getOssAnimeList()
+    try {
+      await getOssAnimeList()
+    } catch (error) {
+      Toast.show('服务异常，请重试')
+      setIsOpen(false)
+      
+    }
   }
   useImperativeHandle(ref, () => ({
     openModal

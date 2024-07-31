@@ -2,11 +2,27 @@ import { nanoid } from 'nanoid'
 import { AnimeCategoryInfo, AnimeInfo } from '../type'
 import { produce } from 'immer'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-const initData = JSON.parse(localStorage.getItem('animeData') || '[]')
+const INIT_DATA: AnimeCategoryInfo[] = [
+  {
+    categoryId: nanoid(),
+    categoryName: '热血/战斗',
+    list: [],
+  },
+  {
+    categoryId: nanoid(),
+    categoryName: '青春/校园',
+    list: [],
+  },
+  {
+    categoryId: nanoid(),
+    categoryName: '搞笑/治愈',
+    list: [],
+  },
+]
 
 export const componentsSlice = createSlice({
   name: 'anime',
-  initialState: initData,
+  initialState: INIT_DATA,
   reducers: {
     addAnimeCategory: produce(
       (draft: AnimeCategoryInfo[], action: PayloadAction<string>) => {
