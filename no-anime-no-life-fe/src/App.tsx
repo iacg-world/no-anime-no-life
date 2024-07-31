@@ -11,9 +11,10 @@ function App() {
         <div className="text-center text-xl font-bold">NO ANIME NO LIFE</div>
         <div className="text-center font-bold">动画人生分享器</div>
       </div>
-      <div className="grow h-[90vh]">
+      <div className="grow h-[85vh]">
         <AnimeCategoryList/>
       </div>
+      <div className="h-[5vh]"></div>
     </div>
   )
 }

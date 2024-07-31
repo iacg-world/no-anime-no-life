@@ -20,7 +20,7 @@ export async function takeScreenshot(ele: HTMLElement) {
     width: ele.scrollWidth,
     height: ele.scrollHeight,
     backgroundColor: '#FFFAFA',
-    skipAutoScale: true,
+    cacheBust: true,
 
   })
   if (url) {

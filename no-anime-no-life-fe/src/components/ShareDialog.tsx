@@ -3,7 +3,7 @@ import { getShareList } from '../api'
 import { AnimeCategoryInfo} from '../type'
 import { takeScreenshot } from '../utils'
 import { useRequest } from 'ahooks'
-import { Button, DotLoading } from 'antd-mobile'
+import { Button, DotLoading, Toast } from 'antd-mobile'
 
 
 export interface ShareDialogProps {
@@ -59,8 +59,14 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
   const createImg = async () => {
     setDownloadLoading(true)
     if (contentRef.current) {
-      await takeScreenshot(contentRef.current)
-      setDownloadLoading(false)
+      try {
+        await takeScreenshot(contentRef.current)
+        setDownloadLoading(false)
+      } catch (error) {
+        setDownloadLoading(false)
+        Toast.show('下载失败请重试')
+        
+      }
     }
   }
  
@@ -70,7 +76,7 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
         isOpen ? (
       
           <div className="bg-stone-900/60 fixed top-0 left-0 w-screen h-screen flex items-center justify-center rounded-sm z-10">
-            <div className="bg-white p-1 w-4/5 min-h-1/2 max-h-screen max-w-screen flex flex-col items-center box-border overflow-scroll">
+            <div className="bg-white p-1 pb-4 box-border w-4/5 min-h-1/2 max-h-screen max-w-screen flex flex-col items-center overflow-scroll">
               {
                 loading 
                   ?
