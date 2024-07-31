@@ -75,6 +75,7 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
             title: '长按中间保存',
             actions: [],
             showCloseButton: true,
+            closeOnMaskClick: true,
           })
 
         } else {
