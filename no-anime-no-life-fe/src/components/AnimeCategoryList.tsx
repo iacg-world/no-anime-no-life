@@ -36,7 +36,7 @@ export const AnimeCategoryList = () =>{
 
   const onShare = async () => {
     const userAgent = window.navigator.userAgent.toLowerCase()
-    if (userAgent.indexOf('micromessenger') !== -1 || true) {
+    if (userAgent.indexOf('micromessenger') !== -1) {
     // 确认是微信浏览器
       shareDialogRef.current?.openModal(true)
 

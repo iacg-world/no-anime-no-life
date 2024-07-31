@@ -13,7 +13,7 @@ export interface ShareDialogProps {
 
  
 export type ShareDialogRef = {
-  openModal: (isWx:boolean) => void;
+  openModal: (isWx?:boolean) => void;
 };
 
 
