@@ -1,9 +1,9 @@
-import { forwardRef, useImperativeHandle, useState, createRef} from 'react'
+import { forwardRef, useImperativeHandle, useState, createRef, useEffect} from 'react'
 import { getShareList } from '../api'
 import { AnimeCategoryInfo} from '../type'
 import { takeScreenshot } from '../utils'
 import { useRequest } from 'ahooks'
-import { Button, DotLoading, Toast } from 'antd-mobile'
+import { Button, DotLoading, Modal, Toast } from 'antd-mobile'
 
 
 export interface ShareDialogProps {
@@ -13,7 +13,7 @@ export interface ShareDialogProps {
 
  
 export type ShareDialogRef = {
-  openModal: () => void;
+  openModal: (isWx:boolean) => void;
 };
 
 
@@ -34,6 +34,7 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
     }
   } 
   const [isOpen, setIsOpen] = useState(false)
+  const [isWx, setIsWx] = useState(false)
   const contentRef = createRef<HTMLDivElement>()
 
   const { data:shareAnimeList, loading, runAsync: getOssAnimeList,  } = useRequest(getRequest, {
@@ -43,8 +44,9 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
     
   })
 
-  const openModal = () => {
+  const openModal = async (isWx: boolean = false) => {
     setIsOpen(true)
+    setIsWx(isWx)
     getOssAnimeList()
   }
   useImperativeHandle(ref, () => ({
@@ -60,8 +62,20 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
     setDownloadLoading(true)
     if (contentRef.current) {
       try {
-        await takeScreenshot(contentRef.current)
+        if (isWx) {
+          const url = await takeScreenshot(contentRef.current, false)
+          Modal.show({
+            image:url,
+            title: '长按中间保存',
+            actions: [],
+            showCloseButton: true,
+          })
+
+        } else {
+          await takeScreenshot(contentRef.current)
+        }
         setDownloadLoading(false)
+
       } catch (error) {
         setDownloadLoading(false)
         Toast.show('下载失败请重试')
@@ -83,7 +97,7 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
                   <div className="flex content-center">
                     <span>生成分享中</span><DotLoading />
                   </div>
-                  :    
+                  :
                   <>
                     <div onDoubleClick={createImg} className="flex flex-row overflow-x-auto max-h-full min-h-full min-w-[80vw]" ref={contentRef}>
                       {
@@ -95,7 +109,8 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
                                 {
                                   categoryItem.list.map(animeItem => {
                                     return (
-                                      <div 
+                                      <div
+                                        key={animeItem.aid}
                                         className="flex flex-col items-center">
                                         <img src={animeItem.ossUrl} alt="" className="w-full h-16" />
                                         <div className="text-center text-xs whitespace-nowrap w-full overflow-hidden text-ellipsis ">{animeItem.name_cn}</div>

@@ -14,7 +14,7 @@ function download(url: string) {
   document.body.removeChild(link)
 
 }
-export async function takeScreenshot(ele: HTMLElement) {
+export async function takeScreenshot(ele: HTMLElement, isDownload: boolean = true) {
   const url = await toJpeg(ele, {
     quality: 1,
     width: ele.scrollWidth,
@@ -23,9 +23,10 @@ export async function takeScreenshot(ele: HTMLElement) {
     cacheBust: true,
 
   })
-  if (url) {
+  if (url && isDownload) {
 
     download(url)
   }
+  return url
 
 }

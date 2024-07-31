@@ -35,7 +35,15 @@ export const AnimeCategoryList = () =>{
   }
 
   const onShare = async () => {
-    shareDialogRef.current?.openModal()
+    const userAgent = window.navigator.userAgent.toLowerCase()
+    if (userAgent.indexOf('micromessenger') !== -1 || true) {
+    // 确认是微信浏览器
+      shareDialogRef.current?.openModal(true)
+
+    } else {
+      shareDialogRef.current?.openModal()
+    }
+
   }
 
   const deleteAnime = (categoryId:string) => {
