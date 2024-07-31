@@ -79,7 +79,7 @@ export const AnimeCategoryList = () =>{
 
   return (
     <>
-      <div className="flex flex-row overflow-x-auto w-screen h-full" ref={contentRef}>
+      <div className="flex flex-row overflow-x-auto w-full h-full" ref={contentRef}>
         {
           animeList.map(categoryItem => {
             return (

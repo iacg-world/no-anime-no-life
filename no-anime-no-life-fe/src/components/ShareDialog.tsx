@@ -105,7 +105,7 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
                   </div>
                   :
                   <>
-                    <div onDoubleClick={createImg} className="flex flex-row overflow-x-auto max-h-full min-h-full min-w-[80vw]" ref={contentRef}>
+                    <div onDoubleClick={createImg} className="flex flex-row overflow-x-auto max-h-full min-h-full min-w-[50%] max-w-full" ref={contentRef}>
                       {
                         shareAnimeList?.map(categoryItem => {
                           return (

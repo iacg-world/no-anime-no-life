@@ -11,12 +11,12 @@ function App() {
         <div className="text-center text-xl font-bold">NO ANIME NO LIFE</div>
         <div className="text-center font-bold">动画人生分享器</div>
       </div>
-      <div className="grow h-[85vh]">
+      <div className="grow h-[85vh] mb-2 shadow-md">
         <AnimeCategoryList/>
       </div>
       <div className="h-[5vh] text-center text-xs text-gray-400">
         <a target='_blank' className="mr-1" href="https://github.com/iacg-world/no-anime-no-life">@Github</a>
-        <a target='_blank' href="https://github.com/bangumi/api">动画接口来源</a>
+        <a target='_blank' href="https://github.com/bangumi/api">动画来自<strong>番组计划</strong></a>
       </div>
     </div>
   )
