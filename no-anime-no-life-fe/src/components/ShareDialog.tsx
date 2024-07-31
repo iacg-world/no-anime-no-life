@@ -1,4 +1,4 @@
-import { forwardRef, useImperativeHandle, useState, createRef, useEffect} from 'react'
+import { forwardRef, useImperativeHandle, useState, createRef} from 'react'
 import { getShareList } from '../api'
 import { AnimeCategoryInfo} from '../type'
 import { takeScreenshot } from '../utils'
