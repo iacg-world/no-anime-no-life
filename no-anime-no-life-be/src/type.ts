@@ -13,6 +13,7 @@ export interface OSSImgInfo {
 export interface AnimeInfo {
   'aid': string,
   'id': number,
+  'name': string,
   'name_cn': string,
   'images': {
     'large': string,

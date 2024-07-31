@@ -102,7 +102,7 @@ export const AnimeCategoryList = () =>{
                           onMouseUp={() => openSearchAdd(categoryItem.categoryId, animeItem)}
                           className="flex flex-col items-center">
                           <img src={animeItem.images?.medium} alt="" className="w-full min-h-16 max-h-18" />
-                          <div className="flex flex-row text-xs">{animeItem.name_cn}</div>
+                          <div className="flex flex-row text-xs">{animeItem.name_cn || animeItem.name}</div>
                         </div>
                       )
                     })

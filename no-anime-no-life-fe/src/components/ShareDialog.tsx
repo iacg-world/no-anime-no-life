@@ -119,7 +119,7 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
                                         key={animeItem.aid}
                                         className="flex flex-col items-center">
                                         <img src={animeItem.ossUrl} alt="" className="w-full h-16" />
-                                        <div className="text-center text-xs whitespace-nowrap w-full overflow-hidden text-ellipsis ">{animeItem.name_cn}</div>
+                                        <div className="text-center text-xs whitespace-nowrap w-full overflow-hidden text-ellipsis ">{animeItem.name_cn || animeItem.name}</div>
                                       </div>
                                     )
                                   })

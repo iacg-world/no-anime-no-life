@@ -60,6 +60,7 @@ export class DownloadController {
           return {
             aid: item.aid,
             id: item.id,
+            name: item.name,
             name_cn: item.name_cn,
             ossUrl: ossUrlList.find(url => url.includes(String(item.id)))
           }

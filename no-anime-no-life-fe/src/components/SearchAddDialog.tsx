@@ -111,7 +111,7 @@ export const SearchAddDialog = forwardRef<SearchAddDialogRef, SearchAddDialogPro
                           onClick={() => chooseAnime(item)}
                           className="flex flex-col items-center w-12 mr-1">
                           <img src={item.images?.large} alt="" className="w-full h-14"/>
-                          <div className="flex flex-row text-xs">{item.name_cn}</div>
+                          <div className="flex flex-row text-xs">{item.name_cn || item.name}</div>
                         </div>
                       )
                     })
