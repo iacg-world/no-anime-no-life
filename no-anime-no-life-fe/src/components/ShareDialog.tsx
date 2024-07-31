@@ -96,8 +96,8 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
       {
         isOpen ? (
       
-          <div className="bg-stone-900/60 fixed top-0 left-0 w-screen h-screen flex items-center justify-center rounded-sm z-10">
-            <div className="bg-white p-1 pb-4 box-border w-4/5 min-h-1/2 max-h-screen max-w-screen flex flex-col items-center overflow-scroll">
+          <div className="bg-stone-900/60 fixed top-0 left-0 w-screen h-screen flex items-center justify-center z-10">
+            <div className="bg-white p-1 pb-4 box-border w-4/5 min-h-1/2 max-h-screen max-w-screen flex flex-col items-center rounded-sm">
               {
                 loading 
                   ?
