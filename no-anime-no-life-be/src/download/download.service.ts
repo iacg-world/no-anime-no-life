@@ -53,7 +53,8 @@ export class DownloadService {
     return new Promise((resolve, reject) => {
       const res: LocalImgInfo[] = []
       imgList.forEach(async (item) => {
-        const existTarget = ossList.find(ossItem => ossItem.name.includes(String(item.id)))
+        const regexp = new RegExp(`^${item.id}-`)
+        const existTarget = ossList.find(ossItem => regexp.test(ossItem.name))
         
         if (existTarget) {
           res.push({
