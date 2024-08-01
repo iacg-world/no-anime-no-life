@@ -1,4 +1,4 @@
-import { forwardRef, useImperativeHandle, useState, createRef} from 'react'
+import { forwardRef, useImperativeHandle, useState, createRef, useEffect} from 'react'
 import { getShareList } from '../api'
 import { AnimeCategoryInfo} from '../type'
 import { isMobile, takeScreenshot } from '../utils'
@@ -34,7 +34,10 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
     }
   } 
   const [isOpen, setIsOpen] = useState(false)
+  const [width, setWidth] = useState('')
   const contentRef = createRef<HTMLDivElement>()
+
+
 
   const { data:shareAnimeList, loading, runAsync: getOssAnimeList,  } = useRequest(getRequest, {
     manual: true,
@@ -42,7 +45,17 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
     debounceLeading: true,
     
   })
+  useEffect(() => {
+    if (shareAnimeList?.length) {
+      console.log(contentRef.current?.scrollWidth)
+      const scrollWidth = contentRef.current?.scrollWidth
+      if (scrollWidth){
 
+        setWidth(scrollWidth + 'px')
+      }
+    }
+
+  }, [shareAnimeList])
   const openModal = async () => {
     setIsOpen(true)
     try {
@@ -104,31 +117,37 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
                   </div>
                   :
                   <>
-                    <div onDoubleClick={createImg} className="flex flex-row overflow-x-auto max-h-full min-h-full min-w-[50%] max-w-full" ref={contentRef}>
-                      {
-                        shareAnimeList?.map(categoryItem => {
-                          return (
-                            <div className='flex flex-col flex-nowrap' key={categoryItem.categoryId}>
-                              <div className="text-sm font-sans text-nowrap">{categoryItem.categoryName}</div>
-                              <div className={'flex flex-col flex-nowrap px-1 w-14'}>
-                                {
-                                  categoryItem.list.map(animeItem => {
-                                    return (
-                                      <div
-                                        key={animeItem.aid}
-                                        className="flex flex-col items-center">
-                                        <img src={animeItem.ossUrl} alt="" className="w-full h-16" />
-                                        <div className="text-center text-xs whitespace-nowrap w-full overflow-hidden text-ellipsis ">{animeItem.name_cn || animeItem.name}</div>
-                                      </div>
-                                    )
-                                  })
-                                }
+                    <div onDoubleClick={createImg} className="flex flex-col overflow-x-auto max-h-full min-h-full min-w-[50%] max-w-full" ref={contentRef}>
+                      <div className="text-center" style={{width: `${width}`}}>
+                        <div className="text-center font-bold text-sm">动画人生生成器</div>
+                        <div className="text-center font-thin text-xs mb-1">nanf.lc404.cn</div>
+                      </div>
+                      <div className="flex flex-row">
+                        {
+                          shareAnimeList?.map(categoryItem => {
+                            return (
+                              <div className='flex flex-col flex-nowrap' key={categoryItem.categoryId}>
+                                <div className="text-sm font-sans text-nowrap">{categoryItem.categoryName}</div>
+                                <div className={'flex flex-col flex-nowrap px-1 w-14'}>
+                                  {
+                                    categoryItem.list.map(animeItem => {
+                                      return (
+                                        <div
+                                          key={animeItem.aid}
+                                          className="flex flex-col items-center">
+                                          <img src={animeItem.ossUrl} alt="" className="w-full h-16 rounded-sm" />
+                                          <div className="text-center text-xs whitespace-nowrap w-full overflow-hidden text-ellipsis ">{animeItem.name_cn || animeItem.name}</div>
+                                        </div>
+                                      )
+                                    })
+                                  }
                   
+                                </div>
                               </div>
-                            </div>
-                          )
-                        })
-                      }
+                            )
+                          })
+                        }
+                      </div>
                     </div>
                     <div className="flex content-center">
                       <Button onClick={closeModal} className="mr-1">关闭</Button>

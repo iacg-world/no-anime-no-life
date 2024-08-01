@@ -4,7 +4,7 @@ import { searchByKeyword } from '../api'
 import { AnimeInfo } from '../type'
 import { addAnime, modifyAnime } from '../store/anime'
 import { useDispatch } from 'react-redux'
-import { Button, Toast } from 'antd-mobile'
+import { Button, Image, Toast } from 'antd-mobile'
 
 
 export interface SearchAddDialogProps {
@@ -110,7 +110,7 @@ export const SearchAddDialog = forwardRef<SearchAddDialogRef, SearchAddDialogPro
                           key={item.aid}
                           onClick={() => chooseAnime(item)}
                           className="flex flex-col items-center w-12 mr-1">
-                          <img src={item.images?.large} alt="" className="w-full h-14"/>
+                          <Image src={item.images?.large} alt="" className="w-full h-14"/>
                           <div className="flex flex-row text-xs">{item.name_cn || item.name}</div>
                         </div>
                       )

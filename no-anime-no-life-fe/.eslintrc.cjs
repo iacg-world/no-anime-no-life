@@ -18,6 +18,7 @@ module.exports = {
     'semi': ['error', 'never'],
     'react/react-in-jsx-scope': 'off',
     'indent': ['error', 2],
-    "@typescript-eslint/no-explicit-any": "off"
+    "@typescript-eslint/no-explicit-any": "off",
+    'react-hooks/exhaustive-deps': 0
   },
 }
