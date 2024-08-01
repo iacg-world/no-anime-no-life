@@ -1,7 +1,7 @@
 import { forwardRef, useImperativeHandle, useState, createRef} from 'react'
 import { getShareList } from '../api'
 import { AnimeCategoryInfo} from '../type'
-import { takeScreenshot } from '../utils'
+import { isMobile, takeScreenshot } from '../utils'
 import { useRequest } from 'ahooks'
 import { Button, DotLoading, Modal, Toast } from 'antd-mobile'
 
@@ -13,7 +13,7 @@ export interface ShareDialogProps {
 
  
 export type ShareDialogRef = {
-  openModal: (isWx?:boolean) => void;
+  openModal: () => void;
 };
 
 
@@ -34,7 +34,6 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
     }
   } 
   const [isOpen, setIsOpen] = useState(false)
-  const [isWx, setIsWx] = useState(false)
   const contentRef = createRef<HTMLDivElement>()
 
   const { data:shareAnimeList, loading, runAsync: getOssAnimeList,  } = useRequest(getRequest, {
@@ -44,9 +43,8 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
     
   })
 
-  const openModal = async (isWx: boolean = false) => {
+  const openModal = async () => {
     setIsOpen(true)
-    setIsWx(isWx)
     try {
       await getOssAnimeList()
     } catch (error) {
@@ -68,7 +66,7 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
     setDownloadLoading(true)
     if (contentRef.current) {
       try {
-        if (isWx) {
+        if (isMobile()) {
           const url = await takeScreenshot(contentRef.current, false)
           Modal.show({
             image:url,

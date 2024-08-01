@@ -30,3 +30,8 @@ export async function takeScreenshot(ele: HTMLElement, isDownload: boolean = tru
   return url
 
 }
+
+export function isMobile(): boolean {
+  const userAgent = navigator.userAgent
+  return /Android|iPhone|iPad|iPod|BlackBerry|webOS|Windows Phone|SymbianOS|IEMobile|Opera Mini/i.test(userAgent)
+}
