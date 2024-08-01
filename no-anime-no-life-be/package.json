@@ -8,7 +8,7 @@
     "dev": "nodemon --exec ts-node main.ts",
     "build": "npx nest build NODE_ENV=production",
     "start": "nodemon dist/main.js NODE_ENV=production",
-    "server": "pm2 start dist/main.js"
+    "server": "pm2 start dist/main.js --name=nanf --stop-exit-codes 0"
   },
   "keywords": [],
   "author": "",
