@@ -1,4 +1,4 @@
-import { toJpeg } from 'html-to-image'
+import { getFontEmbedCSS, toJpeg } from 'html-to-image'
 
 export function localImg(file: string) {
   return new URL(`./assets/${file}`, import.meta.url).href
@@ -15,12 +15,14 @@ function download(url: string) {
 
 }
 export async function takeScreenshot(ele: HTMLElement, isDownload: boolean = true) {
+  const fontEmbedCss = await getFontEmbedCSS(ele)
   const url = await toJpeg(ele, {
     quality: 1,
     width: ele.scrollWidth,
     height: ele.scrollHeight,
     backgroundColor: '#FFFAFA',
     cacheBust: true,
+    fontEmbedCSS: fontEmbedCss
 
   })
   if (url && isDownload) {
