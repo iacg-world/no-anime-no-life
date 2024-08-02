@@ -25,6 +25,9 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
       return []
     }
     const list = props.animeList
+    if (list.every(item => item.list.length === 0)) {
+      throw '至少添加一个动画'
+    }
     const data = await getShareList(list)
     if (data.data) {
       return data.data.data
@@ -61,7 +64,7 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
     try {
       await getOssAnimeList()
     } catch (error) {
-      Toast.show('服务异常，请重试')
+      Toast.show(error || '服务异常，请重试')
       setIsOpen(false)
       
     }

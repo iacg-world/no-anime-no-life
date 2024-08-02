@@ -102,7 +102,7 @@ export const SearchAddDialog = forwardRef<SearchAddDialogRef, SearchAddDialogPro
             <input placeholder="输入关键字查询动画" className="text-sm border-solid border-black/60 border rounded-sm py-1 px-2 mb-1" type="text" value={inputValue} onChange={inputChange}/>
             {
               !loading ? 
-                <div className="flex flex-row flex-wrap overflow-y-auto min-h-[50vh] max-h-[80vh] content-start">
+                <div className="flex flex-row flex-wrap overflow-y-auto min-h-[50vh] max-h-[70vh] content-start">
                   {
                     searchAnimeList.map(item => {
                       return (
@@ -117,7 +117,7 @@ export const SearchAddDialog = forwardRef<SearchAddDialogRef, SearchAddDialogPro
                     })
                   }
                 </div> :
-                <div className="flex flex-row flex-wrap overflow-y-auto min-h-[50vh] max-h-[80vh]">
+                <div className="flex flex-row flex-wrap overflow-y-auto min-h-[50vh] max-h-[70vh]">
                   <DotLoading />
                 </div>
             }
