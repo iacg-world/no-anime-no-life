@@ -167,9 +167,8 @@ export const AnimeCategoryList = () =>{
       </div>
       <SearchAddDialog ref={dialogRef}></SearchAddDialog>
       <ShareDialog  ref={shareDialogRef} animeList={animeList} />
-      <div onClick={onShare} className="fixed right-1 bottom-1 p-0.5 bg-white rounded-sm flex flex-col items-center">
-        <img className="size-6 mb-0.5" src={localImg('share.png')} alt="" />
-        分享你的动画
+      <div onClick={onShare} className="fixed right-1 bottom-1 p-0.5 rounded-sm flex flex-col items-center">
+        <img className="size-8 mb-0.5" src={localImg('share.png')} alt="" />
       </div>
     </>
   )
