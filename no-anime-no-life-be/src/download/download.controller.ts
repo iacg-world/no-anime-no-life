@@ -7,6 +7,7 @@ import { DownloadService } from "./download.service";
 import { extname, normalize, join } from 'path'
 import { imagePath } from "../../src/common";
 import { clearImageCache } from "../../src/utils";
+import { OssService } from "../OssService";
 
 const asyncUrl = (url) => {
   return new Promise((resolve) => {
@@ -18,18 +19,11 @@ const asyncUrl = (url) => {
 
 @Controller('share')
 export class DownloadController {
-  private client
   constructor(
     private readonly downloadService: DownloadService,
+    private readonly oss: OssService
   ) {
-    const client = new OSS({
-      region: 'oss-cn-shenzhen', // 示例：'oss-cn-hangzhou'，填写Bucket所在地域。
-      accessKeyId: process.env.ALC_ACCESS_KEY, // 确保已设置环境变量ALC_ACCESS_KEY。
-      accessKeySecret: process.env.ALC_SECRET_KEY, // 确保已设置环境变量ALC_SECRET_KEY。
-      bucket: 'no-anime-no-life', // 示例：'my-bucket-name'，填写存储空间名称。
-      secure: true,
-    });
-    this.client = client
+
   }
 
   @Post()
@@ -44,7 +38,7 @@ export class DownloadController {
       // const savedOSSPath = `${new Date().getTime()}-${name}`
       const localPath = `${imagePath}/${name}`
       cachePath.push(localPath)
-      const res = ossUrl ? asyncUrl(ossUrl) : this.client.put(name, localPath)
+      const res = ossUrl ? asyncUrl(ossUrl) : this.oss.client.put(name, localPath)
       promiseArr.push(res)
 
     })
