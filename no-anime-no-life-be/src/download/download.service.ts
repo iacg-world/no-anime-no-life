@@ -43,44 +43,50 @@ export class DownloadService {
     })
 
     return new Promise((resolve, reject) => {
-      const res: LocalImgInfo[] = []
+      const localImgList: LocalImgInfo[] = []
       imgList.forEach(async (item) => {
-        const regexp = new RegExp(`^${item.id}-`)
-        const existTarget = ossList.find(ossItem => regexp.test(ossItem.name))
+        const ossFileName = `anime-${item.id}.jpg`
+        const ossFileUrl = await this.oss.isExistObject(ossFileName)
         
-        if (existTarget) {
-          res.push({
+        if (ossFileUrl) {
+          localImgList.push({
             aid: item.aid,
-            name: existTarget.name,
+            name: item.name,
             id: item.id,
-            ossUrl: existTarget.url,
+            ossUrl: ossFileUrl,
           })
-          if (res.length === imgList.length) {
-            resolve(res)
+          if (localImgList.length === imgList.length) {
+            resolve(localImgList)
           }
           return
         }
+        
         const response = await this.httpService.axiosRef({
           url: item.url,
           method: 'GET',
           responseType: 'stream',
         });
 
-        const fileName = item.name + '.jpg'
+        const cacheFileName = item.name + '.jpg'
+        console.log(cacheFileName);
+        
+        
 
-        fs.openSync(`${imagePath}/${fileName}`, 'w')
-        const writer = fs.createWriteStream(`${imagePath}/${fileName}`);
+        fs.openSync(`${imagePath}/${cacheFileName}`, 'w')
+        const writer = fs.createWriteStream(`${imagePath}/${cacheFileName}`);
 
         response.data.pipe(writer);
 
         writer.on('finish', () => {
-          res.push({
+          localImgList.push({
             aid: item.aid,
-            name: fileName,
+            name: item.name,
+            cacheFileName,
+            ossFileName,
             id: item.id,
           })
-          if (res.length === imgList.length) {
-            resolve(res)
+          if (localImgList.length === imgList.length) {
+            resolve(localImgList)
           }
         });
         writer.on('error', () => {

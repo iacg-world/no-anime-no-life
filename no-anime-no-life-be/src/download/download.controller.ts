@@ -19,6 +19,7 @@ const asyncUrl = (url) => {
 
 @Controller('share')
 export class DownloadController {
+  private cachePaths = []
   constructor(
     private readonly downloadService: DownloadService,
     private readonly oss: OssService
@@ -28,41 +29,50 @@ export class DownloadController {
 
   @Post()
   async downloadImage(@Body() list: AnimeCategoryInfo[]) {
-    const localImgList = await this.downloadService.download(list)
-    const promiseArr: Promise<any>[] = []
-    const cachePath = []
-    
+    try {
+      const localImgList = await this.downloadService.download(list)
+      const promiseArr: Promise<any>[] = []
 
-    localImgList.forEach(async ({ name, ossUrl }) => {
 
-      // const savedOSSPath = `${new Date().getTime()}-${name}`
-      const localPath = `${imagePath}/${name}`
-      cachePath.push(localPath)
-      const res = ossUrl ? asyncUrl(ossUrl) : this.oss.client.put(name, localPath)
-      promiseArr.push(res)
+      localImgList.forEach(async ({ cacheFileName, ossFileName, ossUrl }) => {
 
-    })
+        const localPath = `${imagePath}/${cacheFileName}`
+        if (!ossUrl) {
+          this.cachePaths.push(localPath)
+        }
+        const p = ossUrl ? asyncUrl(ossUrl) : this.oss.client.put(ossFileName, localPath)
+        promiseArr.push(p)
 
-    const res: { url: string }[] = await Promise.all(promiseArr)
-    const ossUrlList = res.map(item => item.url)
-    clearImageCache(cachePath)
+      })
 
-    const newList: AnimeCategoryInfo[] = list.map(item => {
-      return {
-        ...item,
-        list: item.list.map(item => {
-          return {
-            aid: item.aid,
-            id: item.id,
-            name: item.name,
-            name_cn: item.name_cn,
-            ossUrl: ossUrlList.find(url => url.includes(String(item.id)))
-          }
-        })
-      }
-    })
-    return newList
 
+      const res: { url: string }[] = await Promise.all(promiseArr)
+      const ossUrlList = res.map(item => item.url)
+
+      const newList: AnimeCategoryInfo[] = list.map(item => {
+        return {
+          ...item,
+          list: item.list.map(item => {
+            return {
+              aid: item.aid,
+              id: item.id,
+              name: item.name,
+              name_cn: item.name_cn,
+              ossUrl: ossUrlList.find(url => url.includes(String(item.id)))
+            }
+          })
+        }
+      })
+      return newList
+
+    } catch (error) {
+      console.log(error);
+
+
+    } finally {
+      clearImageCache(this.cachePaths)
+
+    }
 
   }
 }

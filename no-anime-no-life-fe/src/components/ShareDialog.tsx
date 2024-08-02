@@ -119,7 +119,7 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
                   <>
                     <div onDoubleClick={createImg} className="flex flex-col overflow-x-auto max-h-full min-h-full min-w-[50%] max-w-full" ref={contentRef}>
                       <div className="text-center" style={{width: `${width}`}}>
-                        <div className="text-center font-bold text-base">动画人生生成器</div>
+                        <div className="text-center font-bold text-base">动画人生</div>
                         <div className="text-center font-thin text-xs mb-1">nanf.lc404.cn</div>
                       </div>
                       <div className="flex flex-row">

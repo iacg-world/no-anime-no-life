@@ -15,7 +15,7 @@ import { OssService } from './src/OssService';
   controllers: [AppController, SearchController, DownloadController],
   imports: [
     HttpModule.register({
-      timeout: 8000,
+      timeout: 60000,
       maxRedirects: 10,
     }),
   ],

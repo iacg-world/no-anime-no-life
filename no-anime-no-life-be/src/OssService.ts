@@ -5,7 +5,7 @@ import OSS from 'ali-oss'
 @Injectable()
 export class OssService {
   public client
-  constructor() { 
+  constructor() {
 
     const client = new OSS({
       region: 'oss-cn-shenzhen', // 示例：'oss-cn-hangzhou'，填写Bucket所在地域。
@@ -13,8 +13,22 @@ export class OssService {
       accessKeySecret: process.env.ALC_SECRET_KEY, // 确保已设置环境变量ALC_SECRET_KEY。
       bucket: 'no-anime-no-life', // 示例：'my-bucket-name'，填写存储空间名称。
       secure: true,
+      timeout: '10s',
+      retryMax: 5,
     });
     this.client = client
+  }
+  async isExistObject(name) {
+    try {
+      const data = await this.client.head(name);
+      if (data&&data.res&& data.res.status === 200) {
+        return data.res.requestUrls[0]
+      } else {
+        return false
+      }
+    } catch (error) {
+      return false
+    }
   }
 
 }

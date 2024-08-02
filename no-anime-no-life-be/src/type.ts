@@ -29,5 +29,7 @@ export interface LocalImgInfo {
   aid: string,
   name: string,
   id: number,
+  cacheFileName?: string,
+  ossFileName?: string,
   ossUrl?: string
 }
