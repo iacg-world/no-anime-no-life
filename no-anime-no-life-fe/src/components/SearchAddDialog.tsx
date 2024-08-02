@@ -31,7 +31,7 @@ export const SearchAddDialog = forwardRef<SearchAddDialogRef, SearchAddDialogPro
   const dispatch = useDispatch()
   const { data:searchData, loading, runAsync } = useRequest(getSearchRes, {
     manual: true,
-    debounceWait: 500,
+    debounceWait: 1000,
   })
   const [searchAnimeList, setAnimeList] = useState<AnimeInfo[]>([])
 
@@ -108,7 +108,7 @@ export const SearchAddDialog = forwardRef<SearchAddDialogRef, SearchAddDialogPro
                       return (
                         <div
                           key={item.aid}
-                          onClick={() => chooseAnime(item)}
+                          onMouseUp={() => chooseAnime(item)}
                           className="flex flex-col items-center w-12 mr-1 grow-0">
                           <Image src={item.images?.large} alt="" className="w-full h-14"/>
                           <div className="flex flex-row text-xs">{item.name_cn || item.name}</div>
