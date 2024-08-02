@@ -4,7 +4,7 @@ import { searchByKeyword } from '../api'
 import { AnimeInfo } from '../type'
 import { addAnime, modifyAnime } from '../store/anime'
 import { useDispatch } from 'react-redux'
-import { Button, Image, Toast } from 'antd-mobile'
+import { Button, DotLoading, Image, Toast } from 'antd-mobile'
 
 
 export interface SearchAddDialogProps {
@@ -99,17 +99,17 @@ export const SearchAddDialog = forwardRef<SearchAddDialogRef, SearchAddDialogPro
       {isOpen && (
         <div className="bg-stone-900/60 fixed top-0 left-0 w-full h-screen flex items-center justify-center">
           <div className="bg-white p-1 w-4/5 min-h-1/2 flex flex-col items-center box-border rounded-sm">
-            <input placeholder="输入关键字查询动画" className="text-sm border-solid border-black/60 border rounded-sm py-1 px-2" type="text" value={inputValue} onChange={inputChange}/>
+            <input placeholder="输入关键字查询动画" className="text-sm border-solid border-black/60 border rounded-sm py-1 px-2 mb-1" type="text" value={inputValue} onChange={inputChange}/>
             {
               !loading ? 
-                <div className="flex flex-row flex-wrap overflow-y-auto" style={{minHeight: '50vh',maxHeight: '80vh'}}>
+                <div className="flex flex-row flex-wrap overflow-y-auto min-h-[50vh] max-h-[80vh] content-start">
                   {
                     searchAnimeList.map(item => {
                       return (
                         <div
                           key={item.aid}
                           onClick={() => chooseAnime(item)}
-                          className="flex flex-col items-center w-12 mr-1">
+                          className="flex flex-col items-center w-12 mr-1 grow-0">
                           <Image src={item.images?.large} alt="" className="w-full h-14"/>
                           <div className="flex flex-row text-xs">{item.name_cn || item.name}</div>
                         </div>
@@ -117,8 +117,8 @@ export const SearchAddDialog = forwardRef<SearchAddDialogRef, SearchAddDialogPro
                     })
                   }
                 </div> :
-                <div className="flex flex-row flex-wrap overflow-y-auto" style={{minHeight: '50vh',maxHeight: '80vh'}}>
-            加载中。。。
+                <div className="flex flex-row flex-wrap overflow-y-auto min-h-[50vh] max-h-[80vh]">
+                  <DotLoading />
                 </div>
             }
 

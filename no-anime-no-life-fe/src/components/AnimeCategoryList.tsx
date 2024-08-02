@@ -1,4 +1,4 @@
-import { createRef } from 'react'
+import { createRef, FocusEvent, KeyboardEvent } from 'react'
 import { localImg } from '../utils'
 import { SearchAddDialog, SearchAddDialogRef } from './SearchAddDialog'
 import { AnimeCategoryInfo, AnimeInfo } from '../type'
@@ -22,16 +22,31 @@ export const AnimeCategoryList = () =>{
     dialogRef.current?.openModal({categoryId, animeInfo: data})
   }
 
-  const addCategory = (e: { target: { value: string } }) => {
-    const v = e.target.value
+  const addCategory = (e: FocusEvent<HTMLInputElement, Element>) => {
+    const v = (e.target as HTMLInputElement).value
     if (v) {
 
       dispatch(
         addAnimeCategory(v)
-      )
-      e.target.value = ''
+      );
+      (e.target as HTMLInputElement).value = ''
     }
-
+  }
+  const enterAddCategory = (e: KeyboardEvent<HTMLInputElement>,) => {
+    if (e.key === 'Enter') { // 检查按下的是否是回车键
+      const v = (e.target as HTMLInputElement).value
+      if (v) {
+  
+        dispatch(
+          addAnimeCategory(v)
+        );
+        (e.target as HTMLInputElement).value = ''
+      }
+      const contentRefDom = contentRef.current
+      requestAnimationFrame(() => {
+        contentRefDom?.scrollTo(999999 , 0)
+      })
+    }
   }
 
   const onShare = async () => {
@@ -70,10 +85,19 @@ export const AnimeCategoryList = () =>{
     )
 
   }
-  const modifyCategoryName = (e: { target: { value: string } }, data: AnimeCategoryInfo) => {
+  const modifyCategoryName = (e: FocusEvent<HTMLInputElement, Element>, data: AnimeCategoryInfo) => {
     dispatch(
-      modifyCategory({...data, categoryName: e.target.value, editing: false})
+      modifyCategory({...data, categoryName: (e.target as HTMLInputElement).value, editing: false})
     )
+
+  }
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>, data: AnimeCategoryInfo) => {
+    
+    if (e.key === 'Enter') { // 检查按下的是否是回车键
+      dispatch(
+        modifyCategory({...data, categoryName: (e.target as HTMLInputElement).value, editing: false})
+      )
+    }
 
   }
 
@@ -87,7 +111,12 @@ export const AnimeCategoryList = () =>{
                 {
                   categoryItem.editing 
                     ?
-                    <input autoFocus onBlur={(e) => modifyCategoryName(e, categoryItem)} data-id={categoryItem.categoryId} defaultValue={categoryItem.categoryName} type="text" placeholder="编辑类目" maxLength={5} className="h-4 w-full text-sm" />
+                    <input
+                      autoFocus
+                      onKeyDown={(e) => handleKeyDown(e, categoryItem)}
+                      onBlur={(e) => modifyCategoryName(e, categoryItem)}
+                      data-id={categoryItem.categoryId} defaultValue={categoryItem.categoryName}
+                      type="text" placeholder="编辑类目" maxLength={5} className="h-4 w-full text-sm" />
                     :
                     <div className="text-sm font-sans text-nowrap font-bold"
                       onClick={() => onEditCategory(categoryItem)} >{categoryItem.categoryName}
@@ -113,13 +142,12 @@ export const AnimeCategoryList = () =>{
                     <DeleteOutline 
                       className="text-base"
                       color='var(--adm-color-danger)'
-                      onClick={(e) => {e.stopPropagation();deleteAnime(categoryItem.categoryId)}}
+                      onMouseUp={(e) => {e.stopPropagation();deleteAnime(categoryItem.categoryId)}}
                     />
                     <AddSquareOutline
                       className="text-base"
                       color="#76c6b8"
                       onMouseUp={() => openSearchAdd(categoryItem.categoryId)}
-                      onTouchEnd={() => openSearchAdd(categoryItem.categoryId)}
                     />
 
                   </div>
@@ -132,7 +160,9 @@ export const AnimeCategoryList = () =>{
         }
         <div
           className="flex flex-col items-center justify-center min-w-10 h-4">
-          <input onBlur={addCategory} type="text" placeholder="新增类目" maxLength={5} className="h-full w-full text-sm" />
+          <input 
+            onKeyDown={(e) => enterAddCategory(e)}
+            onBlur={addCategory} type="text" placeholder="输入新类目" maxLength={5} className="h-full w-full text-sm" />
         </div>
       </div>
       <SearchAddDialog ref={dialogRef}></SearchAddDialog>

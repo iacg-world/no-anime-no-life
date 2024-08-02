@@ -119,7 +119,7 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
                   <>
                     <div onDoubleClick={createImg} className="flex flex-col overflow-x-auto max-h-full min-h-full min-w-[50%] max-w-full" ref={contentRef}>
                       <div className="text-center" style={{width: `${width}`}}>
-                        <div className="text-center font-bold text-sm">动画人生生成器</div>
+                        <div className="text-center font-bold text-base">动画人生生成器</div>
                         <div className="text-center font-thin text-xs mb-1">nanf.lc404.cn</div>
                       </div>
                       <div className="flex flex-row">
@@ -128,7 +128,7 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
                             return (
                               <div className='flex flex-col flex-nowrap' key={categoryItem.categoryId}>
                                 <div className="text-sm font-sans text-nowrap">{categoryItem.categoryName}</div>
-                                <div className={'flex flex-col flex-nowrap px-1 w-14'}>
+                                <div className={'flex flex-col flex-nowrap pr-1 w-14 box-border'}>
                                   {
                                     categoryItem.list.map(animeItem => {
                                       return (
