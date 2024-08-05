@@ -8,7 +8,11 @@ import { addAnimeCategory, modifyCategory, rmAnime } from '../store/anime'
 import { ShareDialog, ShareDialogRef } from './ShareDialog'
 import { AddSquareOutline, DeleteOutline } from 'antd-mobile-icons'
 import { useClickAway } from 'ahooks'
-
+import Draggable from './Drag/Draggable'
+import { DndContext } from '@dnd-kit/core'
+import { Droppable } from './Drag/Droppable'
+import { SortableContext } from '@dnd-kit/sortable'
+import AnimeItem, { OpenSearchAdd } from './AnimeItem'
 
 
 export const AnimeCategoryList = () =>{
@@ -18,7 +22,7 @@ export const AnimeCategoryList = () =>{
   const animeList = useSelector<StateType, AnimeCategoryInfo[]>(state => state.anime) || []
   const dispatch = useDispatch()
 
-  const openSearchAdd = (categoryId: string, data?:AnimeInfo) => {
+  const openSearchAdd:OpenSearchAdd = (categoryId, data) => {
     dialogRef.current?.openModal({categoryId, animeInfo: data})
   }
 
@@ -102,12 +106,13 @@ export const AnimeCategoryList = () =>{
   }
 
   return (
-    <>
+    <DndContext>
       <div className="flex flex-row overflow-x-auto w-full h-full" ref={contentRef}>
+
         {
           animeList.map(categoryItem => {
             return (
-              <div className='flex flex-col flex-nowrap min-w-14 max-w-16 h-full' key={categoryItem.categoryId} ref={editInputRef}>
+              <div className='flex flex-col flex-nowrap min-w-14 max-w-16 h-full mx-1' key={categoryItem.categoryId} ref={editInputRef}>
                 {
                   categoryItem.editing 
                     ?
@@ -122,20 +127,18 @@ export const AnimeCategoryList = () =>{
                       onClick={() => onEditCategory(categoryItem)} >{categoryItem.categoryName}
                     </div>
                 }
-                <div className='flex flex-col flex-nowrap px-1 overflow-y-auto h-full flex-1'>
+                <div className='flex flex-col flex-nowrap overflow-y-auto h-full flex-1'>
+
                   {
                     categoryItem.list.map(animeItem => {
                       return (
-                        <div 
-                          key={animeItem.aid}
-                          onMouseUp={() => openSearchAdd(categoryItem.categoryId, animeItem)}
-                          className="flex flex-col items-center">
-                          <img src={animeItem.images?.medium} alt="" className="w-full min-h-16 max-h-18" />
-                          <div className="flex flex-row text-xs">{animeItem.name_cn || animeItem.name}</div>
-                        </div>
+                        <AnimeItem categoryId={categoryItem.categoryId} animeItem={animeItem} openSearchAdd={openSearchAdd} ></AnimeItem>
                       )
                     })
                   }
+
+
+
                   <div
                     className="flex flex-nowrap items-center justify-around"
                   >
@@ -157,7 +160,9 @@ export const AnimeCategoryList = () =>{
             )
             
           })
+
         }
+
         <div
           className="flex flex-col items-center justify-center min-w-10 h-4">
           <input 
@@ -170,7 +175,8 @@ export const AnimeCategoryList = () =>{
       <div onClick={onShare} className="fixed right-1 bottom-1 p-0.5 rounded-sm flex flex-col items-center">
         <img className="size-8 mb-0.5" src={localImg('share.png')} alt="" />
       </div>
-    </>
+    </DndContext>
   )
+
 }
 
