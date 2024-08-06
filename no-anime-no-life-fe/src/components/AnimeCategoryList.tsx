@@ -131,7 +131,7 @@ export const AnimeCategoryList = () =>{
           animeList.map(categoryItem => {
             const {categoryId, editing} = categoryItem
             return (
-              <div className='flex flex-col flex-nowrap w-14 h-full mx-1 flex-shrink-0' key={categoryId} ref={editInputRef}>
+              <div className='flex flex-col flex-nowrap w-14 h-auto mx-1' key={categoryId} ref={editInputRef}>
                 {
                   editing
                     ?
