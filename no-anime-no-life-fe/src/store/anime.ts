@@ -2,10 +2,17 @@ import { nanoid } from 'nanoid'
 import { AnimeCategoryInfo, AnimeInfo } from '../type'
 import { produce } from 'immer'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { arrayMove } from '@dnd-kit/sortable'
+
+export interface MoveAnimeParams {
+  categoryId: string,
+  oldIndex: number,
+  newIndex: number,
+}
 const INIT_DATA: AnimeCategoryInfo[] = [
   {
     categoryId: nanoid(),
-    categoryName: '热血/战斗',
+    categoryName: '催泪/致郁',
     list: [],
   },
   {
@@ -16,6 +23,11 @@ const INIT_DATA: AnimeCategoryInfo[] = [
   {
     categoryId: nanoid(),
     categoryName: '搞笑/治愈',
+    list: [],
+  },
+  {
+    categoryId: nanoid(),
+    categoryName: '最意难平的',
     list: [],
   },
 ]
@@ -100,11 +112,21 @@ export const componentsSlice = createSlice({
       (draft: AnimeCategoryInfo[], action: PayloadAction<Partial<AnimeCategoryInfo>>) => {
         const target = draft.find(item => item.categoryId === action.payload.categoryId)
         if (target) {
-          Object.assign(target , action.payload)
+          Object.assign(target, action.payload)
         }
 
       }
     ),
+    moveAnime: produce(
+      (draft: AnimeCategoryInfo[], action: PayloadAction<MoveAnimeParams>) => {
+        const { categoryId, oldIndex, newIndex } = action.payload
+        const target = draft.find(item => item.categoryId === categoryId)
+        if (target) {
+          target.list = arrayMove(target.list, oldIndex, newIndex)
+        }
+
+      }
+    )
   },
 })
 export const {
@@ -113,5 +135,6 @@ export const {
   rmAnime,
   modifyAnime,
   modifyCategory,
+  moveAnime
 } = componentsSlice.actions
 export default componentsSlice.reducer

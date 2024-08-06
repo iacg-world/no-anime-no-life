@@ -107,7 +107,7 @@ export const SearchAddDialog = forwardRef<SearchAddDialogRef, SearchAddDialogPro
                     searchAnimeList.map(item => {
                       return (
                         <div
-                          key={item.aid}
+                          key={item.id}
                           onMouseUp={() => chooseAnime(item)}
                           className="flex flex-col items-center w-12 mr-1 grow-0">
                           <Image src={item.images?.large} alt="" className="w-full h-14"/>

@@ -7,7 +7,7 @@ export interface AnimeCategoryInfo {
 }
 export interface AnimeInfo {
   'aid': string,
-  'id': number,
+  'id': string | number,
   'url': string,
   'type': number,
   'name': string,

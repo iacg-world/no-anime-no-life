@@ -1,7 +1,6 @@
-import {useSortable} from '@dnd-kit/sortable'
-import {CSS} from '@dnd-kit/utilities'
-import { FC } from 'react'
+import { FC, useContext } from 'react'
 import { AnimeInfo } from '../type'
+import { DragContext } from './Drag/SortableItem'
 export type OpenSearchAdd = (categoryId: string, data?:AnimeInfo) => void
 
 interface PropsType {
@@ -12,15 +11,16 @@ interface PropsType {
 
 export const AnimeItem:FC<PropsType> = (props) => {
   const {categoryId, animeItem, openSearchAdd} = props
-  
+  const isDrag = useContext(DragContext)
 
   return (
     <div 
-      onMouseUp={() => openSearchAdd(categoryId, animeItem)}
+      onMouseUp={() => !isDrag && openSearchAdd(categoryId, animeItem)}
       className="flex flex-col items-center">
       <img src={animeItem.images?.medium} alt="" className="w-full min-h-16 max-h-18" />
       <div className="flex flex-row text-xs">{animeItem.name_cn || animeItem.name}</div>
     </div>
+
   )
 }
 

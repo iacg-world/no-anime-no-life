@@ -4,15 +4,13 @@ import { SearchAddDialog, SearchAddDialogRef } from './SearchAddDialog'
 import { AnimeCategoryInfo, AnimeInfo } from '../type'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateType } from '../store'
-import { addAnimeCategory, modifyCategory, rmAnime } from '../store/anime'
+import { addAnimeCategory, modifyCategory, moveAnime, MoveAnimeParams, rmAnime } from '../store/anime'
 import { ShareDialog, ShareDialogRef } from './ShareDialog'
 import { AddSquareOutline, DeleteOutline } from 'antd-mobile-icons'
 import { useClickAway } from 'ahooks'
-import Draggable from './Drag/Draggable'
-import { DndContext } from '@dnd-kit/core'
-import { Droppable } from './Drag/Droppable'
-import { SortableContext } from '@dnd-kit/sortable'
 import AnimeItem, { OpenSearchAdd } from './AnimeItem'
+import SortableItem from './Drag/SortableItem'
+import SortableContainer from './Drag/SortableContainer'
 
 
 export const AnimeCategoryList = () =>{
@@ -104,39 +102,58 @@ export const AnimeCategoryList = () =>{
     }
 
   }
-
+  // 拖拽排序结束
+  function handleDragEnd(obj:MoveAnimeParams) {
+    dispatch(
+      moveAnime(obj)
+    )
+  }
+  const genSortableAnimeItems = (list: AnimeInfo[]) => {
+    return list.map(item => {
+      return {
+        ...item,
+        id: item.aid
+      }
+    })
+  }
   return (
-    <DndContext>
+    <>
       <div className="flex flex-row overflow-x-auto w-full h-full" ref={contentRef}>
+
 
         {
           animeList.map(categoryItem => {
+            const {categoryId, editing} = categoryItem
             return (
-              <div className='flex flex-col flex-nowrap min-w-14 max-w-16 h-full mx-1' key={categoryItem.categoryId} ref={editInputRef}>
+              <div className='flex flex-col flex-nowrap min-w-14 max-w-16 h-full mx-1' key={categoryId} ref={editInputRef}>
                 {
-                  categoryItem.editing 
+                  editing
                     ?
                     <input
                       autoFocus
                       onKeyDown={(e) => handleKeyDown(e, categoryItem)}
                       onBlur={(e) => modifyCategoryName(e, categoryItem)}
-                      data-id={categoryItem.categoryId} defaultValue={categoryItem.categoryName}
+                      data-id={categoryId} defaultValue={categoryItem.categoryName}
                       type="text" placeholder="编辑类目" maxLength={5} className="h-4 w-full text-sm" />
                     :
                     <div className="text-sm font-sans text-nowrap font-bold"
                       onClick={() => onEditCategory(categoryItem)} >{categoryItem.categoryName}
                     </div>
                 }
-                <div className='flex flex-col flex-nowrap overflow-y-auto h-full flex-1'>
 
-                  {
-                    categoryItem.list.map(animeItem => {
-                      return (
-                        <AnimeItem categoryId={categoryItem.categoryId} animeItem={animeItem} openSearchAdd={openSearchAdd} ></AnimeItem>
-                      )
-                    })
-                  }
-
+                <div className='flex flex-col flex-nowrap overflow-y-auto h-full'>
+                  <SortableContainer items={genSortableAnimeItems(categoryItem.list)} onDragEnd={(obj) => {handleDragEnd({categoryId, ...obj})}}>
+                    {
+                      categoryItem.list.map(animeItem => {
+                        const {aid} = animeItem
+                        return (
+                          <SortableItem key={aid} id={aid}>
+                            <AnimeItem categoryId={categoryId} animeItem={animeItem} openSearchAdd={openSearchAdd} ></AnimeItem>
+                          </SortableItem>
+                        )
+                      })
+                    }
+                  </SortableContainer>
 
 
                   <div
@@ -145,12 +162,12 @@ export const AnimeCategoryList = () =>{
                     <DeleteOutline 
                       className="text-base"
                       color='var(--adm-color-danger)'
-                      onMouseUp={(e) => {e.stopPropagation();deleteAnime(categoryItem.categoryId)}}
+                      onMouseUp={(e) => {e.stopPropagation();deleteAnime(categoryId)}}
                     />
                     <AddSquareOutline
                       className="text-base"
                       color="#76c6b8"
-                      onMouseUp={() => openSearchAdd(categoryItem.categoryId)}
+                      onMouseUp={() => openSearchAdd(categoryId)}
                     />
 
                   </div>
@@ -175,7 +192,8 @@ export const AnimeCategoryList = () =>{
       <div onClick={onShare} className="fixed right-1 bottom-1 p-0.5 rounded-sm flex flex-col items-center">
         <img className="size-8 mb-0.5" src={localImg('share.png')} alt="" />
       </div>
-    </DndContext>
+    </>
+
   )
 
 }
