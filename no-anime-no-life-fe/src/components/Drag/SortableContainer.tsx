@@ -19,21 +19,25 @@ type PropsType = {
   children: JSX.Element | JSX.Element[]
   items: AnimeInfo[]
   onDragEnd: (obj: Omit<MoveAnimeParams, 'categoryId'>) => void
+  onDragStart: (event: DragEndEvent) => void
 }
 
 const SortableContainer: FC<PropsType> = (props: PropsType) => {
-  const { children, items, onDragEnd } = props
+  const { children, items, onDragEnd, onDragStart } = props
 
   const sensors = useSensors(
     useSensor(MouseSensor, {
       activationConstraint: {
-        distance: 3,
+        distance: 8,
+        delay: 250,
       },
     }),
     useSensor(TouchSensor, {
       activationConstraint: {
-        distance: 3
-      }
+        delay: 250,
+        tolerance: 10,
+      },
+
     })
   )
 
@@ -49,7 +53,7 @@ const SortableContainer: FC<PropsType> = (props: PropsType) => {
   }
 
   return (
-    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} onDragStart={onDragStart}>
       <SortableContext items={items} strategy={verticalListSortingStrategy}>
         {children}
       </SortableContext>

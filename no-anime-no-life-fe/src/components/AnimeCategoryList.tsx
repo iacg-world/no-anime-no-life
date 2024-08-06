@@ -1,4 +1,4 @@
-import { createRef, FocusEvent, KeyboardEvent } from 'react'
+import { createRef, FocusEvent, KeyboardEvent, useState } from 'react'
 import { localImg } from '../utils'
 import { SearchAddDialog, SearchAddDialogRef } from './SearchAddDialog'
 import { AnimeCategoryInfo, AnimeInfo } from '../type'
@@ -107,6 +107,7 @@ export const AnimeCategoryList = () =>{
     dispatch(
       moveAnime(obj)
     )
+    setDragging(false)
   }
   const genSortableAnimeItems = (list: AnimeInfo[]) => {
     return list.map(item => {
@@ -116,6 +117,11 @@ export const AnimeCategoryList = () =>{
       }
     })
   }
+  const [isDragging, setDragging] = useState(false)
+  const handleDragStart = () => {
+    setDragging(true)
+  }
+
   return (
     <>
       <div className="flex flex-row overflow-x-auto w-full h-full" ref={contentRef}>
@@ -125,7 +131,7 @@ export const AnimeCategoryList = () =>{
           animeList.map(categoryItem => {
             const {categoryId, editing} = categoryItem
             return (
-              <div className='flex flex-col flex-nowrap min-w-14 max-w-16 h-full mx-1' key={categoryId} ref={editInputRef}>
+              <div className='flex flex-col flex-nowrap w-16 h-full mx-1' key={categoryId} ref={editInputRef}>
                 {
                   editing
                     ?
@@ -134,15 +140,16 @@ export const AnimeCategoryList = () =>{
                       onKeyDown={(e) => handleKeyDown(e, categoryItem)}
                       onBlur={(e) => modifyCategoryName(e, categoryItem)}
                       data-id={categoryId} defaultValue={categoryItem.categoryName}
-                      type="text" placeholder="编辑类目" maxLength={5} className="h-4 w-full text-sm" />
+                      type="text" placeholder="编辑类目" maxLength={5}
+                      className="h-4 w-full text-sm" />
                     :
                     <div className="text-sm font-sans text-nowrap font-bold"
                       onClick={() => onEditCategory(categoryItem)} >{categoryItem.categoryName}
                     </div>
                 }
 
-                <div className='flex flex-col flex-nowrap overflow-y-auto h-full'>
-                  <SortableContainer items={genSortableAnimeItems(categoryItem.list)} onDragEnd={(obj) => {handleDragEnd({categoryId, ...obj})}}>
+                <div className='flex flex-col flex-nowrap overflow-y-auto overflow-x-hidden h-full relative' style={{touchAction: isDragging ?'none' : 'auto'}} >
+                  <SortableContainer items={genSortableAnimeItems(categoryItem.list)} onDragStart={handleDragStart} onDragEnd={(obj) => {handleDragEnd({categoryId, ...obj})}}>
                     {
                       categoryItem.list.map(animeItem => {
                         const {aid} = animeItem
