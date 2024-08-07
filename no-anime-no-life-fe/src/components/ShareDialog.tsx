@@ -111,7 +111,7 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
         isOpen ? (
       
           <div className="bg-stone-900/60 fixed top-0 left-0 w-screen h-screen flex items-center justify-center z-10">
-            <div className="bg-white p-1 pb-4 box-border w-4/5 min-h-1/2 max-h-screen max-w-screen flex flex-col items-center rounded-sm">
+            <div className="bg-white pb-4 box-border w-4/5 min-h-1/2 max-h-screen max-w-screen flex flex-col items-center rounded-sm">
               {
                 loading 
                   ?
@@ -120,7 +120,7 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
                   </div>
                   :
                   <>
-                    <div onDoubleClick={createImg} className="flex flex-col overflow-x-auto max-h-full min-h-full min-w-[50%] max-w-full" ref={contentRef}>
+                    <div onDoubleClick={createImg} className="flex flex-col overflow-x-auto max-h-full min-h-full min-w-[50%] max-w-full px-1" ref={contentRef}>
                       <div className="text-center" style={{width: `${width}`}}>
                         <div className="text-center font-bold text-base">动画人生</div>
                         <div className="text-center font-thin text-xs mb-1">nanf.lc404.cn</div>
@@ -131,14 +131,14 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
                             return (
                               <div className='flex flex-col flex-nowrap' key={categoryItem.categoryId}>
                                 <div className="text-sm font-sans text-nowrap">{categoryItem.categoryName}</div>
-                                <div className={'flex flex-col flex-nowrap pr-1 w-14 box-border'}>
+                                <div className={'flex flex-col flex-nowrap pr-1 w-12 box-border'}>
                                   {
                                     categoryItem.list.map(animeItem => {
                                       return (
                                         <div
                                           key={animeItem.aid}
                                           className="flex flex-col items-center">
-                                          <img src={animeItem.ossUrl} alt="" className="w-full h-16 rounded-sm" />
+                                          <img src={animeItem.ossUrl} alt="" className="w-full h-14 rounded-sm" />
                                           <div className="text-center text-xs whitespace-nowrap w-full overflow-hidden text-ellipsis ">{animeItem.name_cn || animeItem.name}</div>
                                         </div>
                                       )

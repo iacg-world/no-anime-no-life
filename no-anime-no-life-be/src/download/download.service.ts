@@ -68,9 +68,6 @@ export class DownloadService {
         });
 
         const cacheFileName = item.name + '.jpg'
-        console.log(cacheFileName);
-        
-        
 
         fs.openSync(`${imagePath}/${cacheFileName}`, 'w')
         const writer = fs.createWriteStream(`${imagePath}/${cacheFileName}`);
