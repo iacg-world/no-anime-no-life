@@ -152,7 +152,7 @@ export const AnimeCategoryList = () =>{
                 }
 
                 <div className='flex flex-col flex-nowrap overflow-y-auto overflow-x-hidden h-full relative' style={{touchAction: isDragging ?'none' : 'auto'}} >
-                  <SortableContainer items={genSortableAnimeItems(categoryItem.list)} onDragStart={handleDragStart} onDragEnd={(obj) => {handleDragEnd({categoryId, ...obj})}}>
+                  <SortableContainer items={genSortableAnimeItems(categoryItem.list)} onDragStart={handleDragStart} onDragEnd={(obj) => {handleDragEnd(obj ? {categoryId, ...obj} : undefined)}}>
                     {
                       categoryItem.list.map(animeItem => {
                         const {aid} = animeItem
