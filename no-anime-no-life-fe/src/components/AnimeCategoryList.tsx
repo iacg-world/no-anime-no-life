@@ -103,10 +103,13 @@ export const AnimeCategoryList = () =>{
 
   }
   // 拖拽排序结束
-  function handleDragEnd(obj:MoveAnimeParams) {
-    dispatch(
-      moveAnime(obj)
-    )
+  function handleDragEnd(obj?:MoveAnimeParams) {
+    if (obj) {
+      dispatch(
+        moveAnime(obj)
+      )
+    }
+
     setDragging(false)
   }
   const genSortableAnimeItems = (list: AnimeInfo[]) => {

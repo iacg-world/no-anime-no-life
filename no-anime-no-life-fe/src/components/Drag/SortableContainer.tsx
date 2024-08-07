@@ -18,7 +18,7 @@ import { MoveAnimeParams } from '../../store/anime'
 type PropsType = {
   children: JSX.Element | JSX.Element[]
   items: AnimeInfo[]
-  onDragEnd: (obj: Omit<MoveAnimeParams, 'categoryId'>) => void
+  onDragEnd: (obj?: Omit<MoveAnimeParams, 'categoryId'>) => void
   onDragStart: (event: DragEndEvent) => void
 }
 
@@ -43,12 +43,17 @@ const SortableContainer: FC<PropsType> = (props: PropsType) => {
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event
-    if (over == null) return
+    if (over == null) {
+      onDragEnd()
+      return
+    }
 
     if (active.id !== over.id) {
       const oldIndex = items.findIndex(a => a.aid === active.id)
       const newIndex = items.findIndex(a => a.aid === over.id)
       onDragEnd({oldIndex, newIndex})
+    } else {
+      onDragEnd()
     }
   }
 
