@@ -5,7 +5,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { arrayMove } from '@dnd-kit/sortable'
 
 export interface MoveAnimeParams {
-  categoryId: string,
+  categoryId?: string,
   oldIndex: number,
   newIndex: number,
 }
@@ -126,7 +126,19 @@ export const componentsSlice = createSlice({
         }
 
       }
-    )
+    ),
+    moveCategory: (state, action: PayloadAction<MoveAnimeParams>) => {
+      const { oldIndex, newIndex } = action.payload
+      return arrayMove(state, oldIndex, newIndex)
+    },
+    // moveCategory: produce(
+    //   (draft: AnimeCategoryInfo[], action: PayloadAction<MoveAnimeParams>) => {
+    //     const { oldIndex, newIndex } = action.payload
+    //     draft = arrayMove(draft, oldIndex, newIndex)
+
+
+    //   }
+    // )
   },
 })
 export const {
@@ -135,6 +147,7 @@ export const {
   rmAnime,
   modifyAnime,
   modifyCategory,
-  moveAnime
+  moveAnime,
+  moveCategory,
 } = componentsSlice.actions
 export default componentsSlice.reducer

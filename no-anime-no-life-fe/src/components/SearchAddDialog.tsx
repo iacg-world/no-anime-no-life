@@ -97,7 +97,7 @@ export const SearchAddDialog = forwardRef<SearchAddDialogRef, SearchAddDialogPro
   return (
     <div>
       {isOpen && (
-        <div className="bg-stone-900/60 fixed top-0 left-0 w-full h-screen flex items-center justify-center">
+        <div className="bg-stone-900/60 fixed top-0 left-0 w-full h-screen flex items-center justify-center z-50">
           <div className="bg-white p-1 w-4/5 min-h-1/2 flex flex-col items-center box-border rounded-sm">
             <input placeholder="输入关键字查询动画" className="text-sm border-solid border-black/60 border rounded-sm py-1 px-2 mb-1" type="text" value={inputValue} onChange={inputChange}/>
             {

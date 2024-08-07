@@ -10,20 +10,21 @@ import {
 } from '@dnd-kit/core'
 import {
   SortableContext,
-  verticalListSortingStrategy,
+  SortingStrategy,
 } from '@dnd-kit/sortable'
-import { AnimeInfo } from '../../type'
+import { SortableAnimeCategoryInfo, SortableAnimeInfo } from '../../type'
 import { MoveAnimeParams } from '../../store/anime'
 
 type PropsType = {
   children: JSX.Element | JSX.Element[]
-  items: AnimeInfo[]
+  items: SortableAnimeInfo[] | SortableAnimeCategoryInfo[]
   onDragEnd: (obj?: Omit<MoveAnimeParams, 'categoryId'>) => void
-  onDragStart: (event: DragEndEvent) => void
+  onDragStart?: (event: DragEndEvent) => void,
+  strategy: SortingStrategy,
 }
 
 const SortableContainer: FC<PropsType> = (props: PropsType) => {
-  const { children, items, onDragEnd, onDragStart } = props
+  const { children, items, onDragEnd, onDragStart, strategy } = props
 
   const sensors = useSensors(
     useSensor(MouseSensor, {
@@ -34,7 +35,7 @@ const SortableContainer: FC<PropsType> = (props: PropsType) => {
     }),
     useSensor(TouchSensor, {
       activationConstraint: {
-        delay: 250,
+        delay: 150,
         tolerance: 10,
       },
 
@@ -49,8 +50,8 @@ const SortableContainer: FC<PropsType> = (props: PropsType) => {
     }
 
     if (active.id !== over.id) {
-      const oldIndex = items.findIndex(a => a.aid === active.id)
-      const newIndex = items.findIndex(a => a.aid === over.id)
+      const oldIndex = items.findIndex(a => a.id  === active.id)
+      const newIndex = items.findIndex(a => a.id === over.id)
       onDragEnd({oldIndex, newIndex})
     } else {
       onDragEnd()
@@ -59,7 +60,7 @@ const SortableContainer: FC<PropsType> = (props: PropsType) => {
 
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} onDragStart={onDragStart}>
-      <SortableContext items={items} strategy={verticalListSortingStrategy}>
+      <SortableContext items={items} strategy={strategy}>
         {children}
       </SortableContext>
     </DndContext>

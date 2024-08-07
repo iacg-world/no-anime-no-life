@@ -1,28 +1,23 @@
-import { createRef, FocusEvent, KeyboardEvent, useState } from 'react'
+import { createRef, FocusEvent, KeyboardEvent } from 'react'
 import { localImg } from '../utils'
-import { SearchAddDialog, SearchAddDialogRef } from './SearchAddDialog'
-import { AnimeCategoryInfo, AnimeInfo } from '../type'
+import { AnimeCategoryInfo, SortableAnimeCategoryInfo } from '../type'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateType } from '../store'
-import { addAnimeCategory, modifyCategory, moveAnime, MoveAnimeParams, rmAnime } from '../store/anime'
+import { addAnimeCategory, MoveAnimeParams, moveCategory, } from '../store/anime'
 import { ShareDialog, ShareDialogRef } from './ShareDialog'
-import { AddSquareOutline, DeleteOutline } from 'antd-mobile-icons'
-import { useClickAway } from 'ahooks'
-import AnimeItem, { OpenSearchAdd } from './AnimeItem'
 import SortableItem from './Drag/SortableItem'
 import SortableContainer from './Drag/SortableContainer'
+import { horizontalListSortingStrategy } from '@dnd-kit/sortable'
+import AnimeListItem from './AnimeListItem'
 
 
 export const AnimeCategoryList = () =>{
-  const dialogRef = createRef<SearchAddDialogRef>()
   const shareDialogRef = createRef<ShareDialogRef>()
   const contentRef = createRef<HTMLDivElement>()
   const animeList = useSelector<StateType, AnimeCategoryInfo[]>(state => state.anime) || []
   const dispatch = useDispatch()
 
-  const openSearchAdd:OpenSearchAdd = (categoryId, data) => {
-    dialogRef.current?.openModal({categoryId, animeInfo: data})
-  }
+
 
   const addCategory = (e: FocusEvent<HTMLInputElement, Element>) => {
     const v = (e.target as HTMLInputElement).value
@@ -63,133 +58,49 @@ export const AnimeCategoryList = () =>{
 
   }
 
-  const deleteAnime = (categoryId:string) => {
 
-    dispatch(
-      rmAnime({categoryId})
-    )
-  }
-  const editInputRef = createRef<HTMLInputElement>()
-  let lastCategoryId = ''
-  useClickAway(
-    () => {
-      dispatch(
-        modifyCategory({categoryId: lastCategoryId, editing: false})
-      )
-    },
-    () => editInputRef.current
-  )
-  const onEditCategory = (data: AnimeCategoryInfo) => {
-    lastCategoryId = data.categoryId
-    
-    dispatch(
-      modifyCategory({categoryId: data.categoryId, editing: true})
-    )
-
-  }
-  const modifyCategoryName = (e: FocusEvent<HTMLInputElement, Element>, data: AnimeCategoryInfo) => {
-    dispatch(
-      modifyCategory({...data, categoryName: (e.target as HTMLInputElement).value, editing: false})
-    )
-
-  }
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>, data: AnimeCategoryInfo) => {
-    
-    if (e.key === 'Enter') { // 检查按下的是否是回车键
-      dispatch(
-        modifyCategory({...data, categoryName: (e.target as HTMLInputElement).value, editing: false})
-      )
-    }
-
-  }
-  // 拖拽排序结束
-  function handleDragEnd(obj?:MoveAnimeParams) {
+  
+  function handleAnimeListDragEnd(obj?:MoveAnimeParams) {
     if (obj) {
       dispatch(
-        moveAnime(obj)
+        moveCategory(obj)
       )
     }
 
-    setDragging(false)
   }
-  const genSortableAnimeItems = (list: AnimeInfo[]) => {
+
+  const genSortableAnimeCategoryInfoItems = (list: AnimeCategoryInfo[]):SortableAnimeCategoryInfo[] => {
     return list.map(item => {
       return {
         ...item,
-        id: item.aid
+        id: item.categoryId
       }
     })
   }
-  const [isDragging, setDragging] = useState(false)
-  const handleDragStart = () => {
-    setDragging(true)
-  }
+
 
   return (
     <>
       <div className="flex flex-row overflow-x-auto w-full h-full" ref={contentRef}>
+        <SortableContainer  
+          strategy={horizontalListSortingStrategy} 
+          items={genSortableAnimeCategoryInfoItems(animeList)} 
+          onDragEnd={(obj) => {handleAnimeListDragEnd(obj ? {...obj} : undefined)}}>
 
 
-        {
-          animeList.map(categoryItem => {
-            const {categoryId, editing} = categoryItem
-            return (
-              <div className='flex flex-col flex-nowrap w-14 h-auto mx-1' key={categoryId} ref={editInputRef}>
-                {
-                  editing
-                    ?
-                    <input
-                      autoFocus
-                      onKeyDown={(e) => handleKeyDown(e, categoryItem)}
-                      onBlur={(e) => modifyCategoryName(e, categoryItem)}
-                      data-id={categoryId} defaultValue={categoryItem.categoryName}
-                      type="text" placeholder="编辑类目" maxLength={5}
-                      className="h-4 w-full text-sm" />
-                    :
-                    <div className="text-sm font-sans text-nowrap font-bold"
-                      onClick={() => onEditCategory(categoryItem)} >{categoryItem.categoryName}
-                    </div>
-                }
-
-                <div className='flex flex-col flex-nowrap overflow-y-auto overflow-x-hidden h-full relative' style={{touchAction: isDragging ?'none' : 'auto'}} >
-                  <SortableContainer items={genSortableAnimeItems(categoryItem.list)} onDragStart={handleDragStart} onDragEnd={(obj) => {handleDragEnd(obj ? {categoryId, ...obj} : undefined)}}>
-                    {
-                      categoryItem.list.map(animeItem => {
-                        const {aid} = animeItem
-                        return (
-                          <SortableItem key={aid} id={aid}>
-                            <AnimeItem categoryId={categoryId} animeItem={animeItem} openSearchAdd={openSearchAdd} ></AnimeItem>
-                          </SortableItem>
-                        )
-                      })
-                    }
-                  </SortableContainer>
-
-
-                  <div
-                    className="flex flex-nowrap items-center justify-around"
-                  >
-                    <DeleteOutline 
-                      className="text-base"
-                      color='var(--adm-color-danger)'
-                      onMouseUp={(e) => {e.stopPropagation();deleteAnime(categoryId)}}
-                    />
-                    <AddSquareOutline
-                      className="text-base"
-                      color="#76c6b8"
-                      onMouseUp={() => openSearchAdd(categoryId)}
-                    />
-
-                  </div>
-
-                </div>
-              </div>
-            )
+          {
+            animeList.map(categoryItem => {
+              const {categoryId} = categoryItem
+              return (
+                <SortableItem key={categoryId} id={categoryId}>
+                  <AnimeListItem categoryItem={categoryItem}></AnimeListItem>
+                </SortableItem>
+              )
             
-          })
+            })
 
-        }
-
+          }
+        </SortableContainer>
         <div
           className="flex flex-col items-center justify-center min-w-10 h-4">
           <input 
@@ -197,11 +108,11 @@ export const AnimeCategoryList = () =>{
             onBlur={addCategory} type="text" placeholder="输入新类目" maxLength={5} className="h-full w-full text-sm" />
         </div>
       </div>
-      <SearchAddDialog ref={dialogRef}></SearchAddDialog>
-      <ShareDialog  ref={shareDialogRef} animeList={animeList} />
+
       <div onClick={onShare} className="fixed right-1 bottom-1 p-0.5 rounded-sm flex flex-col items-center">
         <img className="size-8 mb-0.5" src={localImg('share.png')} alt="" />
       </div>
+      <ShareDialog  ref={shareDialogRef} animeList={animeList} />
     </>
 
   )

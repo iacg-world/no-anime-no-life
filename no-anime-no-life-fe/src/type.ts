@@ -5,9 +5,13 @@ export interface AnimeCategoryInfo {
   editing?: boolean,
 
 }
+
+export interface SortableAnimeCategoryInfo extends AnimeCategoryInfo{
+  id: string
+}
 export interface AnimeInfo {
   'aid': string,
-  'id': string | number,
+  'id': number,
   'url': string,
   'type': number,
   'name': string,
@@ -23,6 +27,10 @@ export interface AnimeInfo {
     'grid': string
   }
   ossUrl?: string,
+}
+
+export interface SortableAnimeInfo extends Omit<AnimeInfo, 'id'>{
+  id: string
 }
 
 export interface ResponseResult<T> {
