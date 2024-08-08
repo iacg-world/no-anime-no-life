@@ -6,6 +6,7 @@ import { StateType } from './store'
 import { GlobalStore } from './type'
 import { modifyTitle } from './store/global'
 import { createRef, KeyboardEvent, useState } from 'react'
+import { useDebounceFn } from 'ahooks'
 
 function App() {
   const dispatch = useDispatch()
@@ -34,21 +35,26 @@ function App() {
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') { // 检查按下的是否是回车键
       
-      dispatch(
-        modifyTitle({key: 'topic_name', value: getValues()[0]} ),
-        modifyTitle({key: 'topic_name_cn', value: getValues()[1]})
-      )
-      toggleEdit(false)
+      modifyTitleNameDebounce()
     }
   }
   const modifyTitleName = () => {
     dispatch(
       modifyTitle({key: 'topic_name', value: getValues()[0]} ),
+    )
+    dispatch(
       modifyTitle({key: 'topic_name_cn', value: getValues()[1]})
     )
     toggleEdit(false)
 
   }
+  const {
+    run: modifyTitleNameDebounce,
+  } = useDebounceFn(modifyTitleName, {
+    wait: 500,
+    leading: true,
+    trailing: false,
+  })
 
   type EditType = 'name' | 'name_cn'
   const [editType, setEditType] = useState<EditType>('name')
@@ -72,7 +78,7 @@ function App() {
                 className="text-center text-xl font-bold"
                 defaultValue={global.title.topic_name}
                 onKeyDown={(e) => handleKeyDown(e)}
-                onBlur={() => modifyTitleName()}
+                onBlur={() => modifyTitleNameDebounce()}
                 type="text" placeholder=""
               />
               <input
@@ -81,7 +87,7 @@ function App() {
                 className="text-center font-bold"
                 defaultValue={global.title.topic_name_cn}
                 onKeyDown={(e) => handleKeyDown(e)}
-                onBlur={() => modifyTitleName()}
+                onBlur={() => modifyTitleNameDebounce()}
                 type="text" placeholder=""
               />
             </>

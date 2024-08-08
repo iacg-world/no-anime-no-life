@@ -15,15 +15,7 @@ export const globalSlice = createSlice({
   name: 'global',
   initialState: INIT_DATA,
   reducers: {
-    // modifyTitle: (state, action: PayloadAction<{
-    //   key: ObjectKeysToLiteral<GlobalStore['title']>,
-    //   value: string
-    // }>) => {
-    //   const { key, value } = action.payload
-    //   state.title[key] = value
-    //   return state
 
-    // },
     modifyTitle: produce(
       (draft: GlobalStore, action: PayloadAction<{
         key: ObjectKeysToLiteral<GlobalStore['title']>,

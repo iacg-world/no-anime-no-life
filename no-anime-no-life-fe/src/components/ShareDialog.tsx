@@ -1,9 +1,11 @@
 import { forwardRef, useImperativeHandle, useState, createRef, useEffect} from 'react'
 import { getShareList } from '../api'
-import { AnimeCategoryInfo} from '../type'
+import { AnimeCategoryInfo, GlobalStore} from '../type'
 import { isMobile, takeScreenshot } from '../utils'
 import { useRequest } from 'ahooks'
 import { Button, DotLoading, Modal, Toast } from 'antd-mobile'
+import { useSelector } from 'react-redux'
+import { StateType } from '../store'
 
 
 export interface ShareDialogProps {
@@ -39,7 +41,9 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
   const [isOpen, setIsOpen] = useState(false)
   const [width, setWidth] = useState('')
   const contentRef = createRef<HTMLDivElement>()
-
+  const global = useSelector<StateType, GlobalStore>(state => {
+    return state.global
+  }) || {}
 
 
   const { data:shareAnimeList, loading, runAsync: getOssAnimeList,  } = useRequest(getRequest, {
@@ -122,8 +126,8 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
                   <>
                     <div onDoubleClick={createImg} className="flex flex-col overflow-x-auto max-h-full min-h-full min-w-[50%] max-w-full px-1" ref={contentRef}>
                       <div className="text-center" style={{width: `${width}`}}>
-                        <div className="text-center font-bold text-base">动画人生</div>
-                        <div className="text-center font-thin text-xs mb-1">nanf.lc404.cn</div>
+                        <div className="text-center font-bold text-base">{global.title.topic_name}</div>
+                        <div className="text-center font-thin text-xs mb-1">{global.title.topic_name_cn}</div>
                       </div>
                       <div className="flex flex-row">
                         {
