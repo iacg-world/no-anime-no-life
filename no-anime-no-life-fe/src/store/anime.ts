@@ -131,14 +131,6 @@ export const componentsSlice = createSlice({
       const { oldIndex, newIndex } = action.payload
       return arrayMove(state, oldIndex, newIndex)
     },
-    // moveCategory: produce(
-    //   (draft: AnimeCategoryInfo[], action: PayloadAction<MoveAnimeParams>) => {
-    //     const { oldIndex, newIndex } = action.payload
-    //     draft = arrayMove(draft, oldIndex, newIndex)
-
-
-    //   }
-    // )
   },
 })
 export const {

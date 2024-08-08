@@ -6,7 +6,15 @@ export interface AnimeCategoryInfo {
 
 }
 
-export interface SortableAnimeCategoryInfo extends AnimeCategoryInfo{
+export interface GlobalStore {
+  title: {
+    topic_name: string,
+    topic_name_cn: string,
+  }
+
+}
+export type ObjectKeysToLiteral<T> = T extends object ? (keyof T) : never;
+export interface SortableAnimeCategoryInfo extends AnimeCategoryInfo {
   id: string
 }
 export interface AnimeInfo {
@@ -29,7 +37,7 @@ export interface AnimeInfo {
   ossUrl?: string,
 }
 
-export interface SortableAnimeInfo extends Omit<AnimeInfo, 'id'>{
+export interface SortableAnimeInfo extends Omit<AnimeInfo, 'id'> {
   id: string
 }
 

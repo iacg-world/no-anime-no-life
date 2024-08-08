@@ -1,15 +1,98 @@
+import { useDispatch, useSelector } from 'react-redux'
 import './App.scss'
 
 import { AnimeCategoryList } from './components/AnimeCategoryList'
+import { StateType } from './store'
+import { GlobalStore } from './type'
+import { modifyTitle } from './store/global'
+import { createRef, KeyboardEvent, useState } from 'react'
 
 function App() {
+  const dispatch = useDispatch()
+  const [editing, setEditing] = useState(false)
+  const nameRef = createRef<HTMLInputElement>()
+  const nameCnRef = createRef<HTMLInputElement>()
+  const global = useSelector<StateType, GlobalStore>(state => {
+    return state.global
+  }) || {}
+
+  const getValues = (): [string, string] => {
+    if (nameRef.current && nameCnRef.current) {
+      const topic_name = nameRef.current.value ? nameRef.current.value : global.title.topic_name
+      const topic_name_cn = nameCnRef.current.value ? nameCnRef.current.value : global.title.topic_name_cn
+      return [topic_name, topic_name_cn]
+
+    } else {
+      return [global.title.topic_name, global.title.topic_name_cn]
+    }
+    
+  }
+  const toggleEdit = (status: boolean) => {
+    setEditing(status)
+  }
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') { // 检查按下的是否是回车键
+      
+      dispatch(
+        modifyTitle({key: 'topic_name', value: getValues()[0]} ),
+        modifyTitle({key: 'topic_name_cn', value: getValues()[1]})
+      )
+      toggleEdit(false)
+    }
+  }
+  const modifyTitleName = () => {
+    dispatch(
+      modifyTitle({key: 'topic_name', value: getValues()[0]} ),
+      modifyTitle({key: 'topic_name_cn', value: getValues()[1]})
+    )
+    toggleEdit(false)
+
+  }
+
+  type EditType = 'name' | 'name_cn'
+  const [editType, setEditType] = useState<EditType>('name')
+  const clickEdit = (type: EditType) => {
+    setEditType(type)
+    toggleEdit(true)
+  }
+
 
   
   return (
     <div className="flex flex-col h-screen overflow-hidden box-border bg-[#FFFAFA] lg:px-24">
-      <div className="text-center h-[10vh]">
-        <div className="text-center text-xl font-bold">NO ANIME NO LIFE</div>
-        <div className="text-center font-bold">动画人生</div>
+      <div className="flex flex-col items-center h-[10vh]">
+        {
+          editing
+            ?
+            <>
+              <input
+                ref={nameRef}
+                autoFocus={editType === 'name'}
+                className="text-center text-xl font-bold"
+                defaultValue={global.title.topic_name}
+                onKeyDown={(e) => handleKeyDown(e)}
+                onBlur={() => modifyTitleName()}
+                type="text" placeholder=""
+              />
+              <input
+                ref={nameCnRef}
+                autoFocus={editType === 'name_cn'}
+                className="text-center font-bold"
+                defaultValue={global.title.topic_name_cn}
+                onKeyDown={(e) => handleKeyDown(e)}
+                onBlur={() => modifyTitleName()}
+                type="text" placeholder=""
+              />
+            </>
+
+            :
+            <>
+              <div onClick={() => clickEdit('name')} data-type="name" className="text-center text-xl font-bold min-h-4 min-w-6">{global.title.topic_name}</div>
+              <div onClick={() => clickEdit('name_cn')} data-type="cn" className="text-center font-bold">{global.title.topic_name_cn}</div>
+            </>
+
+        }
       </div>
       <div className="grow h-[85vh] mb-2 shadow-md">
         <AnimeCategoryList/>

@@ -1,6 +1,7 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import { AnimeCategoryInfo } from '../type'
+import { AnimeCategoryInfo, GlobalStore } from '../type'
 import animeReducer from './anime'
+import globalReducer from './global'
 import storage from 'redux-persist/lib/storage'
 import {   
   persistStore,
@@ -13,10 +14,12 @@ import {
   REGISTER, 
 } from 'redux-persist'
 export type StateType = {
-  anime: AnimeCategoryInfo[]
+  anime: AnimeCategoryInfo[],
+  global: GlobalStore
 }
 const rootReducer= combineReducers({
   anime: animeReducer,
+  global: globalReducer
 })
 
 const persistConfig = {
