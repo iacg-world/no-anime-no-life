@@ -7,16 +7,15 @@ import SortableContainer from './Drag/SortableContainer'
 import SortableItem, { DragContext } from './Drag/SortableItem'
 import AnimeItem, { OpenSearchAdd } from './AnimeItem'
 import { verticalListSortingStrategy } from '@dnd-kit/sortable'
-import { SearchAddDialog, SearchAddDialogRef } from './SearchAddDialog'
 import { AddSquareOutline, DeleteOutline } from 'antd-mobile-icons'
 
 interface PropsType {
-  categoryItem: AnimeCategoryInfo
+  categoryItem: AnimeCategoryInfo,
+  openSearchAdd: OpenSearchAdd
 }
 
 const AnimeListItem:FC<PropsType> = (props) => {
-  const dialogRef = createRef<SearchAddDialogRef>()
-  const {categoryItem} = props
+  const {categoryItem, openSearchAdd} = props
   const {categoryId, editing} = categoryItem
   const editInputRef = createRef<HTMLInputElement>()
   const {isDragging, activeId} = useContext(DragContext)
@@ -70,9 +69,7 @@ const AnimeListItem:FC<PropsType> = (props) => {
       }
     })
   }
-  const openSearchAdd:OpenSearchAdd = (categoryId, data) => {
-    dialogRef.current?.openModal({categoryId, animeInfo: data})
-  }
+
   useClickAway(
     () => {
       dispatch(
@@ -134,7 +131,8 @@ const AnimeListItem:FC<PropsType> = (props) => {
 
         </div>
       </div>
-      <SearchAddDialog ref={dialogRef}></SearchAddDialog>
+
+      
     </>
 
   )

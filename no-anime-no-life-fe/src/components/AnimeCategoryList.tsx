@@ -9,6 +9,8 @@ import SortableItem from './Drag/SortableItem'
 import SortableContainer from './Drag/SortableContainer'
 import { horizontalListSortingStrategy } from '@dnd-kit/sortable'
 import AnimeListItem from './AnimeListItem'
+import { SearchAddDialog, SearchAddDialogRef } from './SearchAddDialog'
+import { OpenSearchAdd } from './AnimeItem'
 
 
 export const AnimeCategoryList = () =>{
@@ -77,7 +79,11 @@ export const AnimeCategoryList = () =>{
       }
     })
   }
+  const dialogRef = createRef<SearchAddDialogRef>()
 
+  const openSearchAdd:OpenSearchAdd = (categoryId, data) => {
+    dialogRef.current?.openModal({categoryId, animeInfo: data})
+  }
 
   return (
     <>
@@ -93,7 +99,7 @@ export const AnimeCategoryList = () =>{
               const {categoryId} = categoryItem
               return (
                 <SortableItem key={categoryId} id={categoryId}>
-                  <AnimeListItem categoryItem={categoryItem}></AnimeListItem>
+                  <AnimeListItem categoryItem={categoryItem} openSearchAdd={openSearchAdd}></AnimeListItem>
                 </SortableItem>
               )
             
@@ -113,6 +119,9 @@ export const AnimeCategoryList = () =>{
         <img className="size-8 mb-0.5" src={localImg('share.png')} alt="" />
       </div>
       <ShareDialog  ref={shareDialogRef} animeList={animeList} />
+
+      <SearchAddDialog ref={dialogRef}></SearchAddDialog>,
+
     </>
 
   )
