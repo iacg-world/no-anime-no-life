@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 import path from 'path'
 import vitePluginImp from 'vite-plugin-imp'
 
-import px2rem from 'postcss-pxtorem'
+// import px2rem from 'postcss-pxtorem'
 // https://vitejs.dev/config/
 export default defineConfig(() => {
   const envPath = path.dirname(__dirname)
@@ -31,7 +31,6 @@ export default defineConfig(() => {
           }
         ]
       }),
-      px2rem({ rootValue: 10,  exclude: /node_modules/i, propList:['*'] }),
     ],
     // 别名配置
     resolve: {
@@ -42,7 +41,8 @@ export default defineConfig(() => {
         scss: {
           javascriptEnabled: true
         }
-      }
+      },
+
     }
 
   }
