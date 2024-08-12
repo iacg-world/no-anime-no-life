@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import './App.scss'
 
-import { AnimeCategoryList } from './components/AnimeCategoryList'
+import { AnimeView } from './components/AnimeView'
 import { StateType } from './store'
 import { GlobalStore } from './type'
 import { modifyTitle } from './store/global'
@@ -101,7 +101,7 @@ function App() {
         }
       </div>
       <div className="grow h-[85vh] mb-2 shadow-md">
-        <AnimeCategoryList/>
+        <AnimeView/>
       </div>
       <div className="h-[5vh] text-center text-xs text-gray-400">
         <a target='_blank' className="mr-1" href="https://github.com/iacg-world/no-anime-no-life">@Github</a>

@@ -13,7 +13,7 @@ import { SearchAddDialog, SearchAddDialogRef } from './SearchAddDialog'
 import { OpenSearchAdd } from './AnimeItem'
 
 
-export const AnimeCategoryList = () =>{
+export const AnimeView = () =>{
   const shareDialogRef = createRef<ShareDialogRef>()
   const contentRef = createRef<HTMLDivElement>()
   const animeList = useSelector<StateType, AnimeCategoryInfo[]>(state => state.anime) || []
