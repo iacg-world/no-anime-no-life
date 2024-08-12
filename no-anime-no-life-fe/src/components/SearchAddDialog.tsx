@@ -4,8 +4,7 @@ import { searchByKeyword } from '../api'
 import { AnimeInfo } from '../type'
 import { addAnime, modifyAnime } from '../store/anime'
 import { useDispatch } from 'react-redux'
-import { Button, DotLoading } from 'antd-mobile'
-import { Image, Loading, Toast } from '@nutui/nutui-react'
+import { Image, Loading, Toast, Button} from '@nutui/nutui-react'
 
 
 export interface SearchAddDialogProps {
@@ -121,7 +120,7 @@ export const SearchAddDialog = forwardRef<SearchAddDialogRef, SearchAddDialogPro
                   }
                 </div> :
                 <div className="flex flex-row flex-wrap overflow-y-auto min-h-[50vh] max-h-[70vh]">
-                  <DotLoading />
+                  <Loading />
                 </div>
             }
 

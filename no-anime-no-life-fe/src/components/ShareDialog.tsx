@@ -3,10 +3,10 @@ import { getShareList } from '../api'
 import { AnimeCategoryInfo, GlobalStore} from '../type'
 import { isMobile, takeScreenshot } from '../utils'
 import { useRequest } from 'ahooks'
-import { Button, DotLoading, Modal } from 'antd-mobile'
+import { Modal } from 'antd-mobile'
 import { useSelector } from 'react-redux'
 import { StateType } from '../store'
-import { Toast } from '@nutui/nutui-react'
+import { Button, Dialog, Image, Loading, Toast } from '@nutui/nutui-react'
 
 
 export interface ShareDialogProps {
@@ -89,12 +89,11 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
       try {
         if (isMobile()) {
           const url = await takeScreenshot(contentRef.current, false)
-          Modal.show({
-            image:url,
-            title: '长按中间保存',
-            actions: [],
-            showCloseButton: true,
-            closeOnMaskClick: true,
+          Dialog.alert({
+            title: '长按图片保存',
+            content: <Image src={url} />,
+            hideCancelButton: true,
+            confirmText: '完成'
           })
 
         } else {
@@ -121,7 +120,7 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
                 loading 
                   ?
                   <div className="flex content-center">
-                    <span>生成分享中</span><DotLoading />
+                    <Loading direction="vertical">生成分享中</Loading>
                   </div>
                   :
                   <>
@@ -157,9 +156,11 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
                         }
                       </div>
                     </div>
-                    <div className="flex content-center">
+                    <div className="flex content-center mt-1 w-full justify-end px-2">
                       <Button onClick={closeModal} className="mr-1">关闭</Button>
-                      <Button onClick={createImg} loading={downloadLoading} color='success' loadingText='正在下载'>下载分享图</Button>
+                      <Button onClick={createImg} loading={downloadLoading} type="success">
+                      下载分享图
+                      </Button>
                     </div>
                   </>
               }

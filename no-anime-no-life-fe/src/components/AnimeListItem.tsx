@@ -117,7 +117,7 @@ const AnimeListItem:FC<PropsType> = (props) => {
             className="flex flex-nowrap items-center justify-around"
           >
             <RemoveRectangle
-              color='var(--adm-color-danger)'
+              color="#fa2c19"
               width="0.8rem"
               height="0.8rem"
               onClick={(e) => {e.stopPropagation();deleteAnime(categoryId)}}
