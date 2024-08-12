@@ -105,7 +105,7 @@ function App() {
       </div>
       <div className="h-[5vh] text-center text-xs text-gray-400">
         <a target='_blank' className="mr-1" href="https://github.com/iacg-world/no-anime-no-life">@Github</a>
-        <a target='_blank' href="https://github.com/bangumi/api">动画来自<strong>@番组计划</strong></a>
+        <a target='_blank' href="https://github.com/bangumi/api"><strong>@番组计划</strong></a>
       </div>
     </div>
   )

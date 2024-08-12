@@ -4,7 +4,8 @@ import { searchByKeyword } from '../api'
 import { AnimeInfo } from '../type'
 import { addAnime, modifyAnime } from '../store/anime'
 import { useDispatch } from 'react-redux'
-import { Button, DotLoading, Image, Toast } from 'antd-mobile'
+import { Button, DotLoading, Image } from 'antd-mobile'
+import { Toast } from '@nutui/nutui-react'
 
 
 export interface SearchAddDialogProps {
@@ -80,6 +81,7 @@ export const SearchAddDialog = forwardRef<SearchAddDialogRef, SearchAddDialogPro
       Toast.show({
         content: '修改成功',
         position: 'top',
+        icon: 'success',
       })
     } else {
       await dispatch(
@@ -88,6 +90,7 @@ export const SearchAddDialog = forwardRef<SearchAddDialogRef, SearchAddDialogPro
       Toast.show({
         content: '添加成功',
         position: 'top',
+        icon: 'success',
         duration: 800,
       })
     }

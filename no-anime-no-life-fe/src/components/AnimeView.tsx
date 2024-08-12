@@ -1,5 +1,4 @@
-import { createRef, FocusEvent, KeyboardEvent } from 'react'
-import { localImg } from '../utils'
+import { createRef, FocusEvent, KeyboardEvent, useState } from 'react'
 import { AnimeCategoryInfo, SortableAnimeCategoryInfo } from '../type'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateType } from '../store'
@@ -11,6 +10,8 @@ import { horizontalListSortingStrategy } from '@dnd-kit/sortable'
 import AnimeListItem from './AnimeListItem'
 import { SearchAddDialog, SearchAddDialogRef } from './SearchAddDialog'
 import { OpenSearchAdd } from './AnimeItem'
+import { Drag, FixedNav, Toast } from '@nutui/nutui-react'
+import {Disk, Share, Upload} from '@nutui/icons-react'
 
 
 export const AnimeView = () =>{
@@ -84,7 +85,58 @@ export const AnimeView = () =>{
   const openSearchAdd:OpenSearchAdd = (categoryId, data) => {
     dialogRef.current?.openModal({categoryId, animeInfo: data})
   }
+  const saveJSON = () => {
+    try {
+      const json = JSON.stringify(animeList)
+      const blob = new Blob([json], {type: 'application/json'})
+  
+      const link = document.createElement('a')
+      link.href = URL.createObjectURL(blob)
+      link.download = 'anime.json'
+      link.click()
+      Toast.show({
+        title: '保存成功',
+        icon: 'success',
+      })
+    } catch (error) {
+      Toast.show({
+        title: '保存失败',
+        icon: 'fail',
+      })
+    }
 
+  }
+  const list = [
+
+    {
+      id: 2,
+      text: '保存',
+      icon: <Disk />,
+      func: saveJSON
+    },
+    {
+      id: 3,
+      text: '导入',
+      icon: <Upload />,
+    },
+    {
+      id: 1,
+      text: '分享',
+      icon: <Share />,
+      func: onShare
+    },
+  ]
+  const [visible, setVisible] = useState(false)
+  const change = (value: boolean) => {
+    setVisible(value)
+  }
+  const selected = (
+    item: any,
+    event: React.MouseEvent<Element, MouseEvent>
+  ) => {
+    item.func?.call(event)
+    setVisible(false)
+  }
   return (
     <>
       <div className="flex flex-row overflow-x-auto w-full h-full" ref={contentRef}>
@@ -114,10 +166,18 @@ export const AnimeView = () =>{
             onBlur={addCategory} type="text" placeholder="输入新类目" maxLength={5} className="h-full w-full text-sm" />
         </div>
       </div>
-
-      <div onClick={onShare} className="fixed right-1 bottom-1 p-0.5 rounded-sm flex flex-col items-center">
-        <img className="size-8 mb-0.5" src={localImg('share.png')} alt="" />
-      </div>
+      <Drag direction="y" style={{ right: '0px', bottom: '10vh' }}>
+        <FixedNav
+          list={list}
+          overlay
+          inactiveText="功能"
+          activeText="收起"
+          visible={visible}
+          onChange={change}
+          onSelect={selected}
+          color='black'
+        />
+      </Drag>
       <ShareDialog  ref={shareDialogRef} animeList={animeList} />
 
       <SearchAddDialog ref={dialogRef}></SearchAddDialog>,

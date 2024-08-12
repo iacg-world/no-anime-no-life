@@ -3,9 +3,10 @@ import { getShareList } from '../api'
 import { AnimeCategoryInfo, GlobalStore} from '../type'
 import { isMobile, takeScreenshot } from '../utils'
 import { useRequest } from 'ahooks'
-import { Button, DotLoading, Modal, Toast } from 'antd-mobile'
+import { Button, DotLoading, Modal } from 'antd-mobile'
 import { useSelector } from 'react-redux'
 import { StateType } from '../store'
+import { Toast } from '@nutui/nutui-react'
 
 
 export interface ShareDialogProps {

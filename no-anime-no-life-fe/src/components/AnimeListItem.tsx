@@ -7,7 +7,7 @@ import SortableContainer from './Drag/SortableContainer'
 import SortableItem, { DragContext } from './Drag/SortableItem'
 import AnimeItem, { OpenSearchAdd } from './AnimeItem'
 import { verticalListSortingStrategy } from '@dnd-kit/sortable'
-import { AddSquareOutline, DeleteOutline } from 'antd-mobile-icons'
+import {AddRectangle, RemoveRectangle} from '@nutui/icons-react'
 
 interface PropsType {
   categoryItem: AnimeCategoryInfo,
@@ -116,15 +116,17 @@ const AnimeListItem:FC<PropsType> = (props) => {
           <div
             className="flex flex-nowrap items-center justify-around"
           >
-            <DeleteOutline
-              className="text-base"
+            <RemoveRectangle
               color='var(--adm-color-danger)'
-              onMouseUp={(e) => {e.stopPropagation();deleteAnime(categoryId)}}
+              width="0.8rem"
+              height="0.8rem"
+              onClick={(e) => {e.stopPropagation();deleteAnime(categoryId)}}
             />
-            <AddSquareOutline
-              className="text-base"
+            <AddRectangle
               color="#76c6b8"
-              onMouseUp={() => openSearchAdd(categoryId)}
+              width="0.8rem"
+              height="0.8rem"
+              onClick={() => openSearchAdd(categoryId)}
             />
 
           </div>
