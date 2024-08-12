@@ -131,6 +131,9 @@ export const componentsSlice = createSlice({
       const { oldIndex, newIndex } = action.payload
       return arrayMove(state, oldIndex, newIndex)
     },
+    initAnime: (_, action: PayloadAction<AnimeCategoryInfo[]>) => {
+      return action.payload
+    }
   },
 })
 export const {
@@ -141,5 +144,6 @@ export const {
   modifyCategory,
   moveAnime,
   moveCategory,
+  initAnime,
 } = componentsSlice.actions
 export default componentsSlice.reducer

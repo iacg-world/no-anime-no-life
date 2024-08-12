@@ -4,8 +4,8 @@ import { searchByKeyword } from '../api'
 import { AnimeInfo } from '../type'
 import { addAnime, modifyAnime } from '../store/anime'
 import { useDispatch } from 'react-redux'
-import { Button, DotLoading, Image } from 'antd-mobile'
-import { Toast } from '@nutui/nutui-react'
+import { Button, DotLoading } from 'antd-mobile'
+import { Image, Loading, Toast } from '@nutui/nutui-react'
 
 
 export interface SearchAddDialogProps {
@@ -113,7 +113,7 @@ export const SearchAddDialog = forwardRef<SearchAddDialogRef, SearchAddDialogPro
                           key={item.id}
                           onMouseUp={() => chooseAnime(item)}
                           className="flex flex-col items-center w-12 mr-1 grow-0">
-                          <Image src={item.images?.large} alt="" className="w-full h-14"/>
+                          <Image src={item.images?.large} alt="" className="w-full h-14" lazy loading={<Loading />}/>
                           <div className="flex flex-row text-xs">{item.name_cn || item.name}</div>
                         </div>
                       )

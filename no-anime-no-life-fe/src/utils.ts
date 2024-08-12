@@ -1,4 +1,5 @@
 import { getFontEmbedCSS, toJpeg } from 'html-to-image'
+import { AnimeCategoryInfo, AnimeInfo } from './type'
 
 export function localImg(file: string) {
   return new URL(`./assets/${file}`, import.meta.url).href
@@ -36,4 +37,18 @@ export async function takeScreenshot(ele: HTMLElement, isDownload: boolean = tru
 export function isMobile(): boolean {
   const userAgent = navigator.userAgent
   return /Android|iPhone|iPad|iPod|BlackBerry|webOS|Windows Phone|SymbianOS|IEMobile|Opera Mini/i.test(userAgent)
+}
+
+function checkAnimeItemData(data: AnimeInfo[]) {
+  return data.every(item => {
+    return item.aid && item.id && item.images
+  })
+
+}
+
+export function checkAnimeData(data:AnimeCategoryInfo[]) {
+  return data.every(item => {
+    return item.categoryId && item.categoryName && checkAnimeItemData(item.list)
+  })
+
 }

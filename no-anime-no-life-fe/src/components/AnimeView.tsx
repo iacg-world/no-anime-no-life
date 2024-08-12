@@ -2,7 +2,7 @@ import { createRef, FocusEvent, KeyboardEvent, useState } from 'react'
 import { AnimeCategoryInfo, SortableAnimeCategoryInfo } from '../type'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateType } from '../store'
-import { addAnimeCategory, MoveAnimeParams, moveCategory, } from '../store/anime'
+import { addAnimeCategory, initAnime, MoveAnimeParams, moveCategory, } from '../store/anime'
 import { ShareDialog, ShareDialogRef } from './ShareDialog'
 import SortableItem from './Drag/SortableItem'
 import SortableContainer from './Drag/SortableContainer'
@@ -11,7 +11,9 @@ import AnimeListItem from './AnimeListItem'
 import { SearchAddDialog, SearchAddDialogRef } from './SearchAddDialog'
 import { OpenSearchAdd } from './AnimeItem'
 import { Drag, FixedNav, Toast } from '@nutui/nutui-react'
-import {Disk, Share, Upload} from '@nutui/icons-react'
+import {Disk, Share} from '@nutui/icons-react'
+import Uploader from './Uploader'
+
 
 
 export const AnimeView = () =>{
@@ -106,6 +108,16 @@ export const AnimeView = () =>{
     }
 
   }
+  const beforeUploadJSON = (data:AnimeCategoryInfo[]) => {
+    dispatch(
+      initAnime(data)
+    )
+    Toast.show({
+      title: '导入成功',
+      icon: 'success'
+    })
+
+  }
   const list = [
 
     {
@@ -117,7 +129,7 @@ export const AnimeView = () =>{
     {
       id: 3,
       text: '导入',
-      icon: <Upload />,
+      icon: (<Uploader  onUpload={beforeUploadJSON} />),
     },
     {
       id: 1,
