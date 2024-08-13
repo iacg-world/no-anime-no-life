@@ -167,7 +167,7 @@ export const AnimeView = () =>{
               const {categoryId} = categoryItem
               return (
                 <SortableItem key={categoryId} id={categoryId}>
-                  <AnimeListItem categoryItem={categoryItem} openSearchAdd={openSearchAdd}></AnimeListItem>
+                  <AnimeListItem id={categoryId} categoryItem={categoryItem} openSearchAdd={openSearchAdd}></AnimeListItem>
                 </SortableItem>
               )
             

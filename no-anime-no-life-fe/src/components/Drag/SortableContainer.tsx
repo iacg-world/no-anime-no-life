@@ -18,6 +18,7 @@ import {
 } from '@dnd-kit/sortable'
 import { SortableAnimeCategoryInfo, SortableAnimeInfo } from '../../type'
 import { MoveAnimeParams } from '../../store/anime'
+import { createPortal } from 'react-dom'
 
 type PropsType = {
   children: JSX.Element[]
@@ -76,16 +77,27 @@ const SortableContainer: FC<PropsType> = (props: PropsType) => {
   }
 
   return (
-    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} onDragStart={handleDragStart} modifiers={modifiers}>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}
+      onDragStart={handleDragStart}
+      modifiers={modifiers}
+    >
       <SortableContext items={items} strategy={strategy}>
         {children}
       </SortableContext>
       {
-        dragOverlay ?       <DragOverlay>
-          {activeId ? 
-            children.find(item => item.key === activeId)
-            : null}
-        </DragOverlay> : null
+        dragOverlay ? createPortal(
+          
+          <DragOverlay>
+            {activeId ?
+              <div className="scale-110">{children.find(item => item.key === activeId)}</div>:
+              null
+            }
+          </DragOverlay>,
+          document.body
+        ) : null
       }
 
     </DndContext>

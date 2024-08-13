@@ -8,17 +8,28 @@ import SortableItem, { DragContext } from './Drag/SortableItem'
 import AnimeItem, { OpenSearchAdd } from './AnimeItem'
 import { verticalListSortingStrategy } from '@dnd-kit/sortable'
 import {AddRectangle, RemoveRectangle} from '@nutui/icons-react'
+import { UniqueIdentifier } from '@dnd-kit/core'
 
 interface PropsType {
   categoryItem: AnimeCategoryInfo,
+  id: UniqueIdentifier,
   openSearchAdd: OpenSearchAdd
 }
-
+const genSortableAnimeItems = (list: AnimeInfo[]):SortableAnimeInfo[] => {
+  return list.map(item => {
+    return {
+      ...item,
+      id: item.aid
+    }
+  })
+}
 const AnimeListItem:FC<PropsType> = (props) => {
   const {categoryItem, openSearchAdd} = props
   const {categoryId, editing} = categoryItem
   const editInputRef = createRef<HTMLInputElement>()
   const {isDragging, activeId} = useContext(DragContext)
+  const sortableAnimeItems = genSortableAnimeItems(categoryItem.list)
+
   const dispatch = useDispatch()
   let lastCategoryId = ''
   const onEditCategory = (data: AnimeCategoryInfo) => {
@@ -61,14 +72,7 @@ const AnimeListItem:FC<PropsType> = (props) => {
     }
 
   }
-  const genSortableAnimeItems = (list: AnimeInfo[]):SortableAnimeInfo[] => {
-    return list.map(item => {
-      return {
-        ...item,
-        id: item.aid
-      }
-    })
-  }
+
 
   useClickAway(
     () => {
@@ -81,25 +85,29 @@ const AnimeListItem:FC<PropsType> = (props) => {
   const activeClassStr = `flex flex-col flex-nowrap w-14 h-auto mx-1 ${activeId===categoryId ? 'scale-x-110': ''}`
   return (
     <>
-      <div className={activeClassStr} key={categoryId} ref={editInputRef}>
-        {
-          editing
-            ?
-            <input
-              autoFocus
-              onKeyDown={(e) => handleKeyDown(e, categoryItem)}
-              onBlur={(e) => modifyCategoryName(e, categoryItem)}
-              data-id={categoryId} defaultValue={categoryItem.categoryName}
-              type="text" placeholder="编辑类目" maxLength={5}
-              className="h-4 w-full text-sm" />
-            :
-            <div className="text-sm font-sans text-nowrap font-bold"
-              onClick={() => onEditCategory(categoryItem)} >{categoryItem.categoryName}
-            </div>
-        }
+      <div className={activeClassStr} key={categoryId}>
+        <div ref={editInputRef}>
+          {
+            editing
+              ?
+              <input
+                autoFocus
+                onKeyDown={(e) => handleKeyDown(e, categoryItem)}
+                onBlur={(e) => modifyCategoryName(e, categoryItem)}
+                data-id={categoryId} defaultValue={categoryItem.categoryName}
+                type="text" placeholder="编辑类目" maxLength={5}
+                className="h-4 w-full text-sm" />
+              :
+              <div className="text-sm font-sans text-nowrap font-bold"
+                ref={editInputRef}
+                onClick={() => onEditCategory(categoryItem)} >{categoryItem.categoryName}
+              </div>
+          }
+        </div>
+
 
         <div className='flex flex-col flex-nowrap overflow-y-auto overflow-x-hidden h-[80vh] relative' style={{touchAction: isDragging ?'none' : 'auto'}} >
-          <SortableContainer dragOverlay strategy={verticalListSortingStrategy} items={genSortableAnimeItems(categoryItem.list)} onDragEnd={(obj) => {handleDragEnd(obj ? {categoryId, ...obj} : undefined)}}>
+          <SortableContainer dragOverlay strategy={verticalListSortingStrategy} items={sortableAnimeItems} onDragEnd={(obj) => {handleDragEnd(obj ? {categoryId, ...obj} : undefined)}}>
             {
               categoryItem.list.map(animeItem => {
                 const {aid} = animeItem
