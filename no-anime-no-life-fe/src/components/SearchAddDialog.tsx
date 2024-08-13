@@ -90,7 +90,7 @@ export const SearchAddDialog = forwardRef<SearchAddDialogRef, SearchAddDialogPro
         content: '添加成功',
         position: 'top',
         icon: 'success',
-        duration: 800,
+        duration: 1,
       })
     }
 
