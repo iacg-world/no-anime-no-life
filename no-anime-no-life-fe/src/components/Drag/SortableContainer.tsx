@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import {
   DndContext,
   closestCenter,
@@ -7,6 +7,10 @@ import {
   useSensors,
   DragEndEvent,
   TouchSensor,
+  Modifiers,
+  DragOverlay,
+  DragStartEvent,
+  UniqueIdentifier,
 } from '@dnd-kit/core'
 import {
   SortableContext,
@@ -16,15 +20,27 @@ import { SortableAnimeCategoryInfo, SortableAnimeInfo } from '../../type'
 import { MoveAnimeParams } from '../../store/anime'
 
 type PropsType = {
-  children: JSX.Element | JSX.Element[]
+  children: JSX.Element[]
   items: SortableAnimeInfo[] | SortableAnimeCategoryInfo[]
   onDragEnd: (obj?: Omit<MoveAnimeParams, 'categoryId'>) => void
-  onDragStart?: (event: DragEndEvent) => void,
+  onDragStart?: (event: DragStartEvent) => void,
   strategy: SortingStrategy,
+  modifiers?: Modifiers | undefined,
+  dragOverlay?: boolean
 }
 
+
+
 const SortableContainer: FC<PropsType> = (props: PropsType) => {
-  const { children, items, onDragEnd, onDragStart, strategy } = props
+  const { children, items, onDragEnd, onDragStart, strategy, modifiers, dragOverlay} = props
+  const [activeId, setActiveId] = useState<UniqueIdentifier>()
+  function handleDragStart(event:DragStartEvent) {
+    if (event.active.id) {
+
+      setActiveId(event.active.id)
+      onDragStart && onDragStart(event)
+    }
+  }
 
   const sensors = useSensors(
     useSensor(MouseSensor, {
@@ -44,6 +60,7 @@ const SortableContainer: FC<PropsType> = (props: PropsType) => {
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event
+    setActiveId(undefined)
     if (over == null) {
       onDragEnd()
       return
@@ -59,10 +76,18 @@ const SortableContainer: FC<PropsType> = (props: PropsType) => {
   }
 
   return (
-    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} onDragStart={onDragStart}>
+    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} onDragStart={handleDragStart} modifiers={modifiers}>
       <SortableContext items={items} strategy={strategy}>
         {children}
       </SortableContext>
+      {
+        dragOverlay ?       <DragOverlay>
+          {activeId ? 
+            children.find(item => item.key === activeId)
+            : null}
+        </DragOverlay> : null
+      }
+
     </DndContext>
   )
 }

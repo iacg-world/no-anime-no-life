@@ -99,7 +99,7 @@ const AnimeListItem:FC<PropsType> = (props) => {
         }
 
         <div className='flex flex-col flex-nowrap overflow-y-auto overflow-x-hidden h-[80vh] relative' style={{touchAction: isDragging ?'none' : 'auto'}} >
-          <SortableContainer strategy={verticalListSortingStrategy} items={genSortableAnimeItems(categoryItem.list)} onDragEnd={(obj) => {handleDragEnd(obj ? {categoryId, ...obj} : undefined)}}>
+          <SortableContainer dragOverlay strategy={verticalListSortingStrategy} items={genSortableAnimeItems(categoryItem.list)} onDragEnd={(obj) => {handleDragEnd(obj ? {categoryId, ...obj} : undefined)}}>
             {
               categoryItem.list.map(animeItem => {
                 const {aid} = animeItem

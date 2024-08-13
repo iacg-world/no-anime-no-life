@@ -12,11 +12,11 @@ interface PropsType {
 const AnimeItem:FC<PropsType> = (props) => {
   const {categoryId, animeItem, openSearchAdd} = props
   const {isDragging, activeId} = useContext(DragContext)
-  const classNameStr = `flex flex-col items-center ${activeId===animeItem.aid ? 'scale-110': ''}`
+  const classNameStr = `flex flex-col items-center ${activeId===animeItem.aid ? 'opacity-30': ''}`
 
   return (
     <div 
-      onMouseUp={() => !isDragging && openSearchAdd(categoryId, animeItem)}
+      onClick={() => !isDragging && openSearchAdd(categoryId, animeItem)}
       className={classNameStr}>
       <img src={animeItem.images?.medium} alt="" className="w-full h-auto max-h-18" style={{pointerEvents: 'none'}} />
       <div className="flex flex-row text-xs">{animeItem.name_cn || animeItem.name}</div>

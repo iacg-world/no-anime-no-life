@@ -13,6 +13,7 @@ import { OpenSearchAdd } from './AnimeItem'
 import { Drag, FixedNav, Toast } from '@nutui/nutui-react'
 import {Disk, Share} from '@nutui/icons-react'
 import Uploader from './Uploader'
+import { restrictToHorizontalAxis } from './Drag/utils'
 
 
 
@@ -139,8 +140,10 @@ export const AnimeView = () =>{
     },
   ]
   const [visible, setVisible] = useState(false)
+  const [draggable, setDraggable] = useState(false)
   const change = (value: boolean) => {
     setVisible(value)
+    setDraggable(!value)
   }
   const selected = (
     item: any,
@@ -153,6 +156,7 @@ export const AnimeView = () =>{
     <>
       <div className="flex flex-row overflow-x-auto w-full h-full" ref={contentRef}>
         <SortableContainer  
+          modifiers={[restrictToHorizontalAxis]}
           strategy={horizontalListSortingStrategy} 
           items={genSortableAnimeCategoryInfoItems(animeList)} 
           onDragEnd={(obj) => {handleAnimeListDragEnd(obj ? {...obj} : undefined)}}>
@@ -178,7 +182,7 @@ export const AnimeView = () =>{
             onBlur={addCategory} type="text" placeholder="输入新类目" maxLength={5} className="h-full w-full text-sm" />
         </div>
       </div>
-      <Drag direction="y" style={{ right: '0px', bottom: '10vh' }}>
+      <Drag draggable={draggable} direction="y" style={{ right: '0px', bottom: '10vh' }}>
         <FixedNav
           list={list}
           overlay
