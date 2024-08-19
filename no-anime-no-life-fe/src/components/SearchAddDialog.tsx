@@ -31,7 +31,7 @@ export const SearchAddDialog = forwardRef<SearchAddDialogRef, SearchAddDialogPro
   const dispatch = useDispatch()
   const { data:searchData, loading, runAsync } = useRequest(getSearchRes, {
     manual: true,
-    debounceWait: 1000,
+    debounceWait: 700,
   })
   const [searchAnimeList, setAnimeList] = useState<AnimeInfo[]>([])
 
@@ -81,6 +81,7 @@ export const SearchAddDialog = forwardRef<SearchAddDialogRef, SearchAddDialogPro
         content: '修改成功',
         position: 'top',
         icon: 'success',
+        duration: 0.5,
       })
     } else {
       await dispatch(
@@ -90,7 +91,7 @@ export const SearchAddDialog = forwardRef<SearchAddDialogRef, SearchAddDialogPro
         content: '添加成功',
         position: 'top',
         icon: 'success',
-        duration: 1,
+        duration: 0.5,
       })
     }
 

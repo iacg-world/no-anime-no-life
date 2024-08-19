@@ -9,6 +9,11 @@ export interface MoveAnimeParams {
   oldIndex: number,
   newIndex: number,
 }
+export interface InsertAnimeParams {
+  categoryId: string,
+  anime: AnimeInfo,
+  newIndex: number,
+}
 const INIT_DATA: AnimeCategoryInfo[] = [
   {
     categoryId: nanoid(),
@@ -65,8 +70,9 @@ export const componentsSlice = createSlice({
     rmAnime: produce(
       (draft: AnimeCategoryInfo[], action: PayloadAction<{
         categoryId: string,
+        deleteIndex?: number
       }>) => {
-        let deleteIndex = 0
+        let deleteIndex = action.payload.deleteIndex || 0
         const target = draft.find((item, index) => {
           deleteIndex = index
           return item.categoryId === action.payload.categoryId
@@ -127,6 +133,16 @@ export const componentsSlice = createSlice({
 
       }
     ),
+    insertAnime: produce(
+      (draft: AnimeCategoryInfo[], action: PayloadAction<InsertAnimeParams>) => {
+        const { anime, newIndex, categoryId } = action.payload
+        const target = draft.find(item => item.categoryId === categoryId)
+        if (target) {
+          target.list = target.list.concat([anime, ...target.list.splice(newIndex)])
+        }
+
+      }
+    ),
     moveCategory: (state, action: PayloadAction<MoveAnimeParams>) => {
       const { oldIndex, newIndex } = action.payload
       return arrayMove(state, oldIndex, newIndex)
@@ -145,5 +161,6 @@ export const {
   moveAnime,
   moveCategory,
   initAnime,
+  insertAnime,
 } = componentsSlice.actions
 export default componentsSlice.reducer

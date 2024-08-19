@@ -1,19 +1,17 @@
 import { createRef, FocusEvent, KeyboardEvent, useState } from 'react'
-import { AnimeCategoryInfo, SortableAnimeCategoryInfo } from '../type'
+import { AnimeCategoryInfo, AnimeInfo, SortableAnimeCategoryInfo } from '../type'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateType } from '../store'
-import { addAnimeCategory, initAnime, MoveAnimeParams, moveCategory, } from '../store/anime'
+import { addAnimeCategory, initAnime, insertAnime, moveAnime, MoveAnimeParams, moveCategory, rmAnime, } from '../store/anime'
 import { ShareDialog, ShareDialogRef } from './ShareDialog'
-import SortableItem from './Drag/SortableItem'
-import SortableContainer from './Drag/SortableContainer'
-import { horizontalListSortingStrategy } from '@dnd-kit/sortable'
 import AnimeListItem from './AnimeListItem'
 import { SearchAddDialog, SearchAddDialogRef } from './SearchAddDialog'
-import { OpenSearchAdd } from './AnimeItem'
+import AnimeItem, { OpenSearchAdd } from './AnimeItem'
 import { Drag, FixedNav, Toast } from '@nutui/nutui-react'
 import {Disk, Share} from '@nutui/icons-react'
 import Uploader from './Uploader'
-import { restrictToHorizontalAxis } from './Drag/utils'
+import { closestCorners, DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, MouseSensor, TouchSensor, UniqueIdentifier, useSensor, useSensors } from '@dnd-kit/core'
+import { createPortal } from 'react-dom'
 
 
 
@@ -152,29 +150,169 @@ export const AnimeView = () =>{
     item.func?.call(event)
     setVisible(false)
   }
+
+  const sensors = useSensors(
+
+    useSensor(MouseSensor, {
+      activationConstraint: {
+        distance: 2,
+        delay: 250,
+      },
+    }),
+    useSensor(TouchSensor)
+  )
+
+
+  const [activeId, setActiveId] = useState<UniqueIdentifier>()
+  const [activeItem, setActiveItem] = useState<AnimeInfo>()
+  function handleDragStart(event:DragStartEvent) {
+    const { active } = event
+    const { id } = active
+    const activeContainer = findContainer(id)
+    setActiveId(activeContainer?.categoryId)
+
+    let allAnimeList:AnimeInfo[] = []
+    animeList.forEach(item => allAnimeList = allAnimeList.concat(item.list))
+    
+    const activeAnimeItem = allAnimeList.find(item => item.aid === id)
+    setActiveItem(activeAnimeItem)
+    
+
+  }
+  const findContainer = (id:UniqueIdentifier | undefined) => {
+    if (!id) {
+      return undefined
+    }
+    const animeCategoryItem = animeList.find(item => item.categoryId === id)
+    if (animeCategoryItem) {
+      return animeCategoryItem
+    } else {
+      const animeCategoryItem = animeList.find(item => {
+        return item.list.find(anime => anime.aid === id)
+        
+      })
+      return animeCategoryItem
+
+    }
+
+  }
+  const handleDragOver = (event: DragOverEvent) => {
+    const { active, over } = event
+    const { id } = active
+    const { id: overId } = over || {}
+
+    const activeContainer = findContainer(id)
+    const overContainer = findContainer(overId)
+
+    if (
+      !overId ||
+      !activeContainer ||
+      !overContainer ||
+      activeContainer === overContainer
+    ) {
+      return
+    }
+    const activeItem = activeContainer.list.find(item => item.aid === id)
+    if (!activeItem) {
+      return
+    }
+
+    const activeIds = activeContainer.list.map(item => item.aid)
+    const overIds = overContainer.list.map(item => item.aid)
+    const activeIndex = activeIds.indexOf(id as string)
+    const overIndex = overIds.indexOf(overId as string)
+    let newIndex
+    if (overId in overIds) {
+      newIndex = overIds.length + 1
+    } else {
+      const isBelowLastItem =
+      over &&
+      overIndex === overIds.length - 1 &&
+      active.rect.current.translated && active.rect.current.translated.top > over.rect.top + over.rect.height
+
+      const modifier = isBelowLastItem ? 1 : 0
+
+      newIndex = overIndex >= 0 ? overIndex + modifier : overIds.length + 1
+    }
+    
+    
+    
+    dispatch(
+      rmAnime({
+        categoryId: activeContainer.categoryId,
+        deleteIndex: activeIndex
+      })
+    )
+    dispatch(
+      insertAnime({
+        categoryId: overContainer.categoryId,
+        anime: activeItem,
+        newIndex: newIndex
+      })
+    )
+    
+  }
+
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event
+    const activeContainer = findContainer(active.id)
+    const overContainer = findContainer(over?.id)
+    
+    if (!activeContainer || !overContainer || !over || activeContainer.categoryId !== overContainer.categoryId) {
+      return
+    }
+    if (activeId !== activeContainer.categoryId) {
+      return
+    }
+    const activeIds = activeContainer.list.map(item => item.aid)
+    setActiveId(undefined)
+
+    const oldIndex = activeIds.findIndex(a => a  === active.id)
+    const newIndex = activeIds.findIndex(a => a === over.id)
+    dispatch(
+      moveAnime({categoryId: activeContainer.categoryId, oldIndex, newIndex})
+    )
+  }
   return (
     <>
       <div className="flex flex-row overflow-x-auto w-full h-full" ref={contentRef}>
-        <SortableContainer  
-          modifiers={[restrictToHorizontalAxis]}
-          strategy={horizontalListSortingStrategy} 
-          items={genSortableAnimeCategoryInfoItems(animeList)} 
-          onDragEnd={(obj) => {handleAnimeListDragEnd(obj ? {...obj} : undefined)}}>
-
-
-          {
-            animeList.map(categoryItem => {
-              const {categoryId} = categoryItem
-              return (
-                <SortableItem key={categoryId} id={categoryId}>
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCorners}
+          onDragStart={handleDragStart}
+          onDragOver={handleDragOver}
+          onDragEnd={handleDragEnd}
+        >
+          <>
+            {
+              animeList.map(categoryItem => {
+                const {categoryId} = categoryItem
+                return (
                   <AnimeListItem id={categoryId} categoryItem={categoryItem} openSearchAdd={openSearchAdd}></AnimeListItem>
-                </SortableItem>
-              )
+                )
             
-            })
+              })
 
+            }
+          </>
+          {
+            createPortal(
+          
+              <DragOverlay>
+                {
+                  activeItem  ?
+                    <div className="scale-90"><AnimeItem animeItem={activeItem}></AnimeItem></div>
+                    :
+                    null
+                }
+              </DragOverlay>,
+              document.body
+            )
           }
-        </SortableContainer>
+
+        </DndContext>
+
+
         <div
           className="flex flex-col items-center justify-center min-w-10 h-4">
           <input 

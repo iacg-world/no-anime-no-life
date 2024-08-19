@@ -1,4 +1,4 @@
-import { createRef, FC, FocusEvent, KeyboardEvent, useContext } from 'react'
+import { createRef, FC, FocusEvent, KeyboardEvent, useContext, useState } from 'react'
 import { AnimeCategoryInfo, AnimeInfo, SortableAnimeInfo } from '../type'
 import { useClickAway } from 'ahooks'
 import { modifyCategory, moveAnime, MoveAnimeParams, rmAnime } from '../store/anime'
@@ -8,11 +8,12 @@ import SortableItem, { DragContext } from './Drag/SortableItem'
 import AnimeItem, { OpenSearchAdd } from './AnimeItem'
 import { verticalListSortingStrategy } from '@dnd-kit/sortable'
 import {AddRectangle, RemoveRectangle} from '@nutui/icons-react'
-import { UniqueIdentifier } from '@dnd-kit/core'
+import { DragOverlay, DragStartEvent, UniqueIdentifier, useDroppable } from '@dnd-kit/core'
+import { createPortal } from 'react-dom'
 
 interface PropsType {
   categoryItem: AnimeCategoryInfo,
-  id: UniqueIdentifier,
+  id: string,
   openSearchAdd: OpenSearchAdd
 }
 const genSortableAnimeItems = (list: AnimeInfo[]):SortableAnimeInfo[] => {
@@ -24,7 +25,7 @@ const genSortableAnimeItems = (list: AnimeInfo[]):SortableAnimeInfo[] => {
   })
 }
 const AnimeListItem:FC<PropsType> = (props) => {
-  const {categoryItem, openSearchAdd} = props
+  const {categoryItem, openSearchAdd, id} = props
   const {categoryId, editing} = categoryItem
   const editInputRef = createRef<HTMLInputElement>()
   const {isDragging, activeId} = useContext(DragContext)
@@ -73,6 +74,9 @@ const AnimeListItem:FC<PropsType> = (props) => {
 
   }
 
+  const { setNodeRef } = useDroppable({
+    id
+  })
 
   useClickAway(
     () => {
@@ -106,8 +110,14 @@ const AnimeListItem:FC<PropsType> = (props) => {
         </div>
 
 
-        <div className='flex flex-col flex-nowrap overflow-y-auto overflow-x-hidden h-[80vh] relative' style={{touchAction: isDragging ?'none' : 'auto'}} >
-          <SortableContainer dragOverlay strategy={verticalListSortingStrategy} items={sortableAnimeItems} onDragEnd={(obj) => {handleDragEnd(obj ? {categoryId, ...obj} : undefined)}}>
+        <div ref={setNodeRef} className='flex flex-col flex-nowrap overflow-y-auto overflow-x-hidden h-[80vh] relative' style={{touchAction: isDragging ?'none' : 'auto'}} >
+          <SortableContainer
+            id={id}
+            dragOverlay
+            strategy={verticalListSortingStrategy}
+            items={sortableAnimeItems}
+            onDragEnd={(obj) => {handleDragEnd(obj ? {categoryId, ...obj} : undefined)}}
+          >
             {
               categoryItem.list.map(animeItem => {
                 const {aid} = animeItem

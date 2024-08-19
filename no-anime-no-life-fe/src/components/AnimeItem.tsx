@@ -4,9 +4,9 @@ import { DragContext } from './Drag/SortableItem'
 export type OpenSearchAdd = (categoryId: string, data?:AnimeInfo) => void
 
 interface PropsType {
-  categoryId: string,
+  categoryId?: string,
   animeItem: AnimeInfo
-  openSearchAdd: OpenSearchAdd
+  openSearchAdd?: OpenSearchAdd
 }
 
 const AnimeItem:FC<PropsType> = (props) => {
@@ -16,7 +16,7 @@ const AnimeItem:FC<PropsType> = (props) => {
 
   return (
     <div 
-      onClick={() => !isDragging && openSearchAdd(categoryId, animeItem)}
+      onClick={() => (!isDragging && openSearchAdd && categoryId) && openSearchAdd(categoryId, animeItem)}
       className={classNameStr}>
       <img src={animeItem.images?.medium} alt="" className="w-full h-auto max-h-18" style={{pointerEvents: 'none'}} />
       <div className="flex flex-row text-xs">{animeItem.name_cn || animeItem.name}</div>
