@@ -10,8 +10,9 @@ import AnimeItem, { OpenSearchAdd } from './AnimeItem'
 import { Drag, FixedNav, Toast } from '@nutui/nutui-react'
 import {Disk, Share} from '@nutui/icons-react'
 import Uploader from './Uploader'
-import { closestCorners, DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, MouseSensor, TouchSensor, UniqueIdentifier, useSensor, useSensors } from '@dnd-kit/core'
+import { closestCorners, DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, MeasuringStrategy, MouseSensor, TouchSensor, UniqueIdentifier, useSensor, useSensors } from '@dnd-kit/core'
 import { createPortal } from 'react-dom'
+import { restrictToVerticalAxis } from './Drag/utils'
 
 
 
@@ -153,18 +154,13 @@ export const AnimeView = () =>{
 
   const sensors = useSensors(
 
-    useSensor(MouseSensor, {
-      activationConstraint: {
-        distance: 2,
-        delay: 250,
-      },
-    }),
+    useSensor(MouseSensor),
     useSensor(TouchSensor)
   )
 
 
-  const [activeId, setActiveId] = useState<UniqueIdentifier>()
-  const [activeItem, setActiveItem] = useState<AnimeInfo>()
+  const [activeAnimeId, setActiveId] = useState<UniqueIdentifier>()
+  const [activeAnimeItem, setActiveItem] = useState<AnimeInfo>()
   function handleDragStart(event:DragStartEvent) {
     const { active } = event
     const { id } = active
@@ -212,6 +208,7 @@ export const AnimeView = () =>{
     ) {
       return
     }
+    
     const activeItem = activeContainer.list.find(item => item.aid === id)
     if (!activeItem) {
       return
@@ -225,15 +222,18 @@ export const AnimeView = () =>{
     if (overId in overIds) {
       newIndex = overIds.length + 1
     } else {
-      const isBelowLastItem =
+      const isBelowOverItem =
       over &&
-      overIndex === overIds.length - 1 &&
-      active.rect.current.translated && active.rect.current.translated.top > over.rect.top + over.rect.height
+      active.rect.current.translated &&
+      active.rect.current.translated.top >
+        over.rect.top + over.rect.height
 
-      const modifier = isBelowLastItem ? 1 : 0
+      const modifier = isBelowOverItem ? 1 : 0
 
-      newIndex = overIndex >= 0 ? overIndex + modifier : overIds.length + 1
+      newIndex =
+      overIndex >= 0 ? overIndex + modifier : overIds.length + 1
     }
+    
     
     
     
@@ -261,7 +261,7 @@ export const AnimeView = () =>{
     if (!activeContainer || !overContainer || !over || activeContainer.categoryId !== overContainer.categoryId) {
       return
     }
-    if (activeId !== activeContainer.categoryId) {
+    if (activeAnimeId !== activeContainer.categoryId) {
       return
     }
     const activeIds = activeContainer.list.map(item => item.aid)
@@ -280,8 +280,13 @@ export const AnimeView = () =>{
           sensors={sensors}
           collisionDetection={closestCorners}
           onDragStart={handleDragStart}
-          onDragOver={handleDragOver}
+          onDragMove={handleDragOver}
           onDragEnd={handleDragEnd}
+          measuring={{
+            droppable: {
+              strategy: MeasuringStrategy.Always,
+            },
+          }}
         >
           <>
             {
@@ -300,8 +305,8 @@ export const AnimeView = () =>{
           
               <DragOverlay>
                 {
-                  activeItem  ?
-                    <div className="scale-90"><AnimeItem animeItem={activeItem}></AnimeItem></div>
+                  activeAnimeItem  ?
+                    <div className="rotate-12 scale-50"><AnimeItem animeItem={activeAnimeItem}></AnimeItem></div>
                     :
                     null
                 }

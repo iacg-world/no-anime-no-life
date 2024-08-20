@@ -12,7 +12,7 @@ import { SortableAnimeCategoryInfo, SortableAnimeInfo } from '../../type'
 import { MoveAnimeParams } from '../../store/anime'
 
 type PropsType = {
-  children: JSX.Element[]
+  children: JSX.Element[] | JSX.Element
   id: string,
   items: SortableAnimeInfo[] | SortableAnimeCategoryInfo[]
   onDragEnd: (obj?: Omit<MoveAnimeParams, 'categoryId'>) => void

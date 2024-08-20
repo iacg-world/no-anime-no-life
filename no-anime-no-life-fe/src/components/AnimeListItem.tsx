@@ -110,7 +110,7 @@ const AnimeListItem:FC<PropsType> = (props) => {
         </div>
 
 
-        <div ref={setNodeRef} className='flex flex-col flex-nowrap overflow-y-auto overflow-x-hidden h-[80vh] relative' style={{touchAction: isDragging ?'none' : 'auto'}} >
+        <div className='flex flex-col flex-nowrap overflow-y-auto overflow-x-hidden h-[80vh] relative' style={{touchAction: isDragging ?'none' : 'auto'}} >
           <SortableContainer
             id={id}
             dragOverlay
@@ -118,36 +118,43 @@ const AnimeListItem:FC<PropsType> = (props) => {
             items={sortableAnimeItems}
             onDragEnd={(obj) => {handleDragEnd(obj ? {categoryId, ...obj} : undefined)}}
           >
-            {
-              categoryItem.list.map(animeItem => {
-                const {aid} = animeItem
-                return (
-                  <SortableItem key={aid} id={aid}>
-                    <AnimeItem categoryId={categoryId} animeItem={animeItem} openSearchAdd={openSearchAdd} ></AnimeItem>
-                  </SortableItem>
-                )
-              })
-            }
+            <div  ref={setNodeRef}>
+              <>
+                {
+                  categoryItem.list.map(animeItem => {
+                    const {aid} = animeItem
+                    return (
+                      <SortableItem key={aid} id={aid}>
+                        <AnimeItem categoryId={categoryId} animeItem={animeItem} openSearchAdd={openSearchAdd} ></AnimeItem>
+                      </SortableItem>
+                    )
+                  })
+                }
+                <div
+                  className="flex flex-nowrap items-center justify-around"
+                >
+                  <RemoveRectangle
+                    color="#fa2c19"
+                    width="0.8rem"
+                    height="0.8rem"
+                    onClick={(e) => {e.stopPropagation();deleteAnime(categoryId)}}
+                  />
+                  <AddRectangle
+                    color="#76c6b8"
+                    width="0.8rem"
+                    height="0.8rem"
+                    onClick={() => openSearchAdd(categoryId)}
+                  />
+
+                </div>
+              </>
+
+            </div>
+
           </SortableContainer>
 
 
-          <div
-            className="flex flex-nowrap items-center justify-around"
-          >
-            <RemoveRectangle
-              color="#fa2c19"
-              width="0.8rem"
-              height="0.8rem"
-              onClick={(e) => {e.stopPropagation();deleteAnime(categoryId)}}
-            />
-            <AddRectangle
-              color="#76c6b8"
-              width="0.8rem"
-              height="0.8rem"
-              onClick={() => openSearchAdd(categoryId)}
-            />
 
-          </div>
 
         </div>
       </div>
