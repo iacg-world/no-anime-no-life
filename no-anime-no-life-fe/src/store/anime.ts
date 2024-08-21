@@ -87,7 +87,7 @@ export const componentsSlice = createSlice({
             target.list.pop()
           }
 
-        } else if (categoryIndex) {
+        } else if (categoryIndex !== undefined) {
           draft.splice(categoryIndex, 1)
 
         }
