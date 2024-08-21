@@ -6,10 +6,10 @@ import { useDispatch } from 'react-redux'
 import SortableContainer from './Drag/SortableContainer'
 import SortableItem, { DragContext } from './Drag/SortableItem'
 import AnimeItem, { OpenSearchAdd } from './AnimeItem'
-import { verticalListSortingStrategy } from '@dnd-kit/sortable'
+import { useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import {AddRectangle, RemoveRectangle} from '@nutui/icons-react'
-import { DragOverlay, DragStartEvent, UniqueIdentifier, useDroppable } from '@dnd-kit/core'
-import { createPortal } from 'react-dom'
+import { useDroppable } from '@dnd-kit/core'
+import { CSS } from '@dnd-kit/utilities'
 
 interface PropsType {
   categoryItem: AnimeCategoryInfo,
@@ -74,9 +74,6 @@ const AnimeListItem:FC<PropsType> = (props) => {
 
   }
 
-  const { setNodeRef } = useDroppable({
-    id
-  })
 
   useClickAway(
     () => {
@@ -87,9 +84,25 @@ const AnimeListItem:FC<PropsType> = (props) => {
     () => editInputRef.current
   )
   const activeClassStr = `flex flex-col flex-nowrap w-14 h-auto mx-1 ${activeId===categoryId ? 'scale-x-110': ''}`
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transition,
+    transform,
+  } = useSortable({
+    id,
+  })
+  const { setNodeRef: setDropRef } = useDroppable({
+    id
+  })
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  }
   return (
     <>
-      <div className={activeClassStr} key={categoryId}>
+      <div ref={setNodeRef} {...attributes} {...listeners} style={style} className={activeClassStr} key={categoryId}>
         <div ref={editInputRef}>
           {
             editing
@@ -113,12 +126,10 @@ const AnimeListItem:FC<PropsType> = (props) => {
         <div className='flex flex-col flex-nowrap overflow-y-auto overflow-x-hidden h-[80vh] relative' style={{touchAction: isDragging ?'none' : 'auto'}} >
           <SortableContainer
             id={id}
-            dragOverlay
             strategy={verticalListSortingStrategy}
             items={sortableAnimeItems}
-            onDragEnd={(obj) => {handleDragEnd(obj ? {categoryId, ...obj} : undefined)}}
           >
-            <div  ref={setNodeRef}>
+            <div ref={setDropRef}>
               <>
                 {
                   categoryItem.list.map(animeItem => {

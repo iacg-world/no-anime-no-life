@@ -10,8 +10,10 @@ import AnimeItem, { OpenSearchAdd } from './AnimeItem'
 import { Animate, Drag, FixedNav, Toast } from '@nutui/nutui-react'
 import {Disk, Share} from '@nutui/icons-react'
 import Uploader from './Uploader'
-import { closestCorners, DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, MeasuringStrategy, MouseSensor, TouchSensor, UniqueIdentifier, useSensor, useSensors } from '@dnd-kit/core'
+import { closestCorners, DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, MeasuringStrategy, MouseSensor, TouchSensor, UniqueIdentifier, useDroppable, useSensor, useSensors } from '@dnd-kit/core'
 import { createPortal } from 'react-dom'
+import { horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable'
+import SortableContainer from './Drag/SortableContainer'
 
 export const AnimeView = () =>{
   const shareDialogRef = createRef<ShareDialogRef>()
@@ -207,6 +209,8 @@ export const AnimeView = () =>{
 
     const activeContainer = findContainer(id)
     const overContainer = findContainer(overId)
+    console.log(active, over)
+    
 
     if (
       !overId ||
@@ -276,14 +280,19 @@ export const AnimeView = () =>{
       moveAnime({categoryId: activeContainer.categoryId, oldIndex, newIndex})
     )
   }
+
+  const { setNodeRef } = useDroppable({
+    id: 'view'
+  })
+  const sortableAnimeCategoryInfoItems = genSortableAnimeCategoryInfoItems(animeList)
   return (
     <>
-      <div className="flex flex-row overflow-x-auto w-full h-full" ref={contentRef}>
+      <div ref={contentRef}>
         <DndContext
           sensors={sensors}
           collisionDetection={closestCorners}
           onDragStart={handleDragStart}
-          onDragMove={handleDragOver}
+          onDragOver={handleDragOver}
           onDragEnd={handleDragEnd}
           measuring={{
             droppable: {
@@ -291,25 +300,29 @@ export const AnimeView = () =>{
             },
           }}
         >
-          <>
-            {
-              animeList.map(categoryItem => {
-                const {categoryId} = categoryItem
-                return (
-                  <AnimeListItem id={categoryId} categoryItem={categoryItem} openSearchAdd={openSearchAdd}></AnimeListItem>
-                )
+          <SortableContainer id="view" items={genSortableAnimeCategoryInfoItems(animeList)} strategy={horizontalListSortingStrategy}>
+            <div ref={setNodeRef} className="flex flex-row overflow-x-auto w-full h-full">
+              {
+                sortableAnimeCategoryInfoItems.map(categoryItem => {
+                  const {categoryId} = categoryItem
+                  return (
+                    <AnimeListItem id={categoryId} categoryItem={categoryItem} openSearchAdd={openSearchAdd}></AnimeListItem>
+                  )
             
-              })
+                })
 
-            }
-          </>
+              }
+            </div>
+
+
+          </SortableContainer>
           {
             createPortal(
           
               <DragOverlay>
                 {
                   activeAnimeItem  ?
-                    <Animate  type="breath" loop>
+                    <Animate type="breath" loop>
                       <div className="rotate-6 scale-90"><AnimeItem animeItem={activeAnimeItem}></AnimeItem></div>
 
                     </Animate>
