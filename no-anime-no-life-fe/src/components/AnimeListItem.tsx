@@ -1,14 +1,13 @@
-import { createRef, FC, FocusEvent, KeyboardEvent, useContext, useState } from 'react'
+import { createRef, FC, FocusEvent, KeyboardEvent, useContext } from 'react'
 import { AnimeCategoryInfo, AnimeInfo, SortableAnimeInfo } from '../type'
 import { useClickAway } from 'ahooks'
-import { modifyCategory, moveAnime, MoveAnimeParams, rmAnime } from '../store/anime'
+import { modifyCategory, rmAnime } from '../store/anime'
 import { useDispatch } from 'react-redux'
 import SortableContainer from './Drag/SortableContainer'
 import SortableItem, { DragContext } from './Drag/SortableItem'
 import AnimeItem, { OpenSearchAdd } from './AnimeItem'
 import { useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import {AddRectangle, RemoveRectangle} from '@nutui/icons-react'
-import { useDroppable } from '@dnd-kit/core'
 import { CSS } from '@dnd-kit/utilities'
 
 interface PropsType {
@@ -64,16 +63,6 @@ const AnimeListItem:FC<PropsType> = (props) => {
     }
 
   }
-  // 拖拽排序结束
-  function handleDragEnd(obj?:MoveAnimeParams) {
-    if (obj) {
-      dispatch(
-        moveAnime(obj)
-      )
-    }
-
-  }
-
 
   useClickAway(
     () => {
@@ -93,13 +82,14 @@ const AnimeListItem:FC<PropsType> = (props) => {
   } = useSortable({
     id,
   })
-  const { setNodeRef: setDropRef } = useDroppable({
-    id
-  })
+
+
+
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
   }
+
   return (
     <>
       <div ref={setNodeRef} {...attributes} {...listeners} style={style} className={activeClassStr} key={categoryId}>
@@ -129,7 +119,7 @@ const AnimeListItem:FC<PropsType> = (props) => {
             strategy={verticalListSortingStrategy}
             items={sortableAnimeItems}
           >
-            <div ref={setDropRef}>
+            <div>
               <>
                 {
                   categoryItem.list.map(animeItem => {
