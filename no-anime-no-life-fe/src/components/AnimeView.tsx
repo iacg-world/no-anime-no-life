@@ -12,9 +12,6 @@ import {Disk, Share} from '@nutui/icons-react'
 import Uploader from './Uploader'
 import { closestCorners, DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, MeasuringStrategy, MouseSensor, TouchSensor, UniqueIdentifier, useSensor, useSensors } from '@dnd-kit/core'
 import { createPortal } from 'react-dom'
-import { restrictToVerticalAxis } from './Drag/utils'
-
-
 
 export const AnimeView = () =>{
   const shareDialogRef = createRef<ShareDialogRef>()
@@ -154,8 +151,19 @@ export const AnimeView = () =>{
 
   const sensors = useSensors(
 
-    useSensor(MouseSensor),
-    useSensor(TouchSensor)
+    useSensor(MouseSensor, {
+      activationConstraint: {
+        distance: 2,
+        delay: 250,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 150,
+        distance: 8,
+        tolerance: 2
+      }
+    })
   )
 
 
@@ -234,9 +242,6 @@ export const AnimeView = () =>{
       overIndex >= 0 ? overIndex + modifier : overIds.length + 1
     }
     
-    
-    
-    
     dispatch(
       rmAnime({
         categoryId: activeContainer.categoryId,
@@ -261,9 +266,7 @@ export const AnimeView = () =>{
     if (!activeContainer || !overContainer || !over || activeContainer.categoryId !== overContainer.categoryId) {
       return
     }
-    if (activeAnimeId !== activeContainer.categoryId) {
-      return
-    }
+
     const activeIds = activeContainer.list.map(item => item.aid)
     setActiveId(undefined)
 

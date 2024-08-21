@@ -72,18 +72,24 @@ export const componentsSlice = createSlice({
         categoryId: string,
         deleteIndex?: number
       }>) => {
-        let deleteIndex = action.payload.deleteIndex || 0
+        const {categoryId, deleteIndex} = action.payload
+        let categoryIndex
         const target = draft.find((item, index) => {
-          deleteIndex = index
-          return item.categoryId === action.payload.categoryId
-        })
-        if (target) {
-          if (target.list.length) {
-
-            target.list.pop()
-          } else {
-            draft.splice(deleteIndex, 1)
+          if (item.categoryId === categoryId) {
+            categoryIndex = index
+            return item.categoryId === categoryId
           }
+        })
+        if (target && target.list.length) {
+          if (deleteIndex !== undefined) {
+            target.list.splice(deleteIndex, 1)
+          } else {
+            target.list.pop()
+          }
+
+        } else if (categoryIndex) {
+          draft.splice(categoryIndex, 1)
+
         }
 
       }
