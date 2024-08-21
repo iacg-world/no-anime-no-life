@@ -7,7 +7,7 @@ import { ShareDialog, ShareDialogRef } from './ShareDialog'
 import AnimeListItem from './AnimeListItem'
 import { SearchAddDialog, SearchAddDialogRef } from './SearchAddDialog'
 import AnimeItem, { OpenSearchAdd } from './AnimeItem'
-import { Drag, FixedNav, Toast } from '@nutui/nutui-react'
+import { Animate, Drag, FixedNav, Toast } from '@nutui/nutui-react'
 import {Disk, Share} from '@nutui/icons-react'
 import Uploader from './Uploader'
 import { closestCorners, DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, MeasuringStrategy, MouseSensor, TouchSensor, UniqueIdentifier, useSensor, useSensors } from '@dnd-kit/core'
@@ -309,7 +309,10 @@ export const AnimeView = () =>{
               <DragOverlay>
                 {
                   activeAnimeItem  ?
-                    <div className="rotate-12 scale-50"><AnimeItem animeItem={activeAnimeItem}></AnimeItem></div>
+                    <Animate  type="breath" loop>
+                      <div className="rotate-6 scale-90"><AnimeItem animeItem={activeAnimeItem}></AnimeItem></div>
+
+                    </Animate>
                     :
                     null
                 }
