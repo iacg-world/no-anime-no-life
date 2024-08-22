@@ -114,7 +114,7 @@ const AnimeListItem:FC<PropsType> = (props) => {
             <div ref={setDropRef}>
               <>
                 {
-                  sortableAnimeItems.map(animeItem => {
+                  categoryItem.list.map(animeItem => {
                     const {aid} = animeItem
                     return (
                       <SortableItem key={aid} id={aid}>
