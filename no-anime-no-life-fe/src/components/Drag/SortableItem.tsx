@@ -1,4 +1,4 @@
-import { createContext, FC, LegacyRef } from 'react'
+import { createContext, FC } from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { DraggableAttributes, UniqueIdentifier } from '@dnd-kit/core'
@@ -9,11 +9,12 @@ type PropsType = {
   handle?: boolean
   children: JSX.Element
 }
+type F = (element: HTMLElement | null) => void
 export const DragContext = createContext<{
   isDragging: boolean,
   activeId?: UniqueIdentifier,
   handleProps?: {
-    ref: LegacyRef<any>,
+    setActivatorNodeRef: F,
     listeners: SyntheticListenerMap | undefined,
     attributes: DraggableAttributes | object,
   }
@@ -37,7 +38,7 @@ const SortableItem: FC<PropsType> = ({ id, children, handle }) => {
     <DragContext.Provider value={{
       isDragging, activeId: active?.id,
       handleProps: {
-        ref: setActivatorNodeRef,
+        setActivatorNodeRef: setActivatorNodeRef,
         attributes,
         listeners,
       }

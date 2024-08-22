@@ -26,7 +26,7 @@ const AnimeListItem:FC<PropsType> = (props) => {
   const {categoryItem, openSearchAdd, id} = props
   const {categoryId, editing} = categoryItem
   const editInputRef = createRef<HTMLInputElement>()
-  const {isDragging, activeId} = useContext(DragContext)
+  const {isDragging, activeId, handleProps} = useContext(DragContext)
   const sortableAnimeItems = genSortableAnimeItems(categoryItem.list)
 
   const dispatch = useDispatch()
@@ -80,11 +80,16 @@ const AnimeListItem:FC<PropsType> = (props) => {
   return (
     <>
       <div className={activeClassStr} key={categoryId}>
-        <div>
+        <div
+          ref={handleProps?.setActivatorNodeRef}
+          {...handleProps?.attributes}
+          {...handleProps?.listeners}>
           {
             editing
               ?
               <input
+
+                
                 autoFocus
                 onKeyDown={(e) => handleKeyDown(e, categoryItem)}
                 onBlur={(e) => modifyCategoryName(e, categoryItem)}
@@ -109,7 +114,7 @@ const AnimeListItem:FC<PropsType> = (props) => {
             <div ref={setDropRef}>
               <>
                 {
-                  categoryItem.list.map(animeItem => {
+                  sortableAnimeItems.map(animeItem => {
                     const {aid} = animeItem
                     return (
                       <SortableItem key={aid} id={aid}>
