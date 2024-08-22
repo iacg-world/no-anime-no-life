@@ -3,12 +3,11 @@ import { AnimeCategoryInfo, AnimeInfo, SortableAnimeInfo } from '../type'
 import { useClickAway } from 'ahooks'
 import { modifyCategory, rmAnime } from '../store/anime'
 import { useDispatch } from 'react-redux'
-import SortableContainer from './Drag/SortableContainer'
 import SortableItem, { DragContext } from './Drag/SortableItem'
 import AnimeItem, { OpenSearchAdd } from './AnimeItem'
-import { useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import {AddRectangle, RemoveRectangle} from '@nutui/icons-react'
-import { CSS } from '@dnd-kit/utilities'
+import { useDroppable } from '@dnd-kit/core'
 
 interface PropsType {
   categoryItem: AnimeCategoryInfo,
@@ -73,27 +72,15 @@ const AnimeListItem:FC<PropsType> = (props) => {
     () => editInputRef.current
   )
   const activeClassStr = `flex flex-col flex-nowrap w-14 h-auto mx-1 ${activeId===categoryId ? 'scale-x-110': ''}`
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transition,
-    transform,
-  } = useSortable({
-    id,
+
+  const { setNodeRef:setDropRef } = useDroppable({
+    id
   })
-
-
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  }
 
   return (
     <>
-      <div ref={setNodeRef} {...attributes} {...listeners} style={style} className={activeClassStr} key={categoryId}>
-        <div ref={editInputRef}>
+      <div className={activeClassStr} key={categoryId}>
+        <div>
           {
             editing
               ?
@@ -114,12 +101,12 @@ const AnimeListItem:FC<PropsType> = (props) => {
 
 
         <div className='flex flex-col flex-nowrap overflow-y-auto overflow-x-hidden h-[80vh] relative' style={{touchAction: isDragging ?'none' : 'auto'}} >
-          <SortableContainer
+          <SortableContext
             id={id}
             strategy={verticalListSortingStrategy}
             items={sortableAnimeItems}
           >
-            <div>
+            <div ref={setDropRef}>
               <>
                 {
                   categoryItem.list.map(animeItem => {
@@ -152,7 +139,7 @@ const AnimeListItem:FC<PropsType> = (props) => {
 
             </div>
 
-          </SortableContainer>
+          </SortableContext>
 
 
 

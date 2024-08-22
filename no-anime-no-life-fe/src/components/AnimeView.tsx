@@ -10,11 +10,11 @@ import AnimeItem, { OpenSearchAdd } from './AnimeItem'
 import { Animate, Drag, FixedNav, Toast } from '@nutui/nutui-react'
 import {Disk, Share} from '@nutui/icons-react'
 import Uploader from './Uploader'
-import { closestCorners, DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, MeasuringStrategy, MouseSensor, TouchSensor, UniqueIdentifier, useDroppable, useSensor, useSensors } from '@dnd-kit/core'
+import { closestCorners, DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, MeasuringStrategy, MouseSensor, TouchSensor, UniqueIdentifier, useSensor, useSensors } from '@dnd-kit/core'
 import { createPortal } from 'react-dom'
 import { useDebounceFn } from 'ahooks'
-import SortableContainer from './Drag/SortableContainer'
-import { horizontalListSortingStrategy } from '@dnd-kit/sortable'
+import { horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable'
+import SortableItem from './Drag/SortableItem'
 
 export const AnimeView = () =>{
   const shareDialogRef = createRef<ShareDialogRef>()
@@ -209,12 +209,9 @@ export const AnimeView = () =>{
     if (categoryIds.includes(active.id as string)) {
       return
     }
+    
     const activeContainer = findContainer(id)
     const overContainer = findContainer(overId)
-
-    console.log(active, over)
-    
-
     if (
       !overId ||
       !activeContainer ||
@@ -267,7 +264,7 @@ export const AnimeView = () =>{
   const {run: handleDragOverDebounce} = useDebounceFn(handleDragOver, {
     leading: true,
     trailing: false,
-    wait: 300
+    wait: 100
   })
 
   function handleDragEnd(event: DragEndEvent) {
@@ -308,9 +305,7 @@ export const AnimeView = () =>{
 
   }
 
-  const { setNodeRef } = useDroppable({
-    id: 'view'
-  })
+
   const sortableAnimeCategoryInfoItems = genSortableAnimeCategoryInfoItems(animeList)
   return (
     <>
@@ -321,15 +316,25 @@ export const AnimeView = () =>{
           onDragStart={handleDragStart}
           onDragOver={handleDragOverDebounce}
           onDragEnd={handleDragEnd}
+          measuring={{
+            droppable: {
+              strategy: MeasuringStrategy.Always,
+            },
+          }}
         >
-          <SortableContainer id="view" items={sortableAnimeCategoryInfoItems} strategy={horizontalListSortingStrategy}>
-            <div ref={setNodeRef} className="flex flex-row overflow-x-auto w-full h-full">
+          <SortableContext id="view" items={sortableAnimeCategoryInfoItems} strategy={horizontalListSortingStrategy}>
+            <div className="flex flex-row overflow-x-auto w-full h-full">
               <>
                 {
                   sortableAnimeCategoryInfoItems.map(categoryItem => {
                     const {categoryId} = categoryItem
                     return (
-                      <AnimeListItem id={categoryId} categoryItem={categoryItem} openSearchAdd={openSearchAdd}></AnimeListItem>
+                      <SortableItem handle key={categoryId} id={categoryId}>
+
+                        <AnimeListItem key={categoryId} id={categoryId} categoryItem={categoryItem} openSearchAdd={openSearchAdd}></AnimeListItem>
+                      </SortableItem>
+
+
                     )
             
                   })
@@ -346,7 +351,7 @@ export const AnimeView = () =>{
             </div>
 
 
-          </SortableContainer>
+          </SortableContext>
           {
             createPortal(
           
