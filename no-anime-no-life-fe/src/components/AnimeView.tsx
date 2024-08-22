@@ -12,8 +12,9 @@ import {Disk, Share} from '@nutui/icons-react'
 import Uploader from './Uploader'
 import { closestCorners, DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, MeasuringStrategy, MouseSensor, TouchSensor, UniqueIdentifier, useDroppable, useSensor, useSensors } from '@dnd-kit/core'
 import { createPortal } from 'react-dom'
-import { horizontalListSortingStrategy } from '@dnd-kit/sortable'
+import { useDebounceFn } from 'ahooks'
 import SortableContainer from './Drag/SortableContainer'
+import { horizontalListSortingStrategy } from '@dnd-kit/sortable'
 
 export const AnimeView = () =>{
   const shareDialogRef = createRef<ShareDialogRef>()
@@ -263,6 +264,11 @@ export const AnimeView = () =>{
     )
     
   }
+  const {run: handleDragOverDebounce} = useDebounceFn(handleDragOver, {
+    leading: true,
+    trailing: false,
+    wait: 300
+  })
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event
@@ -274,7 +280,8 @@ export const AnimeView = () =>{
     if (!activeContainer || !overContainer || !over) {
       return
     }
-    if (activeContainer.categoryId !== overContainer.categoryId) {
+    const categoryIds = animeList.map(item => item.categoryId)
+    if (categoryIds.includes(active.id as string)) {
       const categoryIds = animeList.map(item => item.categoryId)
       if (categoryIds.includes(active.id as string)) {
         const oldIndex = categoryIds.indexOf(active.id as string)
@@ -312,7 +319,7 @@ export const AnimeView = () =>{
           sensors={sensors}
           collisionDetection={closestCorners}
           onDragStart={handleDragStart}
-          onDragOver={handleDragOver}
+          onDragOver={handleDragOverDebounce}
           onDragEnd={handleDragEnd}
         >
           <SortableContainer id="view" items={sortableAnimeCategoryInfoItems} strategy={horizontalListSortingStrategy}>
