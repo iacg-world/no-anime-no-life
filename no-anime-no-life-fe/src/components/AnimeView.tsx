@@ -16,6 +16,7 @@ import { useDebounceFn } from 'ahooks'
 import { horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable'
 import SortableItem from './Drag/SortableItem'
 import { uploadAnimeJSON } from '../oss'
+import { isMobile } from '../utils'
 
 export const AnimeView = () =>{
   const shareDialogRef = createRef<ShareDialogRef>()
@@ -53,14 +54,8 @@ export const AnimeView = () =>{
   }
 
   const onShare = async () => {
-    const userAgent = window.navigator.userAgent.toLowerCase()
-    if (userAgent.indexOf('micromessenger') !== -1) {
-    // 确认是微信浏览器
-      shareDialogRef.current?.openModal()
+    shareDialogRef.current?.openModal()
 
-    } else {
-      shareDialogRef.current?.openModal()
-    }
 
   }
 
@@ -91,7 +86,20 @@ export const AnimeView = () =>{
   const saveJSON = async() => {
     try {
       const url = await uploadAnimeJSON(animeList)
-      window.location.href = url
+      const link = document.createElement('a')
+      link.href = url
+      link.download = 'anime.json'
+      link.target = '_blank'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      if (isMobile()) {
+        await navigator.clipboard.writeText(url)
+        Toast.show({
+          title: '已复制下载链接',
+        })
+  
+      }
 
     } catch (error) {
       Toast.show({
