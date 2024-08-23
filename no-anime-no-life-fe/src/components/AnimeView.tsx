@@ -91,13 +91,7 @@ export const AnimeView = () =>{
   const saveJSON = async() => {
     try {
       const url = await uploadAnimeJSON(animeList)
-      const link = document.createElement('a')
-      link.href = url
-      link.target = '__blank'
-      link.download = 'anime.json'
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
+      window.location.href = url
 
     } catch (error) {
       Toast.show({
