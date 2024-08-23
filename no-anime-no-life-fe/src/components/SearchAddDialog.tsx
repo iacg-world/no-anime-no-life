@@ -4,7 +4,7 @@ import { searchByKeyword } from '../api'
 import { AnimeInfo } from '../type'
 import { addAnime, modifyAnime } from '../store/anime'
 import { useDispatch } from 'react-redux'
-import { Image, Loading, Toast, Button, Dialog} from '@nutui/nutui-react'
+import { Image, Loading, Toast, Dialog} from '@nutui/nutui-react'
 
 
 export interface SearchAddDialogProps {
