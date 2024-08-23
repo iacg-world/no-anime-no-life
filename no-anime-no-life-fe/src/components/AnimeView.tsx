@@ -15,6 +15,7 @@ import { createPortal } from 'react-dom'
 import { useDebounceFn } from 'ahooks'
 import { horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable'
 import SortableItem from './Drag/SortableItem'
+import { uploadAnimeJSON } from '../oss'
 
 export const AnimeView = () =>{
   const shareDialogRef = createRef<ShareDialogRef>()
@@ -87,19 +88,17 @@ export const AnimeView = () =>{
   const openSearchAdd:OpenSearchAdd = (categoryId, data) => {
     dialogRef.current?.openModal({categoryId, animeInfo: data})
   }
-  const saveJSON = () => {
+  const saveJSON = async() => {
     try {
-      const json = JSON.stringify(animeList)
-      const blob = new Blob([json], {type: 'application/json'})
-  
+      const url = await uploadAnimeJSON(animeList)
       const link = document.createElement('a')
-      link.href = URL.createObjectURL(blob)
+      link.href = url
+      link.target = '__blank'
       link.download = 'anime.json'
+      document.body.appendChild(link)
       link.click()
-      Toast.show({
-        title: '保存成功',
-        icon: 'success',
-      })
+      document.body.removeChild(link)
+
     } catch (error) {
       Toast.show({
         title: '保存失败',
