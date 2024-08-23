@@ -26,7 +26,7 @@ export async function uploadAnimeJSON(animeList: AnimeCategoryInfo[]) {
     if (res.statusCode === 200) {
       const response = {
         'content-disposition': `attachment; filename=${encodeURIComponent(
-          name
+          'anime.json'
         )}`,
       }
       const downloadUrl = await client.signatureUrl(name, { response })
