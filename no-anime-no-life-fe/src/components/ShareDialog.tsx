@@ -144,9 +144,9 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
                   {
                     shareAnimeList?.map(categoryItem => {
                       return (
-                        <div className='flex flex-col flex-nowrap' key={categoryItem.categoryId}>
+                        <div className='flex flex-col flex-nowrap items-center mr-1' key={categoryItem.categoryId}>
                           <div className="text-sm font-sans text-nowrap">{categoryItem.categoryName}</div>
-                          <div className={'flex flex-col flex-nowrap pr-1 w-12 box-border'}>
+                          <div className={'flex flex-col flex-nowrap w-12 box-border'}>
                             {
                               categoryItem.list.map(animeItem => {
                                 return (
