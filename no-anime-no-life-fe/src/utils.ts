@@ -46,9 +46,41 @@ function checkAnimeItemData(data: AnimeInfo[]) {
 
 }
 
-export function checkAnimeData(data:AnimeCategoryInfo[]) {
+export function checkAnimeData(data: AnimeCategoryInfo[]) {
   return data.every(item => {
     return item.categoryId && item.categoryName && checkAnimeItemData(item.list)
   })
 
+}
+export function copyToClipboard(textToCopy:string) {
+  if (document.execCommand('copy')) {
+    // 创建textarea
+    const textArea = document.createElement('textarea')
+    textArea.value = textToCopy
+    // 使textarea不在viewport，同时设置不可见
+    textArea.style.position = 'fixed'
+    textArea.style.opacity = '0'
+    textArea.style.left = '-999999px'
+    textArea.style.top = '-999999px'
+    document.body.appendChild(textArea)
+    textArea.focus()
+    textArea.select()
+    return new Promise((res, rej) => {
+      // 执行复制命令并移除文本框
+      document.execCommand('copy') ? res(1) : rej()
+      textArea.remove()
+    })
+  } else if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+    // navigator clipboard 向剪贴板写文本
+    return navigator.clipboard.writeText(textToCopy)
+  }
+}
+
+export function downloadLink (url:string) {
+  const link = document.createElement('a')
+  link.href = url
+  link.download = 'anime.json'
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
 }

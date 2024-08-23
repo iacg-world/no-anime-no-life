@@ -16,7 +16,7 @@ import { useDebounceFn } from 'ahooks'
 import { horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable'
 import SortableItem from './Drag/SortableItem'
 import { uploadAnimeJSON } from '../oss'
-import { isMobile } from '../utils'
+import { copyToClipboard, downloadLink, isMobile } from '../utils'
 
 export const AnimeView = () =>{
   const shareDialogRef = createRef<ShareDialogRef>()
@@ -86,20 +86,19 @@ export const AnimeView = () =>{
   const saveJSON = async() => {
     try {
       const url = await uploadAnimeJSON(animeList)
-      const link = document.createElement('a')
-      link.href = url
-      link.download = 'anime.json'
-      link.target = '_blank'
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
+
       if (isMobile()) {
-        await navigator.clipboard.writeText(url)
+        await copyToClipboard(url)
         Toast.show({
           title: '已复制下载链接',
         })
-  
+        setTimeout(() => {
+          downloadLink(url)
+        }, 1000)
+      } else {
+        downloadLink(url)
       }
+
 
     } catch (error) {
       Toast.show({
