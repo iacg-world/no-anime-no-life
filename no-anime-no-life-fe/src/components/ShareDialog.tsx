@@ -92,7 +92,10 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
             title: '长按图片保存',
             content: <Image src={url} />,
             hideCancelButton: true,
-            confirmText: '完成'
+            confirmText: '完成',
+            style: {
+              width: '90vw'
+            }
           })
 
         } else {
