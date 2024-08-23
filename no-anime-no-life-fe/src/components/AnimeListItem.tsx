@@ -124,7 +124,7 @@ const AnimeListItem:FC<PropsType> = (props) => {
                   })
                 }
                 <div
-                  className="flex flex-nowrap items-center justify-around"
+                  className="flex flex-nowrap items-center justify-around my-2"
                 >
                   <RemoveRectangle
                     color="#fa2c19"
