@@ -12,7 +12,7 @@ interface PropsType {
 const AnimeItem:FC<PropsType> = (props) => {
   const {categoryId, animeItem, openSearchAdd} = props
   const {isDragging, activeId} = useContext(DragContext)
-  const classNameStr = `flex flex-col items-center ${activeId===animeItem.aid ? 'opacity-30': ''}`
+  const classNameStr = `flex flex-col items-center ${activeId===animeItem.aid ? 'opacity-70': ''}`
 
   return (
     <div 
