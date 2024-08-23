@@ -109,66 +109,66 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
   }
  
   return (
-    <div>
-      {
-        isOpen ? (
-      
-          <div className="bg-stone-900/60 fixed top-0 left-0 w-screen h-screen flex items-center justify-center z-50">
-            <div className="bg-white pb-4 box-border w-4/5 min-h-1/2 max-h-screen max-w-screen flex flex-col items-center rounded-sm">
-              {
-                loading 
-                  ?
-                  <div className="flex content-center">
-                    <Loading direction="vertical">生成分享中</Loading>
-                  </div>
-                  :
-                  <>
-                    <div onDoubleClick={createImg} className="flex flex-col overflow-x-auto max-h-full min-h-full min-w-[50%] max-w-full px-1" ref={contentRef}>
-                      <div className="text-center" style={{width: `${width}`}}>
-                        <div className="text-center font-bold text-base">{global.title.topic_name}</div>
-                        <div className="text-center font-thin text-xs mb-1">{global.title.topic_name_cn}</div>
-                      </div>
-                      <div className="flex flex-row">
-                        {
-                          shareAnimeList?.map(categoryItem => {
-                            return (
-                              <div className='flex flex-col flex-nowrap' key={categoryItem.categoryId}>
-                                <div className="text-sm font-sans text-nowrap">{categoryItem.categoryName}</div>
-                                <div className={'flex flex-col flex-nowrap pr-1 w-12 box-border'}>
-                                  {
-                                    categoryItem.list.map(animeItem => {
-                                      return (
-                                        <div
-                                          key={animeItem.aid}
-                                          className="flex flex-col items-center">
-                                          <img src={animeItem.ossUrl} alt="" className="w-full h-14 rounded-sm" />
-                                          <div className="text-center text-xs whitespace-nowrap w-full overflow-hidden text-ellipsis ">{animeItem.name_cn || animeItem.name}</div>
-                                        </div>
-                                      )
-                                    })
-                                  }
-                  
-                                </div>
-                              </div>
-                            )
-                          })
-                        }
-                      </div>
-                    </div>
-                    <div className="flex content-center mt-1 w-full justify-end px-2">
-                      <Button onClick={closeModal} className="mr-1">关闭</Button>
-                      <Button onClick={createImg} loading={downloadLoading} type="success">
-                      下载分享图
-                      </Button>
-                    </div>
-                  </>
-              }
-            </div>
-          </div>
-
-        ): ''
+    <Dialog
+      className='p-1 w-[90vw]'
+      visible={isOpen}
+      onClose={closeModal} lockScroll
+      footer={
+        <div className="flex content-center mt-1 w-full justify-end px-2">
+          <Button onClick={closeModal} className="mr-1">关闭</Button>
+          <Button onClick={createImg} loading={downloadLoading} type="success">
+        下载分享图
+          </Button>
+        </div>
       }
-    </div>
+    >
+
+      <div className="bg-white pb-4 box-border min-h-1/2 max-h-screen max-w-screen flex flex-col items-center rounded-sm">
+        {
+          loading 
+            ?
+            <div className="flex content-center">
+              <Loading direction="vertical">生成分享中</Loading>
+            </div>
+            :
+            <>
+              <div onDoubleClick={createImg} className="flex flex-col overflow-x-auto max-h-full min-h-full min-w-[50%] max-w-full px-1" ref={contentRef}>
+                <div className="text-center" style={{width: `${width}`}}>
+                  <div className="text-center font-bold text-base">{global.title.topic_name}</div>
+                  <div className="text-center font-thin text-xs mb-1">{global.title.topic_name_cn}</div>
+                </div>
+                <div className="flex flex-row">
+                  {
+                    shareAnimeList?.map(categoryItem => {
+                      return (
+                        <div className='flex flex-col flex-nowrap' key={categoryItem.categoryId}>
+                          <div className="text-sm font-sans text-nowrap">{categoryItem.categoryName}</div>
+                          <div className={'flex flex-col flex-nowrap pr-1 w-12 box-border'}>
+                            {
+                              categoryItem.list.map(animeItem => {
+                                return (
+                                  <div
+                                    key={animeItem.aid}
+                                    className="flex flex-col items-center">
+                                    <img src={animeItem.ossUrl} alt="" className="w-full h-14 rounded-sm" />
+                                    <div className="text-center text-xs whitespace-nowrap w-full overflow-hidden text-ellipsis ">{animeItem.name_cn || animeItem.name}</div>
+                                  </div>
+                                )
+                              })
+                            }
+                  
+                          </div>
+                        </div>
+                      )
+                    })
+                  }
+                </div>
+              </div>
+            </>
+        }
+      </div>
+    </Dialog>
+
     
 
   )
