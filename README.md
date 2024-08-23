@@ -3,6 +3,7 @@
 - 标题、小标题可自定义
 - 支持添加和删除，点击图片可修改，列表为空时删除整个列表
 - 列表可拖拽排序，单个元素可全局拖拽排序
+
 ![image](https://github.com/user-attachments/assets/73ebff5e-e8d6-40b3-80bc-cae51ef1ec03)
 - 创建分享图片
   
