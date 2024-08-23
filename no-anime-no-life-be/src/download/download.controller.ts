@@ -53,12 +53,13 @@ export class DownloadController {
         return {
           ...item,
           list: item.list.map(item => {
+            const ossFileName = `anime-${item.id}.jpg`
             return {
               aid: item.aid,
               id: item.id,
               name: item.name,
               name_cn: item.name_cn,
-              ossUrl: ossUrlList.find(url => url.includes(String(item.id)))
+              ossUrl: ossUrlList.find(url => url.includes(ossFileName))
             }
           })
         }
