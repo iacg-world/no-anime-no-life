@@ -18,7 +18,7 @@ function download(url: string) {
 export async function takeScreenshot(ele: HTMLElement, isDownload: boolean = true) {
   const fontEmbedCss = await getFontEmbedCSS(ele)
   const url = await toJpeg(ele, {
-    quality: 0.6,
+    quality: 0.8,
     width: ele.scrollWidth,
     height: ele.scrollHeight,
     backgroundColor: '#FFFAFA',
