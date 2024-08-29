@@ -135,7 +135,7 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
             </div>
             :
             <>
-              <div onDoubleClick={createImg} className="flex flex-col overflow-x-auto max-h-full min-h-full min-w-[50%] max-w-full px-1" ref={contentRef}>
+              <div onDoubleClick={createImg} className="flex flex-col overflow-x-auto max-h-full min-h-full min-w-[50%] max-w-full" ref={contentRef}>
                 <div className="text-center" style={{width: `${width}`}}>
                   <div className="text-center font-bold text-base">{global.title.topic_name}</div>
                   <div className="text-center font-thin text-xs mb-1">{global.title.topic_name_cn}</div>
@@ -144,16 +144,16 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
                   {
                     shareAnimeList?.map(categoryItem => {
                       return (
-                        <div className='flex flex-col flex-nowrap items-center mr-1' key={categoryItem.categoryId}>
-                          <div className="text-sm font-sans text-nowrap">{categoryItem.categoryName}</div>
-                          <div className={'flex flex-col flex-nowrap w-12 box-border'}>
+                        <div className='flex flex-col flex-nowrap items-center mx-0.5' key={categoryItem.categoryId}>
+                          <div className="text-sm font-sans text-nowrap mb-0.5">{categoryItem.categoryName}</div>
+                          <div className={'flex flex-col flex-nowrap w-10 box-border'}>
                             {
                               categoryItem.list.map(animeItem => {
                                 return (
                                   <div
                                     key={animeItem.aid}
                                     className="flex flex-col items-center">
-                                    <img src={animeItem.ossUrl} alt="" className="w-full h-14 rounded-sm" />
+                                    <img src={animeItem.ossUrl} alt="" className="w-full h-12 rounded-sm" />
                                     <div className="text-center text-xs whitespace-nowrap w-full overflow-hidden text-ellipsis ">{animeItem.name_cn || animeItem.name}</div>
                                   </div>
                                 )

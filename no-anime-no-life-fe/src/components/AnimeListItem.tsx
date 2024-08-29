@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux'
 import SortableItem, { DragContext } from './Drag/SortableItem'
 import AnimeItem, { OpenSearchAdd } from './AnimeItem'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import {AddRectangle, RemoveRectangle} from '@nutui/icons-react'
+import {AddRectangle, Edit, RemoveRectangle} from '@nutui/icons-react'
 import { useDroppable } from '@dnd-kit/core'
 
 interface PropsType {
@@ -71,7 +71,7 @@ const AnimeListItem:FC<PropsType> = (props) => {
     },
     () => editInputRef.current
   )
-  const activeClassStr = `flex flex-col flex-nowrap w-14 h-auto mx-1 ${activeId===categoryId ? 'scale-x-110': ''}`
+  const activeClassStr = `flex flex-col flex-nowrap w-14 h-auto ${activeId===categoryId ? 'scale-x-110': ''}`
 
   const { setNodeRef:setDropRef } = useDroppable({
     id
@@ -97,9 +97,12 @@ const AnimeListItem:FC<PropsType> = (props) => {
                 type="text" placeholder="编辑类目" maxLength={5}
                 className="h-4 w-full text-sm" />
               :
-              <div className="text-sm font-sans text-nowrap font-bold"
-                ref={editInputRef}
-                onClick={() => onEditCategory(categoryItem)} >{categoryItem.categoryName}
+              <div className='flex flex-row flex-nowrap items-center justify-center' onClick={() => onEditCategory(categoryItem)} >
+                <div className="text-sm font-sans text-nowrap font-bold"
+                  ref={editInputRef}
+                >{categoryItem.categoryName}
+                </div>
+                <Edit className='ml-0.5' width="0.25rem" height="0.25rem" />
               </div>
           }
         </div>

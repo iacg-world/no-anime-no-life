@@ -7,6 +7,7 @@ import { GlobalStore } from './type'
 import { modifyTitle } from './store/global'
 import { createRef, KeyboardEvent, useState } from 'react'
 import { useDebounceFn } from 'ahooks'
+import { Edit } from '@nutui/icons-react'
 
 function App() {
   const dispatch = useDispatch()
@@ -94,13 +95,14 @@ function App() {
 
             :
             <>
-              <div onClick={() => clickEdit('name')} data-type="name" className="text-center text-xl font-bold min-h-4 min-w-6">{global.title.topic_name}</div>
-              <div onClick={() => clickEdit('name_cn')} data-type="cn" className="text-center font-bold">{global.title.topic_name_cn}</div>
+              <div onClick={() => clickEdit('name')} data-type="name" className="text-center text-xl font-bold min-h-4 min-w-6">{global.title.topic_name}<Edit className='ml-0.5' width="0.35rem" height="0.35rem" /></div>
+              
+              <div onClick={() => clickEdit('name_cn')} data-type="cn" className="text-center font-bold">{global.title.topic_name_cn}<Edit className='ml-0.5' width="0.35rem" height="0.35rem" /></div>
             </>
 
         }
       </div>
-      <div className="grow h-[85vh] mb-2 shadow-md">
+      <div className="h-[85vh] shadow-md">
         <AnimeView/>
       </div>
       <div className="h-[5vh] text-center text-xs text-gray-400">

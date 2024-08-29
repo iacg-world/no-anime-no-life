@@ -8,7 +8,7 @@ import AnimeListItem from './AnimeListItem'
 import { SearchAddDialog, SearchAddDialogRef } from './SearchAddDialog'
 import AnimeItem, { OpenSearchAdd } from './AnimeItem'
 import { Animate, Drag, FixedNav, Toast } from '@nutui/nutui-react'
-import {Disk, Share} from '@nutui/icons-react'
+import {Disk, Edit, Share} from '@nutui/icons-react'
 import Uploader from './Uploader'
 import { closestCorners, DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, MeasuringStrategy, MouseSensor, TouchSensor, UniqueIdentifier, useSensor, useSensors } from '@dnd-kit/core'
 import { createPortal } from 'react-dom'
@@ -35,6 +35,10 @@ export const AnimeView = () =>{
       );
       (e.target as HTMLInputElement).value = ''
     }
+    const contentRefDom = contentRef.current
+    requestAnimationFrame(() => {
+      contentRefDom?.scrollTo(999999 , 0)
+    })
   }
   const enterAddCategory = (e: KeyboardEvent<HTMLInputElement>,) => {
     if (e.key === 'Enter') { // 检查按下的是否是回车键
@@ -309,72 +313,69 @@ export const AnimeView = () =>{
   const sortableAnimeCategoryInfoItems = genSortableAnimeCategoryInfoItems(animeList)
   return (
     <>
-      <div ref={contentRef}>
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCorners}
-          onDragStart={handleDragStart}
-          onDragOver={handleDragOverDebounce}
-          onDragEnd={handleDragEnd}
-          measuring={{
-            droppable: {
-              strategy: MeasuringStrategy.Always,
-            },
-          }}
-        >
-          <SortableContext id="view" items={sortableAnimeCategoryInfoItems} strategy={horizontalListSortingStrategy}>
-            <div className="flex flex-row overflow-x-auto w-full h-full">
-              <>
-                {
-                  sortableAnimeCategoryInfoItems.map(categoryItem => {
-                    const {categoryId} = categoryItem
-                    return (
-                      <SortableItem handle key={categoryId} id={categoryId}>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCorners}
+        onDragStart={handleDragStart}
+        onDragOver={handleDragOverDebounce}
+        onDragEnd={handleDragEnd}
+        measuring={{
+          droppable: {
+            strategy: MeasuringStrategy.Always,
+          },
+        }}
+      >
+        <SortableContext id="view" items={sortableAnimeCategoryInfoItems} strategy={horizontalListSortingStrategy}>
+          <div className="flex flex-row overflow-x-auto"  ref={contentRef}>
+            <>
+              {
+                sortableAnimeCategoryInfoItems.map(categoryItem => {
+                  const {categoryId} = categoryItem
+                  return (
+                    <SortableItem handle key={categoryId} id={categoryId}>
 
-                        <AnimeListItem key={categoryId} id={categoryId} categoryItem={categoryItem} openSearchAdd={openSearchAdd}></AnimeListItem>
-                      </SortableItem>
+                      <AnimeListItem key={categoryId} id={categoryId} categoryItem={categoryItem} openSearchAdd={openSearchAdd}></AnimeListItem>
+                    </SortableItem>
 
 
-                    )
+                  )
             
-                  })
+                })
 
-                }
-                <div
-                  className="flex flex-col items-center justify-center min-w-10 h-4">
-                  <input 
-                    onKeyDown={(e) => enterAddCategory(e)}
-                    onBlur={addCategory} type="text" placeholder="输入新类目" maxLength={5} className="h-full w-full text-sm" />
-                </div>
-              </>
+              }
+              <div
+                className="flex flex-row items-center justify-center min-w-10 h-3 border bg-white">
+                <input 
+                  onKeyDown={(e) => enterAddCategory(e)}
+                  onBlur={addCategory} type="text" placeholder="输入新增" maxLength={5} className="h-3 px-0.5 w-10 text-xs focus:outline-cyan-400" />
+                <Edit width="0.35rem" height="0.35rem" />
+              </div>
+            </>
 
-            </div>
+          </div>
 
 
-          </SortableContext>
-          {
-            createPortal(
+        </SortableContext>
+        {
+          createPortal(
           
-              <DragOverlay>
-                {
-                  activeAnimeItem  ?
-                    <Animate type="breath" loop>
-                      <div className="rotate-6 scale-90"><AnimeItem animeItem={activeAnimeItem}></AnimeItem></div>
+            <DragOverlay>
+              {
+                activeAnimeItem  ?
+                  <Animate type="breath" loop>
+                    <div className="rotate-6 scale-90"><AnimeItem animeItem={activeAnimeItem}></AnimeItem></div>
 
-                    </Animate>
-                    :
-                    null
-                }
-              </DragOverlay>,
-              document.body
-            )
-          }
+                  </Animate>
+                  :
+                  null
+              }
+            </DragOverlay>,
+            document.body
+          )
+        }
 
-        </DndContext>
+      </DndContext>
 
-
-
-      </div>
       <Drag draggable={draggable} direction="y" style={{ right: '0px', bottom: '10vh' }}>
         <FixedNav
           list={list}
