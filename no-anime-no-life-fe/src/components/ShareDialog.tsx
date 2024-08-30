@@ -135,17 +135,17 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
             </div>
             :
             <>
-              <div onDoubleClick={createImg} className="flex flex-col overflow-x-auto max-h-full min-h-full min-w-[50%] max-w-full" ref={contentRef}>
+              <div onDoubleClick={createImg} className="py-2 flex flex-col overflow-x-auto max-h-full min-h-full min-w-[50%] max-w-full" ref={contentRef}>
                 <div className="text-center" style={{width: `${width}`}}>
-                  <div className="text-center font-bold text-base">{global.title.topic_name}</div>
-                  <div className="text-center font-thin text-xs mb-1">{global.title.topic_name_cn}</div>
+                  <div className="text-center font-extrabold text-base mb-1">{global.title.topic_name}</div>
+                  <div className="text-center text-sm mb-1">{global.title.topic_name_cn}</div>
                 </div>
-                <div className="flex flex-row">
+                <div className="flex flex-row overflow-hidden">
                   {
                     shareAnimeList?.map(categoryItem => {
                       return (
                         <div className='flex flex-col flex-nowrap items-center mx-0.5' key={categoryItem.categoryId}>
-                          <div className="text-sm font-sans text-nowrap mb-0.5">{categoryItem.categoryName}</div>
+                          <div className="text-sm font-sans text-nowrap mb-0.5 font-bold">{categoryItem.categoryName}</div>
                           <div className={'flex flex-col flex-nowrap w-10 box-border'}>
                             {
                               categoryItem.list.map(animeItem => {
