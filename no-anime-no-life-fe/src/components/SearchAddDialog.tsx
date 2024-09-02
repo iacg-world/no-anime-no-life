@@ -100,7 +100,7 @@ export const SearchAddDialog = forwardRef<SearchAddDialogRef, SearchAddDialogPro
   return (
     <Dialog className='p-1 w-[90vw] top-[10rem]' visible={isOpen} hideConfirmButton cancelText={'关闭'} onCancel={closeModal} onClose={closeModal} onOverlayClick={closeModal} lockScroll>
       <div className="flex flex-col items-center box-border rounded-sm">
-        <input placeholder="输入关键字查询动画" className="text-sm border-solid border-black/60 border rounded-sm py-1 px-2 mb-1" type="text" value={inputValue} onChange={inputChange}/>
+        <input placeholder="输入关键字查询" className="text-sm border-solid border-black/60 border rounded-sm py-1 px-2 mb-1" type="text" value={inputValue} onChange={inputChange}/>
         {
           !loading ? 
             <div className="flex flex-row flex-wrap min-h-[30vh] content-start">
