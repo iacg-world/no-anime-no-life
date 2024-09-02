@@ -76,7 +76,7 @@ function App() {
               <input
                 ref={nameRef}
                 autoFocus={editType === 'name'}
-                className="text-center text-xl font-bold"
+                className="text-center text-xl font-bold h-4 "
                 defaultValue={global.title.topic_name}
                 onKeyDown={(e) => handleKeyDown(e)}
                 onBlur={() => modifyTitleNameDebounce()}
@@ -85,7 +85,7 @@ function App() {
               <input
                 ref={nameCnRef}
                 autoFocus={editType === 'name_cn'}
-                className="text-center font-bold"
+                className="text-center font-bold h-4"
                 defaultValue={global.title.topic_name_cn}
                 onKeyDown={(e) => handleKeyDown(e)}
                 onBlur={() => modifyTitleNameDebounce()}
