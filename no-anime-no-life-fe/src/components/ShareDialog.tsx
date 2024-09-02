@@ -28,7 +28,7 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
     }
     const list = props.animeList
     if (list.every(item => item.list.length === 0)) {
-      throw '至少添加一个动画'
+      throw '至少添加一个内容'
     }
     const data = await getShareList(list)
     if (data.data) {

@@ -9,7 +9,7 @@ function download(url: string) {
   const link = document.createElement('a')
   link.style.display = 'none'
   link.href = url
-  link.download = decodeURI('动画人生')
+  link.download = decodeURI('nanf')
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)
