@@ -50,5 +50,6 @@ jobs:
           script: |
             cd ~/project/no-anime-no-life/
             git pull
-            ~/.nvm/versions/node/v20.16.0/bin/npm run build
-            ~/.nvm/versions/node/v20.16.0/bin/npm run server
+            source ~/.bashrc
+            run build
+            run server
