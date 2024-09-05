@@ -51,5 +51,7 @@ jobs:
             cd ~/project/no-anime-no-life/
             git pull
             source ~/.bashrc
+            nvm -v
+            nvm use nvm use v20.16.0
             npm run build
             npm run server
