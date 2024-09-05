@@ -39,7 +39,7 @@ jobs:
       #     source: 'no-anime-no-life'
       #     target: '~/project'
       # 通过 SSH 登录
-      - name: executing ssh and restart docker
+      - name: executing ssh
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -47,9 +47,9 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PWD }}
           script_stop: true
-          # * 登录阿里云 ACR
           script: |
             cd ~/project/no-anime-no-life/
             git pull
             npm run build
+            chmod 777 ./server.sh
             ./server.sh
