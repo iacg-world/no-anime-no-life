@@ -51,5 +51,4 @@ jobs:
             cd ~/project/no-anime-no-life/
             git pull
             npm run build
-            chmod 777 ./server.sh
-            ./server.sh
+            npm run server
