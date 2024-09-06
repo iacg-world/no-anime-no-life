@@ -12,6 +12,7 @@ export default defineConfig(() => {
     build: {
       outDir: path.join(envPath, 'no-anime-no-life-be/dist'),
       assetsDir: 'fe-dist',
+      emptyOutDir: true,
     },
 
 
