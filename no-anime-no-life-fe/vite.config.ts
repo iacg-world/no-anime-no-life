@@ -10,8 +10,7 @@ export default defineConfig(() => {
   return {
     envPrefix: 'NANF',
     build: {
-      outDir: path.join(envPath, 'no-anime-no-life-be/dist'),
-      assetsDir: 'fe-dist',
+      outDir: path.join(envPath, 'no-anime-no-life-be/dist/fe-dist'),
       emptyOutDir: true,
     },
 

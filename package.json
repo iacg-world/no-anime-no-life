@@ -9,7 +9,7 @@
     "dev:fe": "cd no-anime-no-life-fe && npm run dev",
     "build:be": "cd no-anime-no-life-be && npm install --registry=https://registry.npmmirror.com/ && npm run build",
     "build:fe": "cd no-anime-no-life-fe && npm install --registry=https://registry.npmmirror.com/ && npm run build",
-    "build": "npm run build:be && npm run build:fe",
+    "build": "npm run build:fe && npm run build:be",
     "server": "cd no-anime-no-life-be && npm run server",
     "release": "release-it"
   },
