@@ -1,6 +1,6 @@
 {
   "name": "no-anime-no-life",
-  "version": "0.0.6",
+  "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -19,7 +19,5 @@
   "devDependencies": {
     "release-it": "^15.11.0"
   },
-  "dependencies": {
-
-  }
+  "dependencies": {}
 }
