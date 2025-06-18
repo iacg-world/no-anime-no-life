@@ -26,7 +26,22 @@ export const ShareDialog = forwardRef<ShareDialogRef, ShareDialogProps>((props, 
     if (clear) {
       return []
     }
-    const list = props.animeList
+    const list = props.animeList.map(animeItem => {
+      return {
+        categoryId: animeItem.categoryId,
+        categoryName: animeItem.categoryName,
+        list: animeItem.list.map(item => {
+          return {
+            id: item.id,
+            aid: item.aid,
+            name: item.name,
+            name_cn: item.name_cn,
+            url: item.url,
+            cover: item.images.small || item.images.medium || item.images.large,
+          }
+        })
+      }
+    })
     if (list.every(item => item.list.length === 0)) {
       throw '至少添加一个内容'
     }

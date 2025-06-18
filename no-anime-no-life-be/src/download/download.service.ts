@@ -34,7 +34,7 @@ export class DownloadService {
 
       imgList = imgList.concat(item.list.map(item => {
         return {
-          url: item.images?.medium || item.images?.large,
+          url: item.cover,
           aid: item.aid,
           id: item.id,
           name: item.id + '-' + nanoid()

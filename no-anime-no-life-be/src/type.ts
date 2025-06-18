@@ -15,6 +15,7 @@ export interface AnimeInfo {
   'id': number,
   'name': string,
   'name_cn': string,
+  'cover': string,
   'images': {
     'large': string,
     'common': string,

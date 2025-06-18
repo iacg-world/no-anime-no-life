@@ -3,7 +3,13 @@ export interface AnimeCategoryInfo {
   categoryName: string,
   list: AnimeInfo[],
   editing?: boolean,
+}
 
+export interface ApiAnimeCategoryInfo  {
+  categoryId: string,
+  categoryName: string,
+  list: Partial<ApiAnimeInfo>[],
+  editing?: boolean,
 }
 
 export interface GlobalStore {
@@ -17,6 +23,16 @@ export type ObjectKeysToLiteral<T> = T extends object ? (keyof T) : never;
 export interface SortableAnimeCategoryInfo extends AnimeCategoryInfo {
   id: string
 }
+export interface ApiAnimeInfo {
+  'aid': string,
+  'id': number,
+  'url': string,
+  'type': number,
+  'name': string,
+  'name_cn': string,
+  cover: string,
+
+}
 export interface AnimeInfo {
   'aid': string,
   'id': number,
@@ -24,15 +40,11 @@ export interface AnimeInfo {
   'type': number,
   'name': string,
   'name_cn': string,
-  'summary': string,
-  'air_date': string,
-  'air_weekday': number,
   'images': {
-    'large': string,
-    'common': string,
-    'medium': string,
-    'small': string,
-    'grid': string
+    'large'?: string
+    'common'?: string
+    'medium'?: string
+    'small'?: string
   }
   ossUrl?: string,
 }
